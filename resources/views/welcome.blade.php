@@ -5,14 +5,14 @@
 @section('content')
     <div class="container-fluid vh-100 home">
         <div class="d-flex justify-content-center align-items-center vh-100">
-            <div class="w-25 h-50">
+            <div class="h-50">
                 <div class="card py-5 px-5">
                     <div class="card-body">
                         <form method="POST" action="{{ route('login') }}">
                             @csrf
                             <div class="form-group mb-3">
-                                <label for="email" class="col-form-label">{{ __('Email Address') }}</label>
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="hermes@admin.com" required autocomplete="email" autofocus placeholder="Email Address">
+                                <label for="email" class="col-form-label">{{ __('Username') }}</label>
+                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus placeholder="Username>
                                 @error('email')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -22,7 +22,7 @@
     
                             <div class="form-group mb-3">
                                 <label for="password" class="col-form-label">{{ __('Password') }}</label>
-                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" value="hermes@admin.com" required autocomplete="current-password" placeholder="Password">
+                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password" placeholder="Password">
                                 @error('password')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>

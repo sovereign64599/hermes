@@ -168,7 +168,7 @@
 
             <div class="container-fluid">
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                    <h1 class="h3 mb-0 text-light">awd</h1>
+                    <h1 class="h3 mb-0 text-light text-capitalize">{{Route::currentRouteName()}}</h1>
                     <a href="#" class="d-none d-sm-inline-block btn text-light btn-sm shadow-sm">
                         <i class="fas fa-download fa-sm"></i> Generate Report
                     </a>
