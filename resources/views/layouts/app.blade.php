@@ -118,8 +118,9 @@
 
         <div class="sidebar-card d-none d-lg-flex">
             <img class="sidebar-card-illustration mb-2" src="img/undraw_rocket.svg" alt="vencer">
-            <p class="text-center mb-2">Support <strong>Vencer Olermo</strong>! I'm happy working with you.</p>
-            <a class="btn text-light btn-sm" href="https://www.buymeacoffee.com/olermovenzC" target="_blank">Buy me a Coffee</a>
+            <p class="text-center mb-2">Have a Good day!</p>
+            {{-- <p class="text-center mb-2">Support <strong>Me</strong>! I'm happy working with you.</p>
+            <a class="btn text-light btn-sm" href="#" target="_blank">Buy me a Coffee</a> --}}
         </div>
 
     </ul>
