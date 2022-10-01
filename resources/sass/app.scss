@@ -23,6 +23,7 @@
     .login{
         width: 25%;
     }
+
     .card{
         background: var(--secondary);
         color: var(--light);
@@ -188,10 +189,9 @@
     }
 }
 
-@media screen and(max-width: 767px){
-    .home{
-        .login{
-            width: auto;
-        }
+
+@media only screen and (max-width:1024px){
+    .login{
+        width: auto !important;
     }
 }

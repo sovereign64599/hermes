@@ -10966,3 +10966,9 @@ textarea.form-control-lg {
   outline: 0;
   color: var(--gray);
 }
+
+@media only screen and (max-width: 1024px) {
+  .login {
+    width: auto !important;
+  }
+}
