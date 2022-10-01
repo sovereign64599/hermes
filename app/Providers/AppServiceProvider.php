@@ -25,12 +25,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        if (!App::environment(['local', 'staging'])) {
+        if (App::environment(['production', 'PRODUCTION'])) {
             $this->app['request']->server->set('HTTPS', true);
             URL::forceScheme('https');
         }
         
-        if (!app()->environment(['local', 'staging'])) {
+        if (app()->environment(['production', 'PRODUCTION'])) {
             $this->app['request']->server->set('HTTPS', true);
             URL::forceScheme('https');
         }

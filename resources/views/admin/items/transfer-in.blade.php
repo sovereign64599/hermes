@@ -104,14 +104,14 @@
                                     <td>
                                         <img class="img-fluid item-photo" src="https://www.thespruce.com/thmb/lbeqtgmmoRpaeMtbCH568V-8CBI=/3888x2592/filters:no_upscale():max_bytes(150000):strip_icc()/c-pvc-and-u-pvc-fittings-172717498-5ac54ef1a474be00365ae8e6.jpg" alt="img1">
                                     </td>
-                                    <td>Office Manager</td>
-                                    <td>Office Manager</td>
-                                    <td>London</td>
+                                    <td>Item 1</td>
+                                    <td>Building Material</td>
+                                    <td>Metal</td>
                                     <td>30</td>
-                                    <td>2008/12/19</td>
-                                    <td>$90,560</td>
-                                    <td>$90,560</td>
-                                    <td>$90,560</td>
+                                    <td>234234</td>
+                                    <td>Lorem ipsum dolor sit amet.</td>
+                                    <td>$1,560</td>
+                                    <td>$1,860</td>
                                     <td>
                                         <div class="d-flex gap-1">
                                             <a href="#" class="btn text-light">Edit</a>
@@ -123,14 +123,14 @@
                                     <td>
                                         <img class="img-fluid item-photo" src="https://www.thespruce.com/thmb/lbeqtgmmoRpaeMtbCH568V-8CBI=/3888x2592/filters:no_upscale():max_bytes(150000):strip_icc()/c-pvc-and-u-pvc-fittings-172717498-5ac54ef1a474be00365ae8e6.jpg" alt="img1">
                                     </td>
-                                    <td>Support Lead</td>
-                                    <td>Support Lead</td>
-                                    <td>Edinburgh</td>
-                                    <td>22</td>
-                                    <td>2013/03/03</td>
-                                    <td>$342,000</td>
-                                    <td>$342,000</td>
-                                    <td>$342,000</td>
+                                    <td>Item 1</td>
+                                    <td>Building Material</td>
+                                    <td>Metal</td>
+                                    <td>30</td>
+                                    <td>234234</td>
+                                    <td>Lorem ipsum dolor sit amet.</td>
+                                    <td>$1,560</td>
+                                    <td>$1,860</td>
                                     <td>
                                         <div class="d-flex gap-1">
                                             <a href="#" class="btn text-light">Edit</a>
@@ -142,14 +142,14 @@
                                     <td>
                                         <img class="img-fluid item-photo" src="https://www.thespruce.com/thmb/lbeqtgmmoRpaeMtbCH568V-8CBI=/3888x2592/filters:no_upscale():max_bytes(150000):strip_icc()/c-pvc-and-u-pvc-fittings-172717498-5ac54ef1a474be00365ae8e6.jpg" alt="img1">
                                     </td>
-                                    <td>Regional Director</td>
-                                    <td>San Francisco</td>
-                                    <td>36</td>
-                                    <td>2008/10/16</td>
-                                    <td>$470,600</td>
-                                    <td>$470,600</td>
-                                    <td>$470,600</td>
-                                    <td>$470,600</td>
+                                    <td>Item 1</td>
+                                    <td>Building Material</td>
+                                    <td>Metal</td>
+                                    <td>30</td>
+                                    <td>234234</td>
+                                    <td>Lorem ipsum dolor sit amet.</td>
+                                    <td>$1,560</td>
+                                    <td>$1,860</td>
                                     <td>
                                         <div class="d-flex gap-1">
                                             <a href="#" class="btn text-light">Edit</a>

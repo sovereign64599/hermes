@@ -10949,6 +10949,7 @@ textarea.form-control-lg {
   border: 0 !important;
   border-bottom: 1px solid var(--secondary);
   vertical-align: middle;
+  font-size: 13px;
 }
 #page-top #content .transfer-in .card .card-body table tr td .item-photo {
   height: 50px;
