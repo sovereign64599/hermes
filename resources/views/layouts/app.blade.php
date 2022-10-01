@@ -42,7 +42,7 @@
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#itemsCollapse"
                 aria-expanded="true" aria-controls="itemsCollapse">
                 <i class="fas fa-box-open"></i>
-                <span>Items</span>
+                <span>Inventory</span>
             </a>
             <div id="itemsCollapse" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                 <div class="bg-secondary py-2 collapse-inner rounded">
@@ -73,13 +73,6 @@
         </div>
 
         <li class="nav-item">
-            <a class="nav-link" href="tables.html">
-                <i class="fas fa-fw fa-table"></i>
-                <span>Inventory Adjustment</span>
-            </a>
-        </li>
-
-        <li class="nav-item">
             <a class="nav-link" href="charts.html">
                 <i class="fas fa-fw fa-chart-area"></i>
                 <span>Report</span>
@@ -98,20 +91,6 @@
                     <a class="collapse-item text-white" href="register.html"><i class="fas fa-level-up-alt mr-3 text-tertiary"></i><span>Export</span></a>
                 </div>
             </div>
-        </li>
-
-        <li class="nav-item">
-            <a class="nav-link" href="charts.html">
-                <i class="fas fa-fw fa-chart-area"></i>
-                <span>Transaction Explorer</span>
-            </a>
-        </li>
-
-        <li class="nav-item">
-            <a class="nav-link" href="charts.html">
-                <i class="fas fa-fw fa-chart-area"></i>
-                <span>Item Quantity Check</span>
-            </a>
         </li>
 
         <hr class="sidebar-divider d-none d-md-block">
