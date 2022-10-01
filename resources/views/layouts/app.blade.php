@@ -26,7 +26,7 @@
         <hr class="sidebar-divider my-0">
 
         <li class="nav-item active">
-            <a class="nav-link" href="index.html">
+            <a href="{{route('dashboard')}}" class="nav-link" href="index.html">
                 <i class="far fa-chart-bar"></i>
                 <span>Dashboard (Sales)</span>
             </a>
