@@ -76,7 +76,7 @@
         <div class="col-lg-9">
             <div class="card shadow mb-4">
                 <div class="card-header pb-0 pt-4">
-                    <h6 class="m-0 text-tertiary">DataTables Example</h6>
+                    <h6 class="m-0 text-tertiary">Items</h6>
                     <div class="d-flex py-2 gap-1">
                         <button class="btn text-light"><i class="fas fa-file-import mr-2"></i><span>Import Items</span></button>
                         <button class="btn text-light"><i class="fas fa-file-export mr-2"></i><span>Export Items</span></button>
