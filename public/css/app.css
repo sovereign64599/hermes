@@ -10827,6 +10827,9 @@ textarea.form-control-lg {
 .home {
   background: var(--primary);
 }
+.home .login {
+  width: 25%;
+}
 .home .card {
   background: var(--secondary);
   color: var(--light);
