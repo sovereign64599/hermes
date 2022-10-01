@@ -1,0 +1,186 @@
+// Fonts
+@import url('https://fonts.googleapis.com/css?family=Nunito');
+
+// Variables
+@import 'variables';
+
+// Bootstrap
+@import '~bootstrap/scss/bootstrap';
+
+:root {
+    --primary: #1a1e29 !important;
+    --secondary: #24283b !important;
+    --tertiary: #d95650 !important;
+    --tertiary-dark: #ad403a !important;
+    --light: #ffffff !important;
+    --gray: #858796 !important;
+}
+
+// HOME
+.home{
+    background: var(--primary);
+    .card{
+        background: var(--secondary);
+        color: var(--light);
+        border: 0;
+
+        .btn-home{
+            background: var(--tertiary);
+            color: var(--light);
+    
+            &:hover{
+                background: var(--tertiary-dark);
+                color: var(--light);
+            }
+        }
+
+        form{
+            position: relative;
+
+            input, select, textarea{
+                background: var(--primary);
+                border: 0;
+                outline: 0;
+                color: var(--gray);
+            }
+        }
+    }
+}
+
+// admin
+#page-top{
+    .bg-secondary{
+        background-color: var(--secondary) !important;
+    }
+    .text-light{
+        color: var(--light);
+    }
+    .text-gray{
+        color: var(--gray);
+    }
+    .text-tertiary{
+        color: var(--tertiary);
+    }
+    .btn{
+        background: var(--tertiary);
+        border: 0;
+    }
+    .btn-primary{
+        background: var(--secondary);
+        border: 0;
+    }
+    .shadow {
+        box-shadow: 0 0.5rem 1rem 0px rgb(0 0 0 / 18%) !important;
+    }
+    .dropdown-divider{
+        border-top: var(--primary);
+    }
+    .dropdown-item:focus, .dropdown-item:hover{
+        background-color: var(--tertiary);
+        color: var(--light);
+    }
+    .dropdown-item:focus i, .dropdown-item:hover i{
+        color: var(--light);
+    }
+    .sidebar .nav-item .collapse .collapse-inner .collapse-item:hover, .sidebar .nav-item .collapsing .collapse-inner .collapse-item:hover{
+        background-color: var(--tertiary);
+        color: var(--light);
+    }
+    .sidebar .nav-item .collapse .collapse-inner .collapse-item:hover i, .sidebar .nav-item .collapsing .collapse-inner .collapse-item:hover i{
+        color: var(--light);
+    }
+    .dropdown-menu{
+        background: var(--secondary);
+        border: none;
+        
+        .dropdown-item{
+            color: var(--light);
+        }
+    }
+
+    .admin-sidebar{
+        background: var(--primary);
+
+        .nav-item .nav-link i{
+            color: var(--tertiary);
+        }
+        .nav-item.active .nav-link{
+            color: var(--tertiary);
+        }
+        
+    }
+    
+    #content{
+        background: var(--secondary);
+
+        .admin-nav{
+            background: var(--primary);
+        }
+    }
+    .card{
+        background: var(--primary);
+        border: 0 !important;
+
+        .card-header{
+            border: 0;
+            background: none !important;
+        }
+    }
+    .modal-content{
+        background-color: var(--secondary);
+        color: var(--light);
+        .logout-info{
+           font-size: 50px;
+           margin-bottom: 30px;
+        }
+    }
+
+    // transfer in page
+    #content .transfer-in{
+        position: relative;
+        
+        .card {
+
+            .card-body{
+
+                table{
+                    border: 0;
+                    th{
+                        background: var(--secondary);
+                        border: 0;
+                        font-weight: 300;
+                    }
+
+                    tr{
+                        border: 0 !important;
+
+                        td{
+                            border: 0 !important;
+                            border-bottom: 1px solid var(--secondary);
+                            vertical-align: middle;
+
+                            .item-photo{
+                                height: 50px;
+                                width: 50px;
+                                object-fit: cover;
+                                border-radius: 50%;
+                            }
+                        }
+                    }
+                }
+            }
+
+            form{
+                position: relative;
+
+                input, select, textarea{
+                    background: var(--secondary);
+                    border: 0;
+                    outline: 0;
+                    color: var(--gray);
+                }
+            }
+        }
+    }
+}
+
