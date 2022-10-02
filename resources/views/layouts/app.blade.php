@@ -23,20 +23,18 @@
             <div class="sidebar-brand-text mx-3">HERMES</div>
         </a>
 
-        <hr class="sidebar-divider my-0">
-
-        <li class="nav-item active">
-            <a href="{{route('dashboard')}}" class="nav-link" href="index.html">
-                <i class="far fa-chart-bar"></i>
-                <span>Dashboard (Sales)</span>
-            </a>
-        </li>
-
-        <hr class="sidebar-divider">
+        <hr class="sidebar-divider mb-4">
 
         <div class="sidebar-heading">
             Management
         </div>
+
+        <li class="nav-item @if(Route::currentRouteName() == 'dashboard') active @endif">
+            <a class="nav-link" href="{{route('dashboard')}}">
+                <i class="far fa-chart-bar"></i>
+                <span>Dashboard (Sales)</span>
+            </a>
+        </li>
 
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#itemsCollapse"
@@ -44,15 +42,15 @@
                 <i class="fas fa-box-open"></i>
                 <span>Inventory</span>
             </a>
-            <div id="itemsCollapse" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+            <div id="itemsCollapse" class="collapse @if(Route::currentRouteName() == 'transfer.in' || Route::currentRouteName() == 'transfer.out') show @endif" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                 <div class="bg-secondary py-2 collapse-inner rounded">
-                    <a class="collapse-item text-white" href="{{route('transfer.in')}}"><i class="fas fa-level-down-alt mr-3 text-tertiary"></i><span>Transfer In</span></a>
-                    <a class="collapse-item text-white" href="{{route('transfer.out')}}"><i class="fas fa-level-up-alt mr-3 text-tertiary"></i><span>Transfer Out</span></a>
+                    <a class="collapse-item text-white  @if(Route::currentRouteName() == 'transfer.in') active @endif" href="{{route('transfer.in')}}"><i class="fas fa-level-down-alt mr-3 text-tertiary"></i><span>Transfer In</span></a>
+                    <a class="collapse-item text-white  @if(Route::currentRouteName() == 'transfer.out') active @endif" href="{{route('transfer.out')}}"><i class="fas fa-level-up-alt mr-3 text-tertiary"></i><span>Transfer Out</span></a>
                 </div>
             </div>
         </li>
 
-        <li class="nav-item">
+        <li class="nav-item ">
             <a class="nav-link" href="tables.html">
                 <i class="fas fa-tasks"></i>
                 <span>Item Quantity Check</span>
@@ -96,10 +94,8 @@
         <hr class="sidebar-divider d-none d-md-block">
 
         <div class="sidebar-card d-none d-lg-flex">
-            <img class="sidebar-card-illustration mb-2" src="img/undraw_rocket.svg" alt="vencer">
+            <img class="sidebar-card-illustration mb-2" src="img/undraw_rocket.svg" alt="Have a Good Day!">
             <p class="text-center mb-2">Have a Good day!</p>
-            {{-- <p class="text-center mb-2">Support <strong>Me</strong>! I'm happy working with you.</p>
-            <a class="btn text-light btn-sm" href="#" target="_blank">Buy me a Coffee</a> --}}
         </div>
 
     </ul>
@@ -149,9 +145,9 @@
             <div class="container-fluid">
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
                     <h1 class="h3 mb-0 text-light text-capitalize">{{str_replace("."," ", Route::currentRouteName())}}</h1>
-                    <a href="#" class="d-none d-sm-inline-block btn text-light btn-sm shadow-sm">
+                    {{-- <a href="#" class="d-none d-sm-inline-block btn text-light btn-sm shadow-sm">
                         <i class="fas fa-download fa-sm"></i> Generate Report
-                    </a>
+                    </a> --}}
                 </div>
 
                 @yield('content')
@@ -187,10 +183,14 @@
     <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('vendor/jquery-easing/jquery.easing.min.js') }}"></script>
     <script src="{{ asset('js/sb-admin-2.min.js') }}"></script>
+    @if(Route::currentRouteName() == 'dashboard')
     <script src="{{ asset('vendor/chart.js/Chart.min.js') }}"></script>
     <script src="{{ asset('js/demo/chart-area-demo.js') }}"></script>
     <script src="{{ asset('js/demo/chart-pie-demo.js') }}"></script>
-    <script src="{{ asset('js/sb-admin-2.min.js') }}"></script>
+    @endif
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.27.2/axios.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @yield('script')
     @else
         @yield('content')
     @endauth

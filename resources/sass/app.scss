@@ -54,8 +54,14 @@
 
 // admin
 #page-top{
+    #wrapper #content-wrapper{
+        overflow-x: unset;
+    }
     .bg-secondary{
         background-color: var(--secondary) !important;
+    }
+    .bg-tertiary{
+        background-color: var(--tertiary);
     }
     .text-light{
         color: var(--light);
@@ -94,9 +100,19 @@
     .sidebar .nav-item .collapse .collapse-inner .collapse-item:hover i, .sidebar .nav-item .collapsing .collapse-inner .collapse-item:hover i{
         color: var(--light);
     }
+
+    .sidebar .nav-item .collapse .collapse-inner .collapse-item.active, .sidebar .nav-item .collapsing .collapse-inner .collapse-item.active{
+        background-color: var(--tertiary);
+        color: var(--light);
+    }
+    .sidebar .nav-item .collapse .collapse-inner .collapse-item.active i, .sidebar .nav-item .collapsing .collapse-inner .collapse-item.active i{
+        color: var(--light);
+    }
+
     .dropdown-menu{
         background: var(--secondary);
         border: none;
+        z-index: 1091;
         
         .dropdown-item{
             color: var(--light);
@@ -143,10 +159,42 @@
     // transfer in page
     #content .transfer-in{
         position: relative;
+
+        .modal {
+            form{
+                position: relative;
+
+                input, select, textarea{
+                    background-color: var(--primary);
+                    border: 0;
+                    outline: 0;
+                    color: var(--gray);
+                }
+            }
+        }
         
         .card {
+            .card-header{
+                input, select, textarea{
+                    background-color: var(--secondary);
+                    border: 0;
+                    outline: 0;
+                    color: var(--gray);
+                    padding: 10px;
+                    border-radius: 10px;
+                }
+            }
 
             .card-body{
+                
+                input{
+                    background-color: var(--secondary);
+                    border: 0;
+                    outline: 0;
+                    color: var(--gray);
+                    border-radius: 10px;
+                    padding: 5px;
+                }
 
                 table{
                     border: 0;
@@ -154,6 +202,10 @@
                         background: var(--secondary);
                         border: 0;
                         font-weight: 300;
+
+                        &::after{
+                            display: none;
+                        }
                     }
 
                     tr{
@@ -180,11 +232,98 @@
                 position: relative;
 
                 input, select, textarea{
-                    background: var(--secondary);
+                    background-color: var(--secondary);
                     border: 0;
                     outline: 0;
                     color: var(--gray);
                 }
+            }
+        }
+    }
+
+    // transfer out page
+    #content .transfer-out{
+        position: relative;
+
+        .t-o-left{
+            form{
+                position: relative;
+    
+                input, select, textarea{
+                    background-color: var(--primary);
+                    border: 0;
+                    outline: 0;
+                    color: var(--gray);
+                }
+            }
+
+            .t-o-items{
+                padding-top: 80px;
+
+                .card{
+                    margin-bottom: 70px;
+                    .card-footer{
+                        background: #283048;
+
+                        span{
+                            height: 100%;
+                            width: 2px;
+                            background: var(--primary);
+                        }
+                    }
+
+                    .t-o-item-img{
+                        margin-top: -60px;
+                        width: 200px;
+                        height: 200px;
+                        border-radius: 50%;
+                        object-fit: cover;
+                        background: var(--primary);
+                        padding: 5px;
+                    }
+                }
+            }
+        }
+        .t-o-right{
+
+            form{
+                position: relative;
+
+                .ch-input{
+                    background: var(--primary);
+                }
+    
+                input, select, textarea{
+                    background-color: var(--secondary);
+                    border: 0;
+                    outline: 0;
+                    color: var(--gray);
+                }
+
+                .order-item{
+                    width: 100%;
+                    position: relative;
+                    background: var(--secondary);
+                    border-radius: 10px;
+                    column-gap: 20px;
+
+                    img{
+                        height: 50px;
+                        width: 50px;
+                        border-radius: 50%;
+                    }
+                }
+                .order-details{
+                    display: flex;
+                    flex-direction: column;
+                }
+            }
+        }
+        
+        .card {
+
+            .card-body{
+                position: relative;
             }
         }
     }
