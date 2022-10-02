@@ -20,29 +20,33 @@ class TransferInController extends Controller
     
     public function getItems(){
         $items = Items::orderBy('created_at', 'desc')->get();
-        $html = '';
-        foreach($items as $item){
-            $quantity = ($item->item_quantity == 0) ? '<small class="text-danger">Out of Stock</small>' : $item->item_quantity;
-            $img = empty($item->item_photo) ? asset('img/default_item_photo.png') : asset('img/item_photo/'.$item->item_photo.'');
-            $html .= '<tr><td>';
-            $html .='<img class="img-fluid item-photo" src="'. $img .'" alt="img1">';
-            $html .='</td>';
-            $html .='<td>'.$item->item_name.'</td>';
-            $html .='<td>'.$item->item_category.'</td>';
-            $html .='<td>'.$item->item_sub_category.'</td>';
-            $html .='<td>'.$quantity.'</td>';
-            $html .='<td>'.$item->item_barcode.'</td>';
-            $html .='<td>'.$item->item_description.'</td>';
-            $html .='<td>'.$item->item_cost.'</td>';
-            $html .='<td>'.$item->item_sell.'</td>';
-            $html .='<td>';
-            $html .='<div class="d-flex gap-1">';
-            $html .='<button data="'.$item->id.'" class="btn text-light" onclick="editItem(this)">Edit</button>';
-            $html .='<button data="'.$item->id.'" class="btn text-light" onclick="deleteItem(this)">Delete</button>';
-            $html .='</div>';
-            $html .='</td></tr>';
+        if($items->count() > 0){
+            $html = '';
+            foreach($items as $item){
+                $quantity = ($item->item_quantity == 0) ? '<small class="text-danger">Out of Stock</small>' : $item->item_quantity;
+                $img = empty($item->item_photo) ? asset('img/default_item_photo.png') : asset('img/item_photo/'.$item->item_photo.'');
+                $html .= '<tr><td>';
+                $html .='<img class="img-fluid item-photo" src="'. $img .'" alt="img1">';
+                $html .='</td>';
+                $html .='<td>'.$item->item_name.'</td>';
+                $html .='<td>'.$item->item_category.'</td>';
+                $html .='<td>'.$item->item_sub_category.'</td>';
+                $html .='<td>'.$quantity.'</td>';
+                $html .='<td>'.$item->item_barcode.'</td>';
+                $html .='<td>'.$item->item_description.'</td>';
+                $html .='<td>'.$item->item_cost.'</td>';
+                $html .='<td>'.$item->item_sell.'</td>';
+                $html .='<td>';
+                $html .='<div class="d-flex gap-1">';
+                $html .='<button data="'.$item->id.'" class="btn text-light" onclick="editItem(this)">Edit</button>';
+                $html .='<button data="'.$item->id.'" class="btn text-light" onclick="deleteItem(this)">Delete</button>';
+                $html .='</div>';
+                $html .='</td></tr>';
+            }
+            return response(json_encode(['status' => 200, 'data' => $html]));
+        }else{
+            return response(json_encode(['status' => 200, 'data' => 'No Items Found']));
         }
-        return response(json_encode(['status' => 200, 'data' => $html]));
     }
 
     public function checkItems(Request $request){
@@ -307,6 +311,9 @@ class TransferInController extends Controller
         }
 
         $quantity = ($request->item_quantity <= 0) ? 0 : $request->item_quantity;
+
+        $item->increment('item_quantity', $quantity);
+
         $updateItem = Items::where('item_name', $request->item_name)
             ->where('item_category', $request->item_category)
             ->where('item_sub_category', $request->item_sub_category)
@@ -314,7 +321,6 @@ class TransferInController extends Controller
             'item_name' => ucfirst($request->item_name),
             'item_category' => ucfirst($request->item_category),
             'item_sub_category' => ucfirst($request->item_sub_category),
-            'item_quantity' => $quantity,
             'item_barcode' => ucfirst($request->item_barcode),
             'item_description' => $request->item_description,
             'item_cost' => $request->item_cost,

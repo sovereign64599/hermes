@@ -33,5 +33,6 @@ Route::group(['middleware' => 'auth'], function(){
     // pages to show
     Route::get('/transfer-in', [App\Http\Controllers\Admin\TransferInController::class, 'index'])->name('transfer.in');
     Route::get('/transfer-out', [App\Http\Controllers\Admin\TransferOutController::class, 'index'])->name('transfer.out');
+    Route::get('/show-categories', [App\Http\Controllers\Admin\CategoriesController::class, 'index'])->name('categories');
 
 });

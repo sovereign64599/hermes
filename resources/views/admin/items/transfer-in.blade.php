@@ -156,7 +156,9 @@
             
             await axios.get('/get-items')
                 .then(function (response) {
-                    document.querySelector('#showItems').innerHTML = response.data.data;
+                    if(response.data.status == 200){
+                        document.querySelector('#showItems').innerHTML = `<tr><td>${response.data.data}</td></tr>`;
+                    }
                 })
                 .catch(function (error) {
                     console.log(error);

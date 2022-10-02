@@ -42,10 +42,11 @@
                 <i class="fas fa-box-open"></i>
                 <span>Inventory</span>
             </a>
-            <div id="itemsCollapse" class="collapse @if(Route::currentRouteName() == 'transfer.in' || Route::currentRouteName() == 'transfer.out') show @endif" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+            <div id="itemsCollapse" class="collapse @if(Route::currentRouteName() == 'transfer.in' || Route::currentRouteName() == 'transfer.out' || Route::currentRouteName() == 'categories') show @endif" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                 <div class="bg-secondary py-2 collapse-inner rounded">
                     <a class="collapse-item text-white  @if(Route::currentRouteName() == 'transfer.in') active @endif" href="{{route('transfer.in')}}"><i class="fas fa-level-down-alt mr-3 text-tertiary"></i><span>Transfer In</span></a>
                     <a class="collapse-item text-white  @if(Route::currentRouteName() == 'transfer.out') active @endif" href="{{route('transfer.out')}}"><i class="fas fa-level-up-alt mr-3 text-tertiary"></i><span>Transfer Out</span></a>
+                    <a class="collapse-item text-white  @if(Route::currentRouteName() == 'categories') active @endif" href="{{route('categories')}}"><i class="fas fa-sitemap mr-2 text-tertiary"></i><span>Categories</span></a>
                 </div>
             </div>
         </li>
