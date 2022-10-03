@@ -190,6 +190,15 @@
                     updateCategory.reset("reset");
                     myModal.hide()
                     getCategory();
+                }else{
+                    Swal.fire({
+                        icon: 'error',
+                        text: response.data.message,
+                        timer: 2000,
+                        color: '#ffffff',
+                        background: '#24283b',
+                        timerProgressBar: true,
+                    });
                 }
             })
             .catch(function (error) {

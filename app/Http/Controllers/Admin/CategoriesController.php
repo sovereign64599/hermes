@@ -81,19 +81,10 @@ class CategoriesController extends Controller
             'category_name' => 'required',
         ]);
 
-        $checkCat = Category::where('category_name', $request->category_name)->first();
-        if($checkCat){
-            $updateCategory = Category::create([
-                'category_name' => ucfirst($request->category_name) . '- copy',
-                'category_description' => ucfirst($request->category_description),
-            ]);
-    
-            if($updateCategory){
-                return response(json_encode(['status' => 200, 'message' => ucfirst($request->category_name). ' copied Successfully.']));
-                exit();
-            }
+        if(Category::where('category_name', $request->category_name)->where('id', '!=', $request->category_id)->exists()){
+            return response(json_encode(['status' => 500, 'message' => ucfirst($request->category_name). ' Exist.']));
+            exit();
         }
-
         $updateCategory = Category::where('id', $request->category_id)->update([
             'category_name' => ucfirst($request->category_name),
             'category_description' => ucfirst($request->category_description),
