@@ -33,12 +33,13 @@
                     </div>
                 </div>
             </form>
+            <hr class="bg-dark">
             <div class="row t-o-items justify-content-center" id="showItems">
                 {{-- show items here --}}
             </div>
         </div>
         <div class="col-lg-4 t-o-right">
-            <div class="card sticky-top">
+            <div class="card sticky-top p-4">
                 <form action="">
                     <div class="card-header py-4 ">
                         <h3>Order</h3>

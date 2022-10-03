@@ -10971,7 +10971,6 @@ textarea.form-control-lg {
   outline: 0;
   color: var(--gray);
   border-radius: 10px;
-  padding: 5px;
 }
 #page-top #content .transfer-in .card .card-body table {
   border: 0;
@@ -10980,6 +10979,8 @@ textarea.form-control-lg {
   background: var(--secondary);
   border: 0;
   font-weight: 300;
+  padding: 1.5rem 10px;
+  font-size: 13px;
 }
 #page-top #content .transfer-in .card .card-body table th::after {
   display: none;
@@ -11076,6 +11077,71 @@ textarea.form-control-lg {
 }
 #page-top #content .transfer-out .card .card-body {
   position: relative;
+}
+#page-top #content .categories {
+  position: relative;
+}
+#page-top #content .categories .modal form {
+  position: relative;
+}
+#page-top #content .categories .modal form input, #page-top #content .categories .modal form select, #page-top #content .categories .modal form textarea {
+  background-color: var(--primary);
+  border: 0;
+  outline: 0;
+  color: var(--gray);
+}
+#page-top #content .categories .card .card-header input, #page-top #content .categories .card .card-header select, #page-top #content .categories .card .card-header textarea {
+  background-color: var(--secondary);
+  border: 0;
+  outline: 0;
+  color: var(--gray);
+  padding: 10px;
+  border-radius: 10px;
+}
+#page-top #content .categories .card .card-body input {
+  background-color: var(--secondary);
+  border: 0;
+  outline: 0;
+  color: var(--gray);
+  border-radius: 10px;
+}
+#page-top #content .categories .card .card-body table {
+  border: 0;
+}
+#page-top #content .categories .card .card-body table th {
+  background: var(--secondary);
+  border: 0;
+  font-weight: 300;
+  padding: 1.5rem 10px;
+  font-size: 13px;
+}
+#page-top #content .categories .card .card-body table th::after {
+  display: none;
+}
+#page-top #content .categories .card .card-body table tr {
+  border: 0 !important;
+}
+#page-top #content .categories .card .card-body table tr td {
+  border: 0 !important;
+  border-bottom: 1px solid var(--secondary);
+  vertical-align: middle;
+  font-size: 13px;
+}
+#page-top #content .categories .card .card-body table tr td .item-photo {
+  height: 50px;
+  width: 50px;
+  -o-object-fit: cover;
+     object-fit: cover;
+  border-radius: 50%;
+}
+#page-top #content .categories .card form {
+  position: relative;
+}
+#page-top #content .categories .card form input, #page-top #content .categories .card form select, #page-top #content .categories .card form textarea {
+  background-color: var(--secondary);
+  border: 0;
+  outline: 0;
+  color: var(--gray);
 }
 
 @media only screen and (max-width: 1024px) {

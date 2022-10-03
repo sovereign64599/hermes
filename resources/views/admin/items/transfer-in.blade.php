@@ -4,9 +4,9 @@
 
 @section('content')
     <div class="row transfer-in">
-        <div class="col-lg-3">
-            <div class="card text-left sticky-top">
-                <div class="card-header pb-0">
+        <div class="col-lg-4">
+            <div class="card text-left sticky-top p-4">
+                <div class="card-header p-3">
                     <h4 class="m-0 text-tertiary">Add Items</h4>
                     <p class="text-light-400">Unlimited Items</p>
                 </div>
@@ -15,10 +15,14 @@
                         @csrf
                         <div class="row">
                             <div class="form-group">
+                                <label><small>Item Name</small></label>
                                 <input type="text" name="item_name" class="form-control" placeholder="Item Name">
                             </div>
+
+                            @if($category->count() > 0)
                             <div class="col-lg-6">
                                 <div class="form-group">
+                                    <label><small>Item Category</small></label>
                                     <select class="form-select" name="item_category">
                                         <option value="" selected>Item Category</option>
                                         <option value="1">One</option>
@@ -27,9 +31,9 @@
                                     </select>
                                 </div>
                             </div>
-                            
                             <div class="col-lg-6">
                                 <div class="form-group">
+                                    <label><small>Item Sub Category</small></label>
                                     <select class="form-select" name="item_sub_category">
                                         <option value="" selected>Item Category</option>
                                         <option value="1">One</option>
@@ -38,35 +42,51 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-lg-6">
+                            @else 
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label><small>Category and Sub Category List is not created yet.</small></label>
+                                        <br />
+                                        <a class="btn btn-tertiary text-light" href="{{route('categories')}}">Add Categories</a>
+                                    </div>
+                                </div>
+                            @endif
+                            <div class="col-lg-4">
                                 <div class="form-group">
+                                    <label><small>Item Quantity</small></label>
                                     <input type="number" name="item_quantity" class="form-control" placeholder="Item Quantity">
                                 </div>
                             </div>
-                            <div class="col-lg-6">
+                            <div class="col-lg-4">
                                 <div class="form-group">
+                                    <label><small>Item barcode</small></label>
                                     <input type="number" name="item_barcode" class="form-control" value="{{str_pad(mt_rand(0, 999999), 6, '0', STR_PAD_LEFT)}}" placeholder="Item Bar code">
                                 </div>
                             </div>
-                            <div class="col-lg-6">
+                            <div class="col-lg-4">
                                 <div class="form-group">
+                                    <label><small>Item Cost</small></label>
                                     <input type="number" name="item_cost" class="form-control" placeholder="Cost">
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group">
+                                    <label><small>Item Sell</small></label>
                                     <input type="number" name="item_sell" class="form-control" placeholder="Sell">
                                 </div>
                             </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="item_img"><small>Item photo (Optional)</small></label>
+                                    <input type="file" name="item_photo" class="form-control" id="item_img" placeholder="Cost">
+                                </div>
+                            </div>
                             <div class="form-group">
+                                <label><small>Item Description</small></label>
                                 <textarea name="item_description" rows="3" class="form-control" placeholder="Description"></textarea>
                             </div>
                             <div class="form-group">
-                                <label class="text-light" for="item_img">Item photo (Optional)</label>
-                                <input type="file" name="item_photo" class="form-control" id="item_img" placeholder="Cost">
-                            </div>
-                            <div class="form-group">
-                                <label class="text-light">Add Notes (Optional)</label>
+                                <label><small>Add Notes (Optional)</small></label>
                                 <textarea name="item_notes" rows="3" class="form-control" value="No Notes" placeholder="Add notes"></textarea>
                             </div>
                             <div class="form-group">
@@ -78,21 +98,21 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-9">
-            <div class="card shadow mb-4">
-                <div class="card-header pb-0 pt-4">
-                    <h4 class="m-0 text-tertiary">Items Available</h4>
+        <div class="col-lg-8">
+            <div class="card shadow p-4">
+                <div class="card-header">
+                    <h4 class="text-tertiary">Items Available</h4>
                     <div class="d-flex justify-content-between">
-                        <div class="d-flex py-2 gap-1">
-                            <button class="btn text-light"><i class="fas fa-file-import mr-2"></i><span>Import Items</span></button>
-                            <button class="btn text-light"><i class="fas fa-file-export mr-2"></i><span>Export Items</span></button>
+                        <div class="d-flex gap-1">
+                            <button class="btn btn-sm text-light"><i class="fas fa-file-import mr-2"></i><span>Import Items</span></button>
+                            <button class="btn btn-sm text-light"><i class="fas fa-file-export mr-2"></i><span>Export Items</span></button>
                         </div>
-                        <div class="py-2">
+                        <div>
                             <input type="text" placeholder="Search Item" oninput="filter(this)">
                         </div>
                     </div>
                 </div>
-                <div class="card-body p-0">
+                <div class="card-body">
                     <div class="table-responsive">
                         <table class="table" width="100%" cellspacing="0">
                             <thead>
@@ -115,9 +135,6 @@
                         </table>
                     </div>
                 </div>
-                {{-- <div class="card-footer bg-transparent border-0">
-                    <button class="btn text-light" id="nextPage" onclick="nextPage(this)">Next</button>
-                </div> --}}
             </div>
 
             {{-- modal --}}
@@ -205,6 +222,8 @@
                         Swal.fire({
                             text: response.data.message,
                             icon: 'info',
+                            color: '#ffffff',
+                            background: '#24283b',
                             showCancelButton: true,
                             confirmButtonColor: '#3085d6',
                             cancelButtonColor: '#d33',
@@ -254,6 +273,8 @@
                             icon: 'success',
                             text: response.data.message,
                             timer: 2000,
+                            color: '#ffffff',
+                            background: '#24283b',
                             timerProgressBar: true,
                         });
                         transferIn.reset("reset");
@@ -277,6 +298,8 @@
                             icon: 'success',
                             text: response.data.message,
                             timer: 2000,
+                            color: '#ffffff',
+                            background: '#24283b',
                             timerProgressBar: true,
                         });
                         updateItem.reset("reset");
@@ -308,8 +331,21 @@
                                 icon: 'error',
                                 html: `<ul>${errMessage}</ul>`,
                                 timer: 2000,
+                                color: '#ffffff',
+                                background: '#24283b',
                                 timerProgressBar: true,
                             });
+                        }
+                        if(error.response.status == 404){
+                            Swal.fire({
+                                icon: 'error',
+                                text: error.response.statusText,
+                                timer: 2000,
+                                color: '#ffffff',
+                                background: '#24283b',
+                                timerProgressBar: true,
+                            });
+                            getItems();
                         }
                     }
                 });
@@ -326,8 +362,14 @@
                 .catch(function (error) {
                     if(error){
                         if(error.response.status == 404){
-                            myModal.show()
-                            modalItem.innerHTML = `<div class="modal-body text-center"><img class="img-fluid" src="{{asset('img/no_item.svg')}}"></img></div>`;
+                            Swal.fire({
+                                icon: 'error',
+                                text: error.response.statusText,
+                                timer: 2000,
+                                color: '#ffffff',
+                                background: '#24283b',
+                                timerProgressBar: true,
+                            });
                         }
                     }
                 })
@@ -339,9 +381,11 @@
                 title: 'Are you sure?',
                 text: "You won't be able to revert this!",
                 icon: 'warning',
+                color: '#ffffff',
+                background: '#24283b',
                 showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
+                confirmButtonColor: '#d95650',
+                cancelButtonColor: '#858796',
                 confirmButtonText: 'Yes, delete it!'
                 }).then((result) => {
                 if (result.isConfirmed) {
@@ -358,11 +402,16 @@
                             }
                         })
                         .catch(function (error) {
-                            if(error){
-                                if(error.response.status == 404){
-                                    myModal.show()
-                                    modalItem.innerHTML = `<div class="modal-body text-center"><img class="img-fluid" src="{{asset('img/no_item.svg')}}"></img></div>`;
-                                }
+                            if(error.response.status == 404){
+                                Swal.fire({
+                                    icon: 'error',
+                                    text: error.response.statusText,
+                                    timer: 2000,
+                                    color: '#ffffff',
+                                    background: '#24283b',
+                                    timerProgressBar: true,
+                                });
+                                getItems();
                             }
                         })
                 }

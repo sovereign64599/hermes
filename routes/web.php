@@ -30,9 +30,22 @@ Route::group(['middleware' => 'auth'], function(){
     // transfer out get action
     Route::get('/show-items', [App\Http\Controllers\Admin\TransferOutController::class, 'showItems']);
 
-    // pages to show
+    // inventory show pages
     Route::get('/transfer-in', [App\Http\Controllers\Admin\TransferInController::class, 'index'])->name('transfer.in');
     Route::get('/transfer-out', [App\Http\Controllers\Admin\TransferOutController::class, 'index'])->name('transfer.out');
-    Route::get('/show-categories', [App\Http\Controllers\Admin\CategoriesController::class, 'index'])->name('categories');
+
+    // category post action
+    Route::post('/create-category', [App\Http\Controllers\Admin\CategoriesController::class, 'store'])->name('store.category');
+    Route::post('/update-category', [App\Http\Controllers\Admin\CategoriesController::class, 'updateCategory'])->name('update.category');
+
+    // category get action
+    Route::get('/get-category', [App\Http\Controllers\Admin\CategoriesController::class, 'getCategory']);
+    Route::get('/edit-category/{id}', [App\Http\Controllers\Admin\CategoriesController::class, 'editCategory']);
+    Route::get('/filter-category/{input}', [App\Http\Controllers\Admin\CategoriesController::class, 'filter']);
+    Route::get('/delete-category/{input}', [App\Http\Controllers\Admin\CategoriesController::class, 'deleteCategory']);
+
+    // category show pages
+    Route::get('/categories', [App\Http\Controllers\Admin\CategoriesController::class, 'index'])->name('categories');
+    Route::get('/sub-categories', [App\Http\Controllers\Admin\SubCategoryController::class, 'index'])->name('sub.categories');
 
 });

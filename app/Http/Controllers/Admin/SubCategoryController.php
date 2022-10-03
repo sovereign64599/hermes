@@ -6,14 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
 
-class CategoriesController extends Controller
+class SubCategoryController extends Controller
 {
     public function __construct(){
         $this->middleware('auth');
     }
 
     public function index(){
-        return view('admin.categories.category');
+        $categories = Category::get();
+        return view('admin.categories.subcategory', compact(['categories']));
     }
 
     public function getCategory(){
@@ -21,7 +22,7 @@ class CategoriesController extends Controller
         if($categories->count() > 0){
             $html = '';
             foreach($categories as $category){
-                $html .='<tr>';
+                $html .='</tr>';
                 $html .='<td>'.$category->category_name.'</td>';
                 $html .='<td>'.$category->category_description.'</td>';
                 $html .='<td>'.$category->created_at->diffForHumans().'</td>';
@@ -81,18 +82,8 @@ class CategoriesController extends Controller
             'category_name' => 'required',
         ]);
 
-        $checkCat = Category::where('category_name', $request->category_name)->first();
-        if($checkCat){
-            $updateCategory = Category::create([
-                'category_name' => ucfirst($request->category_name) . '- copy',
-                'category_description' => ucfirst($request->category_description),
-            ]);
-    
-            if($updateCategory){
-                return response(json_encode(['status' => 200, 'message' => ucfirst($request->category_name). ' copied Successfully.']));
-                exit();
-            }
-        }
+        $checkCategory  = Category::orderBy('updated_at', 'ASC')->where('category_name', $request->category_name)->first();
+        Category::where('id', $checkCategory->id)->delete();
 
         $updateCategory = Category::where('id', $request->category_id)->update([
             'category_name' => ucfirst($request->category_name),
@@ -139,4 +130,4 @@ class CategoriesController extends Controller
             return response(json_encode(['status' => 200, 'message' => 'Item Deleted.']));
         }
     }
-}   
+}

@@ -7,6 +7,7 @@
     <title>@yield('title')</title>
     <script src="{{ asset('js/app.js') }}" defer></script>
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
+    <link rel="shortcut icon" href="{{asset('img/shorticon.png')}}">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
@@ -42,11 +43,24 @@
                 <i class="fas fa-box-open"></i>
                 <span>Inventory</span>
             </a>
-            <div id="itemsCollapse" class="collapse @if(Route::currentRouteName() == 'transfer.in' || Route::currentRouteName() == 'transfer.out' || Route::currentRouteName() == 'categories') show @endif" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+            <div id="itemsCollapse" class="collapse @if(Route::currentRouteName() == 'transfer.in' || Route::currentRouteName() == 'transfer.out') show @endif" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                 <div class="bg-secondary py-2 collapse-inner rounded">
-                    <a class="collapse-item text-white  @if(Route::currentRouteName() == 'transfer.in') active @endif" href="{{route('transfer.in')}}"><i class="fas fa-level-down-alt mr-3 text-tertiary"></i><span>Transfer In</span></a>
-                    <a class="collapse-item text-white  @if(Route::currentRouteName() == 'transfer.out') active @endif" href="{{route('transfer.out')}}"><i class="fas fa-level-up-alt mr-3 text-tertiary"></i><span>Transfer Out</span></a>
-                    <a class="collapse-item text-white  @if(Route::currentRouteName() == 'categories') active @endif" href="{{route('categories')}}"><i class="fas fa-sitemap mr-2 text-tertiary"></i><span>Categories</span></a>
+                    <a class="collapse-item text-white mb-1  @if(Route::currentRouteName() == 'transfer.in') active @endif" href="{{route('transfer.in')}}"><i class="fas fa-level-down-alt mr-3 text-tertiary"></i><span>Transfer In</span></a>
+                    <a class="collapse-item text-white mb-1  @if(Route::currentRouteName() == 'transfer.out') active @endif" href="{{route('transfer.out')}}"><i class="fas fa-level-up-alt mr-3 text-tertiary"></i><span>Transfer Out</span></a>
+                </div>
+            </div>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#itemsCollapse"
+                aria-expanded="true" aria-controls="itemsCollapse">
+                <i class="fas fa-box-open"></i>
+                <span>Manage Category</span>
+            </a>
+            <div id="itemsCollapse" class="collapse @if(Route::currentRouteName() == 'categories' || Route::currentRouteName() == 'sub.categories') show @endif" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                <div class="bg-secondary py-2 collapse-inner rounded">
+                    <a class="collapse-item text-white mb-1  @if(Route::currentRouteName() == 'categories') active @endif" href="{{route('categories')}}"><i class="fas fa-sitemap mr-2 text-tertiary"></i><span>Category</span></a>
+                    <a class="collapse-item text-white  @if(Route::currentRouteName() == 'sub.categories') active @endif" href="{{route('sub.categories')}}"><i class="fas fa-sitemap mr-2 text-tertiary"></i><span>Sub Category</span></a>
                 </div>
             </div>
         </li>
@@ -86,8 +100,8 @@
             </a>
             <div id="resourcesCollapse" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                 <div class="bg-secondary py-2 collapse-inner rounded">
-                    <a class="collapse-item text-white" href="login.html"><i class="fas fa-level-down-alt mr-3 text-tertiary"></i><span>Import</span></a>
-                    <a class="collapse-item text-white" href="register.html"><i class="fas fa-level-up-alt mr-3 text-tertiary"></i><span>Export</span></a>
+                    <a class="collapse-item text-white mb-1" href="login.html"><i class="fas fa-level-down-alt mr-3 text-tertiary"></i><span>Import</span></a>
+                    <a class="collapse-item text-white mb-1" href="register.html"><i class="fas fa-level-up-alt mr-3 text-tertiary"></i><span>Export</span></a>
                 </div>
             </div>
         </li>

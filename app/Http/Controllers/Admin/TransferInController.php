@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\Items;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -15,7 +16,8 @@ class TransferInController extends Controller
     }
 
     public function index(){
-        return view('admin.items.transfer-in');
+        $category = Category::get();
+        return view('admin.items.transfer-in', compact(['category']));
     }
     
     public function getItems(){
@@ -26,7 +28,7 @@ class TransferInController extends Controller
                 $quantity = ($item->item_quantity == 0) ? '<small class="text-danger">Out of Stock</small>' : $item->item_quantity;
                 $img = empty($item->item_photo) ? asset('img/default_item_photo.png') : asset('img/item_photo/'.$item->item_photo.'');
                 $html .= '<tr><td>';
-                $html .='<img class="img-fluid item-photo" src="'. $img .'" alt="img1">';
+                $html .='<a href="'. $img .'" target="_blank"><img class="img-fluid item-photo" src="'. $img .'" alt="'.$item->item_name.'"></a>';
                 $html .='</td>';
                 $html .='<td>'.$item->item_name.'</td>';
                 $html .='<td>'.$item->item_category.'</td>';
@@ -38,8 +40,8 @@ class TransferInController extends Controller
                 $html .='<td>'.$item->item_sell.'</td>';
                 $html .='<td>';
                 $html .='<div class="d-flex gap-1">';
-                $html .='<button data="'.$item->id.'" class="btn text-light" onclick="editItem(this)">Edit</button>';
-                $html .='<button data="'.$item->id.'" class="btn text-light" onclick="deleteItem(this)">Delete</button>';
+                $html .='<button data="'.$item->id.'" class="btn bg-secondary text-light btn-sm" onclick="editItem(this)"><i class="fas fa-pencil-alt mr-1 fa-sm"></i><small>Edit</small></button>';
+                $html .='<button data="'.$item->id.'" class="btn text-light btn-sm" onclick="deleteItem(this)"><i class="fas fa-trash mr-1 fa-sm"></i><small>Delete</small></button>';
                 $html .='</div>';
                 $html .='</td></tr>';
             }
@@ -254,24 +256,27 @@ class TransferInController extends Controller
         }
 
         $quantity = ($request->item_quantity <= 0) ? 0 : $request->item_quantity;
-        $updateItem = Items::where('id', $request->item_id)->update([
-            'item_name' => ucfirst($request->item_name),
-            'item_category' => ucfirst($request->item_category),
-            'item_sub_category' => ucfirst($request->item_sub_category),
-            'item_quantity' => $quantity,
-            'item_barcode' => ucfirst($request->item_barcode),
-            'item_description' => $request->item_description,
-            'item_cost' => $request->item_cost,
-            'item_sell' => $request->item_sell,
-            'item_notes' => $request->item_notes,
-            'item_photo' => $item_photo,
-        ]);
-
-        if($updateItem){
-            if(!empty($request->item_photo)){
-                $request->item_photo->move(public_path('img/item_photo'), $item_photo);
+        $checkUp = Items::where('id', $request->item_id)->firstOrFail();
+        if($checkUp){
+            $updateItem = $checkUp->update([
+                'item_name' => ucfirst($request->item_name),
+                'item_category' => ucfirst($request->item_category),
+                'item_sub_category' => ucfirst($request->item_sub_category),
+                'item_quantity' => $quantity,
+                'item_barcode' => ucfirst($request->item_barcode),
+                'item_description' => $request->item_description,
+                'item_cost' => $request->item_cost,
+                'item_sell' => $request->item_sell,
+                'item_notes' => $request->item_notes,
+                'item_photo' => $item_photo,
+            ]);
+    
+            if($updateItem){
+                if(!empty($request->item_photo)){
+                    $request->item_photo->move(public_path('img/item_photo'), $item_photo);
+                }
+                return response(json_encode(['status' => 200, 'message' => ucfirst($request->item_name). ' Updated Successfully.']));
             }
-            return response(json_encode(['status' => 200, 'message' => ucfirst($request->item_name). ' Updated Successfully.']));
         }
     }
 
@@ -338,8 +343,9 @@ class TransferInController extends Controller
     }
 
     public function destroy(String $id){
-        $item = Items::where('id', $id)->delete();
-        if($item){
+        $item = Items::where('id', $id)->firstOrFail();
+        $delete = $item->delete();
+        if($delete){
             return response(json_encode(['status' => 200, 'message' => 'Item Deleted.']));
         }
     }
