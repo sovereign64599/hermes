@@ -13,6 +13,7 @@
     --tertiary: #d95650 !important;
     --tertiary-dark: #ad403a !important;
     --light: #ffffff !important;
+    --light-gray: #cdcdce !important;
     --gray: #858796 !important;
 }
 
@@ -341,7 +342,7 @@
                     background-color: var(--primary);
                     border: 0;
                     outline: 0;
-                    color: var(--gray);
+                    color: var(--light-gray);
                 }
             }
         }
@@ -352,7 +353,7 @@
                     background-color: var(--secondary);
                     border: 0;
                     outline: 0;
-                    color: var(--gray);
+                    color: var(--light-gray);
                     padding: 10px;
                     border-radius: 10px;
                 }
@@ -364,7 +365,7 @@
                     background-color: var(--secondary);
                     border: 0;
                     outline: 0;
-                    color: var(--gray);
+                    color: var(--light-gray);
                     border-radius: 10px;
                 }
 
@@ -409,7 +410,7 @@
                     background-color: var(--secondary);
                     border: 0;
                     outline: 0;
-                    color: var(--gray);
+                    color: var(--light-gray);
                 }
             }
         }

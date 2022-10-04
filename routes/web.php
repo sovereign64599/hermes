@@ -26,6 +26,7 @@ Route::group(['middleware' => 'auth'], function(){
     Route::get('/edit-items/{id}', [App\Http\Controllers\Admin\TransferInController::class, 'editItems']);
     Route::get('/delete-items/{id}', [App\Http\Controllers\Admin\TransferInController::class, 'destroy']);
     Route::get('/filter-items/{input}', [App\Http\Controllers\Admin\TransferInController::class, 'filter']);
+    Route::get('/collect-sub-categories/{id}', [App\Http\Controllers\Admin\TransferInController::class, 'collectSubCategory']);
 
     // transfer out get action
     Route::get('/show-items', [App\Http\Controllers\Admin\TransferOutController::class, 'showItems']);
@@ -43,6 +44,16 @@ Route::group(['middleware' => 'auth'], function(){
     Route::get('/edit-category/{id}', [App\Http\Controllers\Admin\CategoriesController::class, 'editCategory']);
     Route::get('/filter-category/{input}', [App\Http\Controllers\Admin\CategoriesController::class, 'filter']);
     Route::get('/delete-category/{input}', [App\Http\Controllers\Admin\CategoriesController::class, 'deleteCategory']);
+
+    // sub category post action
+    Route::post('/create-sub-category', [App\Http\Controllers\Admin\SubCategoryController::class, 'store'])->name('store.sub.category');
+    Route::post('/update-sub-category', [App\Http\Controllers\Admin\SubCategoryController::class, 'updateSubCategory'])->name('update.sub.category');
+
+    // sub category get action
+    Route::get('/get-sub-category', [App\Http\Controllers\Admin\SubCategoryController::class, 'getSubCategory']);
+    Route::get('/edit-sub-category/{id}', [App\Http\Controllers\Admin\SubCategoryController::class, 'editSubCategory']);
+    Route::get('/filter-sub-category/{input}', [App\Http\Controllers\Admin\SubCategoryController::class, 'filter']);
+    Route::get('/delete-sub-category/{input}', [App\Http\Controllers\Admin\SubCategoryController::class, 'deleteSubCategory']);
 
     // category show pages
     Route::get('/categories', [App\Http\Controllers\Admin\CategoriesController::class, 'index'])->name('categories');

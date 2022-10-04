@@ -8,7 +8,9 @@
             <div class="card text-left sticky-top p-4">
                 <div class="card-header">
                     <h4 class="m-0 text-tertiary">Add Category</h4>
+                    @if($categories->count() === 0)
                     <small class="text-light-400"><strong>Note:</strong> To Enable Sub Category, You need to add Category first.</small>
+                    @endif
                 </div>
                 <div class="card-body pt-0">
                     <form id="addCategory">
@@ -23,7 +25,7 @@
                                 <textarea name="category_description" class="form-control" rows="3" placeholder="write.."></textarea>
                             </div>
                             <div class="form-group">
-                                <button class="btn btn-primary text-light">Reset Form</button>
+                                <button class="btn bg-secondary text-light">Reset Form</button>
                                 <button class="btn text-light">Create Category</button>
                             </div>
                         </div>
@@ -63,8 +65,8 @@
 
             {{-- modal --}}
             <div class="modal fade" id="editCategory" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
-                <div class="modal-dialog modal-lg modal-dialog-centered">
-                    <div class="modal-content">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content p-4">
                         <div class="modal-header border-0">
                             <h5 class="modal-title">Update Category</h5>
                         </div>

@@ -18,27 +18,23 @@
                                 <label><small>Item Name</small></label>
                                 <input type="text" name="item_name" class="form-control" placeholder="Item Name">
                             </div>
-
-                            @if($category->count() > 0)
+                            @if($getSubCategories->count() > 0)
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label><small>Item Category</small></label>
-                                    <select class="form-select" name="item_category">
-                                        <option value="" selected>Item Category</option>
-                                        <option value="1">One</option>
-                                        <option value="2">Two</option>
-                                        <option value="3">Three</option>
+                                    <select class="form-select" name="item_category" onchange="collectSubCategory(this)">
+                                        <option value="" selected>Select Category</option>
+                                        @foreach($getSubCategories as $category)
+                                            <option data="{{$category->category_id}}" value="{{$category->category_name}}">{{$category->category_name}}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label><small>Item Sub Category</small></label>
-                                    <select class="form-select" name="item_sub_category">
-                                        <option value="" selected>Item Category</option>
-                                        <option value="1">One</option>
-                                        <option value="2">Two</option>
-                                        <option value="3">Three</option>
+                                    <select class="form-select" name="item_sub_category" id="item_sub_category">
+                                        <option value="" selected>Choose Category first</option>
                                     </select>
                                 </div>
                             </div>
@@ -47,7 +43,7 @@
                                     <div class="form-group">
                                         <label><small>Category and Sub Category List is not created yet.</small></label>
                                         <br />
-                                        <a class="btn btn-tertiary text-light" href="{{route('categories')}}">Add Categories</a>
+                                        <a class="btn btn-tertiary text-light" href="{{route('categories')}}">Create Categories</a>
                                     </div>
                                 </div>
                             @endif
@@ -60,7 +56,7 @@
                             <div class="col-lg-4">
                                 <div class="form-group">
                                     <label><small>Item barcode</small></label>
-                                    <input type="number" name="item_barcode" class="form-control" value="{{str_pad(mt_rand(0, 999999), 6, '0', STR_PAD_LEFT)}}" placeholder="Item Bar code">
+                                    <input type="number" name="item_barcode" class="form-control" placeholder="Item Bar code">
                                 </div>
                             </div>
                             <div class="col-lg-4">
@@ -264,6 +260,20 @@
                     }
                 });
         })
+
+        async function collectSubCategory(data){
+            var selectedOption = data.options[data.selectedIndex];
+            var dataID = selectedOption.getAttribute('data');
+            await axios.get('/collect-sub-categories/' + dataID)
+                .then(function (response) {
+                    if(response.data.status == 200){
+                        document.querySelector('#item_sub_category').innerHTML = response.data.data;
+                    }
+                })
+                .catch(function (error) {
+                    console.log(error);
+                })
+        }
 
         function updateExistItems(dataToUpdate) {
             axios.post('/update-exist-items', dataToUpdate)

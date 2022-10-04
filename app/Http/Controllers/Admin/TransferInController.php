@@ -5,9 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Items;
+use App\Models\SubCategory;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\DB;
 
 class TransferInController extends Controller
 {
@@ -16,8 +15,13 @@ class TransferInController extends Controller
     }
 
     public function index(){
-        $category = Category::get();
-        return view('admin.items.transfer-in', compact(['category']));
+        $collection = collect(SubCategory::get());
+        $unique = $collection->unique(['category_name']);
+
+        $unique->values()->all();
+        $getSubCategories = $unique;
+        // dd($checkCategories);
+        return view('admin.items.transfer-in', compact(['getSubCategories']));
     }
     
     public function getItems(){
@@ -101,6 +105,19 @@ class TransferInController extends Controller
         }
     }
 
+    public function collectSubCategory($id){
+        $subCategories = SubCategory::where('category_id', $id)->get();
+        if($subCategories->count() > 0){
+            $html = '';
+            foreach($subCategories as $subCategory){
+                $html .= '<option>'.$subCategory->sub_category_name.'</option>';
+            }
+            return response(json_encode(['status' => 200, 'data' => $html]));
+        }else{
+            return response(json_encode(['status' => 200, 'data' => '<option>No sub category found</option>']));
+        }
+    }
+
     public function store(Request $request){
         $request->validate([
             'item_name' => 'required',
@@ -135,19 +152,20 @@ class TransferInController extends Controller
             $item_photo = NULL;
         }
         $quantity = $request->item_quantity <= 0 ? 0 : $request->item_quantity;
+        $barcode = empty($request->item_barcode) ? str_pad(mt_rand(0, 999999), 6, '0', STR_PAD_LEFT) : $request->item_barcode;
         $storeItems = Items::create([
             'item_name' => ucfirst($request->item_name),
             'item_category' => ucfirst($request->item_category),
             'item_sub_category' => ucfirst($request->item_sub_category),
             'item_quantity' => $quantity,
-            'item_barcode' => ucfirst($request->item_barcode),
+            'item_barcode' => $barcode,
             'item_description' => ucfirst($request->item_description),
             'item_cost' => $request->item_cost,
             'item_sell' => $request->item_sell,
             'item_notes' => $request->item_notes,
             'item_photo' => $item_photo,
         ]);
-
+        // str_pad(mt_rand(0, 999999), 6, '0', STR_PAD_LEFT)
         if($storeItems){
             if(!empty($request->item_photo)){
                 $request->item_photo->move(public_path('img/item_photo'), $item_photo);
@@ -244,10 +262,7 @@ class TransferInController extends Controller
             }
         }
 
-        $item  = Items::where('item_name', $request->item_name)
-        ->where('item_category', $request->item_category)
-        ->where('item_sub_category', $request->item_sub_category)
-        ->where('item_barcode', $request->item_barcode)->first();
+        $item  = Items::where('id', $request->item_id)->first();
 
         if(!empty($request->item_photo)){
             $item_photo = uniqid() . '.' . $request->item_photo->extension();

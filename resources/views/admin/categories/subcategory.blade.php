@@ -10,15 +10,16 @@
                     <h4 class="m-0 text-tertiary">Add Sub Category</h4>
                 </div>
                 <div class="card-body">
-                    <form id="addCategory">
+                    <form id="addSubCategory">
                         @csrf
                         @if($categories->count() > 0)
+                            <input type="hidden" name="category_id">
                             <div class="form-group">
                                 <label><small>Category</small></label>
                                 <select class="form-select" name="category_name">
                                     <option value="" selected>Choose Category</option>
                                     @foreach($categories as $item)
-                                        <option value="{{$item->category_name}}">{{$item->category_name}}</option>
+                                        <option value="{{$item->category_name}}|{{$item->id}}">{{$item->category_name}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -27,11 +28,7 @@
                                 <input type="text" name="sub_category_name" class="form-control" placeholder="Category name">
                             </div>
                             <div class="form-group">
-                                <label><small>Category Description (Optional)</small></label>
-                                <textarea name="category_description" class="form-control" rows="3" placeholder="write.."></textarea>
-                            </div>
-                            <div class="form-group">
-                                <button class="btn btn-primary text-light">Reset Form</button>
+                                <button class="btn bg-secondary text-light">Reset Form</button>
                                 <button class="btn text-light">Create Category</button>
                             </div>
                         @else 
@@ -59,12 +56,12 @@
                                 <tr>
                                     <th>Category</th>
                                     <th>Sub Category</th>
-                                    <th>Category Created</th>
-                                    <th>Category Updated</th>
+                                    <th>Sub Category Created</th>
+                                    <th>Sub Category Updated</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                            <tbody id="showCategory">
+                            <tbody id="showSubCategory">
                                 <tr>
                                     <td>No Item Found</td>
                                 </tr>
@@ -75,14 +72,14 @@
             </div>
 
             {{-- modal --}}
-            <div class="modal fade" id="editCategory" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
-                <div class="modal-dialog modal-lg modal-dialog-centered">
-                    <div class="modal-content">
+            <div class="modal fade" id="editSubCategory" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content p-4">
                         <div class="modal-header border-0">
-                            <h5 class="modal-title">Update Category</h5>
+                            <h5 class="modal-title">Update Sub Category</h5>
                         </div>
                         <div class="modal-body border-0">
-                            <form id="updateCategory" class="modal-category">
+                            <form id="updateSubCategory" class="modal-sub-category">
                             </form>
                         </div>
                     </div>
@@ -95,24 +92,24 @@
 @endsection
 
 @section('script')
-{{-- <script>
-    const categoryForm = document.querySelector('#addCategory');
-    const modalCategory = document.querySelector('.modal-category');
-    const updateCategory = document.querySelector('#updateCategory');
-    var myModal = new bootstrap.Modal(document.getElementById('editCategory'), {
+<script>
+    const subCategoryForm = document.querySelector('#addSubCategory');
+    const modalSubCategory = document.querySelector('.modal-sub-category');
+    const updateSubCategory = document.querySelector('#updateSubCategory');
+    var myModal = new bootstrap.Modal(document.getElementById('editSubCategory'), {
         // keyboard: false
     })
-    getCategory();
+    getSubCategory();
 
-    async function getCategory(){
-        document.querySelector('#showCategory').innerHTML = `<div class="d-flex align-items-center justify-content-center py-4"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+    async function getSubCategory(){
+        document.querySelector('#showSubCategory').innerHTML = `<div class="d-flex align-items-center justify-content-center py-4"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
             <span class="visually-hidden">Loading...</span>
         </div></div>`;
         
-        await axios.get('/get-category')
+        await axios.get('/get-sub-category')
             .then(function (response) {
                 if(response.data.status == 200){
-                    document.querySelector('#showCategory').innerHTML = `<tr><td>${response.data.data}</td></tr>`;
+                    document.querySelector('#showSubCategory').innerHTML = `<tr><td>${response.data.data}</td></tr>`;
                 }
             })
             .catch(function (error) {
@@ -121,18 +118,18 @@
     }
 
     async function filter(input) {
-        document.querySelector('#showCategory').innerHTML = `<div class="d-flex align-items-center justify-content-center py-4"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+        document.querySelector('#showSubCategory').innerHTML = `<div class="d-flex align-items-center justify-content-center py-4"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
             <span class="visually-hidden">Loading...</span>
         </div></div>`;
         let incrementedLengthInput = input.value.length + 1;
         if(incrementedLengthInput > 2){
-            await axios.get('/filter-category/'+input.value)
+            await axios.get('/filter-sub-category/'+input.value)
             .then(function (response) {
                 setTimeout(() => {
                     if(response.data.status == 200){
-                        document.querySelector('#showCategory').innerHTML = response.data.data;
+                        document.querySelector('#showSubCategory').innerHTML = response.data.data;
                     }else if(response.data.empty){
-                        getCategory();
+                        getSubCategory();
                     }
                 }, 1000);
             })
@@ -149,14 +146,14 @@
                 }
             })
         }else{
-            getCategory();
+            getSubCategory();
         }
     }
 
-    categoryForm.addEventListener('submit', function(e){
+    subCategoryForm.addEventListener('submit', function(e){
         e.preventDefault();
         let formData = new FormData(this);
-        axios.post('/create-category', formData)
+        axios.post('/create-sub-category', formData)
             .then((response) => {
                 if(response.data.status == 200){
                     Swal.fire({
@@ -165,8 +162,30 @@
                         color: '#ffffff',
                         background: '#24283b',
                     });
-                    categoryForm.reset("reset");
-                    getCategory();
+                    subCategoryForm.reset("reset");
+                    getSubCategory();
+                }else if(response.data.status == 422){
+                    Swal.fire({
+                        icon: 'error',
+                        text: response.data.message,
+                        color: '#ffffff',
+                        background: '#24283b',
+                    });
+                }else{
+                    Swal.fire({
+                        text: response.data.message,
+                        icon: 'warning',
+                        color: '#ffffff',
+                        background: '#24283b',
+                        showCancelButton: false,
+                        confirmButtonColor: '#d95650',
+                        cancelButtonColor: '#858796',
+                        confirmButtonText: 'Reload'
+                        }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.reload();
+                        }
+                    });
                 }
             })
             .catch(function (error) {
@@ -175,21 +194,36 @@
                         var errors = error.response.data.errors;
                         Swal.fire({
                             icon: 'error',
-                            html: `${errors.category_name}`,
+                            html: `${errors.sub_category_name}`,
                             color: '#ffffff',
                             background: '#24283b',
+                        });
+                    }else if( error.response.status === 404 ) {
+                        Swal.fire({
+                            text: 'Something went wrong. Please reload page.',
+                            icon: 'warning',
+                            color: '#ffffff',
+                            background: '#24283b',
+                            showCancelButton: false,
+                            confirmButtonColor: '#d95650',
+                            cancelButtonColor: '#858796',
+                            confirmButtonText: 'Reload'
+                            }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.reload();
+                            }
                         });
                     }
                 }
             });
     })
 
-    if(updateCategory){
-        updateCategory.addEventListener('submit', function(e){
+    if(updateSubCategory){
+        updateSubCategory.addEventListener('submit', function(e){
             e.preventDefault();
             let formData = new FormData(this);
 
-            axios.post('/update-category', formData)
+            axios.post('/update-sub-category', formData)
             .then((response) => {
                 if(response.data.status == 200){
                     Swal.fire({
@@ -200,9 +234,16 @@
                         background: '#24283b',
                         timerProgressBar: true,
                     });
-                    updateCategory.reset("reset");
+                    updateSubCategory.reset("reset");
                     myModal.hide()
-                    getCategory();
+                    getSubCategory();
+                }else{
+                    Swal.fire({
+                        icon: 'error',
+                        text: response.data.message,
+                        color: '#ffffff',
+                        background: '#24283b',
+                    });
                 }
             })
             .catch(function (error) {
@@ -211,7 +252,7 @@
                         var errors = error.response.data.errors;
                         Swal.fire({
                             icon: 'error',
-                            html: `${errors.category_name}`,
+                            html: `${errors.sub_category_name}`,
                             color: '#ffffff',
                             background: '#24283b',
                         });
@@ -221,12 +262,12 @@
         })
     }
 
-    async function editCategory(id){
+    async function editSubCategory(id){
         const dataID = id.getAttribute('data');
-        await axios.get('/edit-category/' + dataID)
+        await axios.get('/edit-sub-category/' + dataID)
             .then(function (response) {
                 myModal.show()
-                modalCategory.innerHTML = response.data;
+                modalSubCategory.innerHTML = response.data;
             })
             .catch(function (error) {
                 if(error){
@@ -258,7 +299,7 @@
             confirmButtonText: 'Yes, delete it!'
             }).then((result) => {
             if (result.isConfirmed) {
-            axios.get('/delete-category/' + dataID)
+            axios.get('/delete-sub-category/' + dataID)
                     .then(function (response) {
                         if(response.data.status == 200){
                             Swal.fire({
@@ -269,7 +310,7 @@
                                 background: '#24283b',
                                 timerProgressBar: true,
                             });
-                            getCategory();
+                            getSubCategory();
                         }
                     })
                     .catch(function (error) {
@@ -289,6 +330,5 @@
             }
         })
     }
-
-</script> --}}
+</script>
 @endsection

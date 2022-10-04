@@ -6,18 +6,14 @@ use App\Traits\Uuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Category extends Model
+class Cart extends Model
 {
     use HasFactory;
     use Uuid;
 
-    protected $table = 'categories';
+    protected $table = 'carts';
     protected $fillable = [
         'category_name',
         'category_description',
     ];
-
-    public function subcategory(){
-        return $this->hasMany(SubCategory::class);
-    }
 }

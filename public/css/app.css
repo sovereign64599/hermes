@@ -10821,6 +10821,7 @@ textarea.form-control-lg {
   --tertiary: #d95650 !important;
   --tertiary-dark: #ad403a !important;
   --light: #ffffff !important;
+  --light-gray: #cdcdce !important;
   --gray: #858796 !important;
 }
 
@@ -11088,13 +11089,13 @@ textarea.form-control-lg {
   background-color: var(--primary);
   border: 0;
   outline: 0;
-  color: var(--gray);
+  color: var(--light-gray);
 }
 #page-top #content .categories .card .card-header input, #page-top #content .categories .card .card-header select, #page-top #content .categories .card .card-header textarea {
   background-color: var(--secondary);
   border: 0;
   outline: 0;
-  color: var(--gray);
+  color: var(--light-gray);
   padding: 10px;
   border-radius: 10px;
 }
@@ -11102,7 +11103,7 @@ textarea.form-control-lg {
   background-color: var(--secondary);
   border: 0;
   outline: 0;
-  color: var(--gray);
+  color: var(--light-gray);
   border-radius: 10px;
 }
 #page-top #content .categories .card .card-body table {
@@ -11141,7 +11142,7 @@ textarea.form-control-lg {
   background-color: var(--secondary);
   border: 0;
   outline: 0;
-  color: var(--gray);
+  color: var(--light-gray);
 }
 
 @media only screen and (max-width: 1024px) {

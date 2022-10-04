@@ -13,7 +13,8 @@ class CategoriesController extends Controller
     }
 
     public function index(){
-        return view('admin.categories.category');
+        $categories = Category::get();
+        return view('admin.categories.category', compact(['categories']));
     }
 
     public function getCategory(){
