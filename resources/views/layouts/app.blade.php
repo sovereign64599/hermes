@@ -52,12 +52,12 @@
         </li>
 
         <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#itemsCollapse"
-                aria-expanded="true" aria-controls="itemsCollapse">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#categoryCollapse"
+                aria-expanded="true" aria-controls="categoryCollapse">
                 <i class="fas fa-box-open"></i>
                 <span>Manage Category</span>
             </a>
-            <div id="itemsCollapse" class="collapse @if(Route::currentRouteName() == 'categories' || Route::currentRouteName() == 'sub.categories') show @endif" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+            <div id="categoryCollapse" class="collapse @if(Route::currentRouteName() == 'categories' || Route::currentRouteName() == 'sub.categories') show @endif" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                 <div class="bg-secondary py-2 collapse-inner rounded">
                     <a class="collapse-item text-white mb-1  @if(Route::currentRouteName() == 'categories') active @endif" href="{{route('categories')}}"><i class="fas fa-sitemap mr-2 text-tertiary"></i><span>Category</span></a>
                     <a class="collapse-item text-white  @if(Route::currentRouteName() == 'sub.categories') active @endif" href="{{route('sub.categories')}}"><i class="fas fa-sitemap mr-2 text-tertiary"></i><span>Sub Category</span></a>

@@ -82,7 +82,7 @@ class CategoriesController extends Controller
         ]);
 
         if(Category::where('category_name', $request->category_name)->where('id', '!=', $request->category_id)->exists()){
-            return response(json_encode(['status' => 500, 'message' => ucfirst($request->category_name). ' Exist.']));
+            return response(json_encode(['status' => 500, 'message' => ucfirst($request->category_name). ' already exist.']));
             exit();
         }
         $updateCategory = Category::where('id', $request->category_id)->update([
@@ -127,7 +127,7 @@ class CategoriesController extends Controller
         $category = Category::where('id', $id)->firstOrFail();
         $delete = $category->delete();
         if($delete){
-            return response(json_encode(['status' => 200, 'message' => 'Item Deleted.']));
+            return response(json_encode(['status' => 200, 'message' => 'Category Deleted.']));
         }
     }
 }   
