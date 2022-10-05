@@ -26,7 +26,6 @@ class CreateItemsTable extends Migration
             $table->string('item_sell');
             $table->string('item_notes')->nullable();
             $table->string('item_photo')->nullable();
-            $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

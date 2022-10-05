@@ -42,7 +42,7 @@
             <div class="card sticky-top p-4">
                 <form action="">
                     <div class="card-header py-4 ">
-                        <h3>Order</h3>
+                        <h3>Transfer Out</h3>
                         <div class="d-flex justify-content-between">
                             <div class="m-0 text-tertiary">
                                 Form # 
@@ -59,6 +59,7 @@
                         </div>
                     </div>
                     <div class="card-body h-100 pt-0 pb-4 position-relative">
+
                         <div class="card mb-2 order-item">
                             <div class="card-body">
                                 <div class="row">
@@ -101,6 +102,7 @@
                                 </div>
                             </div>
                         </div>
+                        
                     </div>
                     <div class="card-footer bg-transparent border-0">
                         <button class="btn text-light">Submit</button>

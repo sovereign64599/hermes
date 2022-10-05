@@ -36,7 +36,7 @@ class TransferOutController extends Controller
             $html .= '</div>';
             $html .= '<div class="card-footer d-flex align-items-center justify-content-center border-0 p-0">';
             $html .= '<button class="btn-block h-100 mt-0 border-0 bg-transparent text-light p-1">View</button><span></span>';
-            $html .= '<button class="btn-block h-100 mt-0 border-0 bg-tertiary text-light p-1">Add Item</button>';
+            $html .= '<button class="btn-block h-100 mt-0 border-0 bg-transparent text-light p-1">Add Item</button>';
             $html .= '</div>';
             $html .= '</div>';
             $html .= '</div>';
