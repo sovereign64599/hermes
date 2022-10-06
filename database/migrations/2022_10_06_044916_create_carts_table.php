@@ -16,16 +16,18 @@ class CreateCartsTable extends Migration
         Schema::create('carts', function (Blueprint $table) {
             $table->uuid('id');
             $table->primary('id');
-            $table->string('item_name');
-            $table->string('item_category');
-            $table->string('item_sub_category');
-            $table->string('item_quantity');
-            $table->string('item_barcode');
-            $table->string('item_description');
-            $table->string('item_cost');
-            $table->string('item_sell');
-            $table->string('item_notes')->nullable();
-            $table->string('item_photo')->nullable();
+            $table->uuid('item_id')->nullable();
+            $table->foreign('item_id')->references('id')->on('items')->onDelete('cascade');
+            $table->string('cart_name');
+            $table->string('cart_category');
+            $table->string('cart_sub_category');
+            $table->integer('cart_quantity');
+            $table->string('cart_barcode');
+            $table->string('cart_description');
+            $table->integer('cart_cost');
+            $table->integer('cart_sell');
+            $table->string('cart_notes')->nullable();
+            $table->string('cart_photo')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

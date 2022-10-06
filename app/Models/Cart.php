@@ -13,7 +13,17 @@ class Cart extends Model
 
     protected $table = 'carts';
     protected $fillable = [
-        'category_name',
-        'category_description',
+        'item_id',
+        'cart_name',
+        'cart_category',
+        'cart_sub_category',
+        'cart_quantity',
+        'cart_name',
+        'cart_barcode',
+        'cart_description',
+        'cart_cost',
+        'cart_sell',
+        'cart_notes',
+        'cart_photo'
     ];
 }

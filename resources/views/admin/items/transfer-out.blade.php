@@ -42,7 +42,8 @@
             <div class="card sticky-top p-4">
                 <form action="">
                     <div class="card-header py-4 ">
-                        <h3>Transfer Out</h3>
+                        <h3>Cart</h3>
+                        <small>Form # and date is auto generated. (Editable)</small>
                         <div class="d-flex justify-content-between">
                             <div class="m-0 text-tertiary">
                                 Form # 
@@ -51,60 +52,19 @@
                             <div class="date-now">
                                 @php
                                     date_default_timezone_set('Asia/Manila');
-                                    $date = "1996-06-25";
-                                    $newDate = date("Y-m-d");
+                                    $dateToday = date("Y-m-d");
                                 @endphp
-                                <input type="date" name="date" class="ch-input" value="{{$newDate}}">
+                                <input type="date" name="date" class="ch-input" value="{{$dateToday}}">
                             </div>
                         </div>
                     </div>
-                    <div class="card-body h-100 pt-0 pb-4 position-relative">
-
-                        <div class="card mb-2 order-item">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-lg-2">
-                                        <img class="img-fluid" src="https://www.thespruce.com/thmb/lbeqtgmmoRpaeMtbCH568V-8CBI=/3888x2592/filters:no_upscale():max_bytes(150000):strip_icc()/c-pvc-and-u-pvc-fittings-172717498-5ac54ef1a474be00365ae8e6.jpg" alt="test">
-                                    </div>
-                                    <div class="col-lg-6 d-flex flex-column">
-                                        <small>Test Item 1</small>
-                                        <small>Lorem ipsum dolor sit amet</small>
-                                    </div>
-                                    <div class="col-lg-2 d-flex align-items-center justify-content-end">
-                                        <input type="number" value="1" class="form-control ch-input">
-                                    </div>
-                                    <div class="col-lg-2 d-flex align-items-center justify-content-end">
-                                        <button class="btn">
-                                            <i class="fas fa-trash text-light"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card mb-2 order-item">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-lg-2">
-                                        <img class="img-fluid" src="https://www.thespruce.com/thmb/lbeqtgmmoRpaeMtbCH568V-8CBI=/3888x2592/filters:no_upscale():max_bytes(150000):strip_icc()/c-pvc-and-u-pvc-fittings-172717498-5ac54ef1a474be00365ae8e6.jpg" alt="test">
-                                    </div>
-                                    <div class="col-lg-6 d-flex flex-column">
-                                        <small>Test Item 2</small>
-                                        <small>Lorem ipsum dolor sit amet</small>
-                                    </div>
-                                    <div class="col-lg-2 d-flex align-items-center justify-content-end">
-                                        <input type="number" value="2" class="form-control ch-input">
-                                    </div>
-                                    <div class="col-lg-2 d-flex align-items-center justify-content-end">
-                                        <button class="btn">
-                                            <i class="fas fa-trash text-light"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
+                    <div class="card-body h-100 pt-0 pb-4 position-relative" id="showCart">
+                        {{-- show carts --}}
                     </div>
                     <div class="card-footer bg-transparent border-0">
+                        <h5 class="text-light">Total Amount: $<span id="totalAmount">0</span></h5>
+                        <input type="hidden" name="total_amount" id="totalAmountValue"">
+                        <hr class="bg-light">
                         <button class="btn text-light">Submit</button>
                     </div>
                 </form>
@@ -116,17 +76,89 @@
 @section('script')
     <script>
 
-        getItems();
+        const headers = {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        }
 
-        function getItems(){
+        window.onload = function(){
+            getItems();
+            getCart();
+        }
+
+        // add comma to number >= 4 digits
+        function numberWithCommas(x) {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        async function getItems(){
             document.querySelector('#showItems').innerHTML = `<div class="w-100 text-center"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
                 <span class="visually-hidden">Loading...</span>
             </div></div>`;
             
-            axios.get('/show-items')
+            await axios.get('/show-items')
                 .then(function (response) {
-                    console.log(response);
-                    document.querySelector('#showItems').innerHTML = response.data.data;
+                    if(response.status == 200){
+                        document.querySelector('#showItems').innerHTML = response.data.data;
+                    }
+                })
+                .catch(function (error) {
+                    document.querySelector('#showItems').innerHTML = error.response.data.errors;
+                })
+        }
+
+        async function addCart(item){
+            const dataID = item.getAttribute('data');
+            
+            await axios.post('/add-item-to-cart', {data:dataID}, {
+                headers: headers
+            })
+                .then((response) => {
+                    if(response.status == 200){
+                        getItemQuantity(dataID)
+                        Swal.fire({
+                            icon: 'success',
+                            text: response.data.success,
+                            timer: 2000,
+                            color: '#ffffff',
+                            background: '#24283b',
+                            timerProgressBar: true,
+                        });
+                        getCart()
+                    }
+                })
+                .catch(function (error) {
+                    Swal.fire({
+                        icon: 'warning',
+                        text: error.response.data.errors,
+                        timer: 2000,
+                        color: '#ffffff',
+                        background: '#24283b',
+                        timerProgressBar: true,
+                    });
+                });
+        }
+
+        async function getCart(){
+            await axios.get('/get-cart')
+                .then(function (response) {
+                    if(response.status == 200){
+                        document.querySelector('#showCart').innerHTML = response.data.data;
+                        document.querySelector('#totalAmount').innerHTML = numberWithCommas(response.data.totalAmount);
+                        document.querySelector('#totalAmountValue').value = response.data.totalAmount;
+                    }
+                })
+                .catch(function (error) {
+                    document.querySelector('#showCart').innerHTML = error.response.data.errors;
+                })
+        }
+
+        async function getItemQuantity(id){
+            await axios.get('/get-item-quantity/'+id)
+                .then(function (response) {
+                    if(response.status == 200){
+                        document.querySelector('.item-qty-'+id).innerHTML = response.data.quantity;
+                    }
                 })
                 .catch(function (error) {
                     console.log(error);

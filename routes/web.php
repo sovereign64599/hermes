@@ -28,8 +28,13 @@ Route::group(['middleware' => 'auth'], function(){
     Route::get('/filter-items/{input}', [App\Http\Controllers\Admin\TransferInController::class, 'filter']);
     Route::get('/collect-sub-categories/{id}', [App\Http\Controllers\Admin\TransferInController::class, 'collectSubCategory']);
 
+    // transfer out post action
+    Route::post('/add-item-to-cart', [App\Http\Controllers\Admin\TransferOutController::class, 'addItemToCart']);
+
     // transfer out get action
     Route::get('/show-items', [App\Http\Controllers\Admin\TransferOutController::class, 'showItems']);
+    Route::get('/get-cart', [App\Http\Controllers\Admin\TransferOutController::class, 'getCart']);
+    Route::get('/get-item-quantity/{id}', [App\Http\Controllers\Admin\TransferOutController::class, 'getItemQuantity']);
 
     // inventory show pages
     Route::get('/transfer-in', [App\Http\Controllers\Admin\TransferInController::class, 'index'])->name('transfer.in');

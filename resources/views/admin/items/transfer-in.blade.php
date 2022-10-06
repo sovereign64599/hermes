@@ -50,25 +50,25 @@
                             <div class="col-lg-4">
                                 <div class="form-group">
                                     <label><small>Item Quantity</small></label>
-                                    <input type="number" name="item_quantity" class="form-control" placeholder="Item Quantity">
+                                    <input type="text" name="item_quantity" class="form-control" class="form-control" placeholder="Item Quantity" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');">
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group">
                                     <label><small>Item barcode</small></label>
-                                    <input type="number" name="item_barcode" class="form-control" placeholder="Item Bar code">
+                                    <input type="text" name="item_barcode" class="form-control" placeholder="Item Bar code" maxlength="6" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');">
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group">
                                     <label><small>Item Cost</small></label>
-                                    <input type="number" name="item_cost" class="form-control" placeholder="Cost">
+                                    <input type="text" name="item_cost" class="form-control" placeholder="Cost" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');">
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label><small>Item Sell</small></label>
-                                    <input type="number" name="item_sell" class="form-control" placeholder="Sell">
+                                    <input type="text" name="item_sell" class="form-control" placeholder="Sell" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');">
                                 </div>
                             </div>
                             <div class="col-lg-6">

@@ -19,11 +19,11 @@ class CreateItemsTable extends Migration
             $table->string('item_name');
             $table->string('item_category');
             $table->string('item_sub_category');
-            $table->string('item_quantity');
+            $table->integer('item_quantity');
             $table->string('item_barcode');
             $table->string('item_description');
-            $table->string('item_cost');
-            $table->string('item_sell');
+            $table->integer('item_cost');
+            $table->integer('item_sell');
             $table->string('item_notes')->nullable();
             $table->string('item_photo')->nullable();
             $table->rememberToken();
