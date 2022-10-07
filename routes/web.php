@@ -30,11 +30,14 @@ Route::group(['middleware' => 'auth'], function(){
 
     // transfer out post action
     Route::post('/add-item-to-cart', [App\Http\Controllers\Admin\TransferOutController::class, 'addItemToCart']);
+    Route::post('/update-cart-quantity', [App\Http\Controllers\Admin\TransferOutController::class, 'updateCartQuantity']);
 
     // transfer out get action
     Route::get('/show-items', [App\Http\Controllers\Admin\TransferOutController::class, 'showItems']);
     Route::get('/get-cart', [App\Http\Controllers\Admin\TransferOutController::class, 'getCart']);
     Route::get('/get-item-quantity/{id}', [App\Http\Controllers\Admin\TransferOutController::class, 'getItemQuantity']);
+    Route::get('/get-cart-total-amount', [App\Http\Controllers\Admin\TransferOutController::class, 'getCartTotalAmount']);
+    Route::get('/delete-cart/{id}', [App\Http\Controllers\Admin\TransferOutController::class, 'deleteCart']);
 
     // inventory show pages
     Route::get('/transfer-in', [App\Http\Controllers\Admin\TransferInController::class, 'index'])->name('transfer.in');

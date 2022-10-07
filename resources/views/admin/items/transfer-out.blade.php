@@ -63,7 +63,6 @@
                     </div>
                     <div class="card-footer bg-transparent border-0">
                         <h5 class="text-light">Total Amount: $<span id="totalAmount">0</span></h5>
-                        <input type="hidden" name="total_amount" id="totalAmountValue"">
                         <hr class="bg-light">
                         <button class="btn text-light">Submit</button>
                     </div>
@@ -84,6 +83,7 @@
         window.onload = function(){
             getItems();
             getCart();
+            getCartTotal()
         }
 
         // add comma to number >= 4 digits
@@ -104,6 +104,18 @@
                 })
                 .catch(function (error) {
                     document.querySelector('#showItems').innerHTML = error.response.data.errors;
+                })
+        }
+
+        async function getItemQuantity(id){
+            await axios.get('/get-item-quantity/'+id)
+                .then(function (response) {
+                    if(response.status == 200){
+                        document.querySelector('.item-qty-'+id).innerHTML = response.data.quantity;
+                    }
+                })
+                .catch(function (error) {
+                    console.log(error);
                 })
         }
 
@@ -144,25 +156,104 @@
                 .then(function (response) {
                     if(response.status == 200){
                         document.querySelector('#showCart').innerHTML = response.data.data;
-                        document.querySelector('#totalAmount').innerHTML = numberWithCommas(response.data.totalAmount);
-                        document.querySelector('#totalAmountValue').value = response.data.totalAmount;
                     }
                 })
                 .catch(function (error) {
-                    document.querySelector('#showCart').innerHTML = error.response.data.errors;
+                    if(error){
+                        document.querySelector('#showCart').innerHTML = error.response.data.errors;
+                    }
                 })
         }
 
-        async function getItemQuantity(id){
-            await axios.get('/get-item-quantity/'+id)
+        async function getCartTotal(){
+            await axios.get('/get-cart-total-amount')
                 .then(function (response) {
                     if(response.status == 200){
-                        document.querySelector('.item-qty-'+id).innerHTML = response.data.quantity;
+                        document.querySelector('#totalAmount').innerHTML = numberWithCommas(response.data.totalAmount);
                     }
                 })
                 .catch(function (error) {
                     console.log(error);
                 })
+        }
+
+        async function upadateQuantity(data){
+            console.log(data);return;
+            const dataID = data.getAttribute('data');
+            const dataQuantity = data.value;
+            
+            await axios.post('/update-cart-quantity', {
+                id:dataID,
+                quantity:dataQuantity,
+            }, {
+                headers: headers
+            })
+                .then((response) => {
+                    if(response.status == 200){
+                        getItemQuantity(dataID)
+                        // Swal.fire({
+                        //     icon: 'success',
+                        //     text: response.data.success,
+                        //     timer: 2000,
+                        //     color: '#ffffff',
+                        //     background: '#24283b',
+                        //     timerProgressBar: true,
+                        // });
+                        getCartTotal();
+                    }
+                })
+                .catch(function (error) {
+                    Swal.fire({
+                        icon: 'warning',
+                        text: error.response.data.errors,
+                        timer: 2000,
+                        color: '#ffffff',
+                        background: '#24283b',
+                        timerProgressBar: true,
+                    });
+                });
+        }
+
+        function deleteCart(id){
+            const dataID = id.getAttribute('data');
+            Swal.fire({
+                text: "Are you sure?",
+                icon: 'warning',
+                color: '#ffffff',
+                background: '#24283b',
+                showCancelButton: true,
+                confirmButtonColor: '#d95650',
+                cancelButtonColor: '#858796',
+                confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                if (result.isConfirmed) {
+                axios.get('/delete-cart/' + dataID)
+                        .then(function (response) {
+                            if(response.status == 200){
+                                Swal.fire({
+                                    icon: 'success',
+                                    text: response.data.message,
+                                    timer: 2000,
+                                    timerProgressBar: true,
+                                });
+                                getCart();
+                                getItems();
+                            }
+                        })
+                        .catch(function (error) {
+                            if(error.response.status == 404){
+                                Swal.fire({
+                                    icon: 'error',
+                                    text: error.response.data.errors,
+                                    timer: 2000,
+                                    color: '#ffffff',
+                                    background: '#24283b',
+                                    timerProgressBar: true,
+                                });
+                            }
+                        })
+                }
+            })
         }
 
     </script>

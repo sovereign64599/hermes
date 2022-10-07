@@ -169,12 +169,12 @@
             
             await axios.get('/get-items')
                 .then(function (response) {
-                    if(response.data.status == 200){
+                    if(response.status == 200){
                         document.querySelector('#showItems').innerHTML = `<tr><td>${response.data.data}</td></tr>`;
                     }
                 })
                 .catch(function (error) {
-                    console.log(error);
+                    document.querySelector('#showItems').innerHTML = `<tr><td>${error.response.data.errors}</td></tr>`;
                 })
         }
 
@@ -183,19 +183,17 @@
                 <span class="visually-hidden">Loading...</span>
             </div></div>`;
             let incrementedLengthInput = input.value.length + 1;
-            if(incrementedLengthInput > 2){
+            if(incrementedLengthInput > 1){
                 await axios.get('/filter-items/'+input.value)
                 .then(function (response) {
                     setTimeout(() => {
-                        if(response.data.status == 200){
+                        if(response.status == 200){
                             document.querySelector('#showItems').innerHTML = response.data.data;
-                        }else if(response.data.empty){
-                            getItems();
                         }
                     }, 1000);
                 })
                 .catch(function (error) {
-                    console.log(error.response.data);
+                    document.querySelector('#showItems').innerHTML = error.response.data.errors;
                 })
             }else{
                 getItems();
@@ -207,29 +205,13 @@
             let formData = new FormData(this);
             axios.post('/store-items', formData)
                 .then((response) => {
-                    if(response.data.status == 200){
+                    if(response.status == 200){
                         Swal.fire({
                             icon: 'success',
                             text: response.data.message
                         });
                         transferIn.reset("reset");
                         getItems();
-                    }else if(response.data.status == 400){
-                        Swal.fire({
-                            text: response.data.message,
-                            icon: 'info',
-                            color: '#ffffff',
-                            background: '#24283b',
-                            showCancelButton: true,
-                            confirmButtonColor: '#3085d6',
-                            cancelButtonColor: '#d33',
-                            confirmButtonText: 'Update'
-                            }).then((result) => {
-                            if (result.isConfirmed) {
-                                let dataToUpdate = new FormData(document.querySelector('#transferIn'));
-                                updateExistItems(dataToUpdate)
-                            }
-                        })
                     }
                 })
                 .catch(function (error) {
@@ -256,6 +238,22 @@
                                 icon: 'error',
                                 html: `<ul>${errMessage}</ul>`,
                             });
+                        }else{
+                            Swal.fire({
+                                text: error.response.data.error,
+                                icon: 'info',
+                                color: '#ffffff',
+                                background: '#24283b',
+                                showCancelButton: true,
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'Update'
+                                }).then((result) => {
+                                if (result.isConfirmed) {
+                                    let dataToUpdate = new FormData(document.querySelector('#transferIn'));
+                                    updateExistItems(dataToUpdate)
+                                }
+                            })
                         }
                     }
                 });
@@ -266,12 +264,12 @@
             var dataID = selectedOption.getAttribute('data');
             await axios.get('/collect-sub-categories/' + dataID)
                 .then(function (response) {
-                    if(response.data.status == 200){
+                    if(response.status == 200){
                         document.querySelector('#item_sub_category').innerHTML = response.data.data;
                     }
                 })
                 .catch(function (error) {
-                    console.log(error);
+                    document.querySelector('#item_sub_category').innerHTML = error.response.data.errors;
                 })
         }
 
@@ -366,15 +364,18 @@
             const dataID = id.getAttribute('data');
             await axios.get('/edit-items/' + dataID)
                 .then(function (response) {
-                    myModal.show()
-                    modalItem.innerHTML = response.data;
+                    // console.log(response);return;
+                    if(response.status == 200){
+                        myModal.show()
+                        modalItem.innerHTML = response.data.data;
+                    }
                 })
                 .catch(function (error) {
                     if(error){
                         if(error.response.status == 404){
                             Swal.fire({
                                 icon: 'error',
-                                text: error.response.statusText,
+                                text: error.response.data.errors,
                                 timer: 2000,
                                 color: '#ffffff',
                                 background: '#24283b',

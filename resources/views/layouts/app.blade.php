@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
-    <link href="{{ asset('css/sb-admin-2.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/admin.min.css') }}" rel="stylesheet">
 </head>
 <body class="light" @auth id="page-top" @endauth>
 
@@ -132,7 +132,7 @@
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="mr-2 d-none d-lg-inline text-white-600 small">{{Auth::user()->name}}</span>
                             <img class="img-profile rounded-circle"
-                                src="img/undraw_profile.svg">
+                                src="{{asset('img/admin-avatar.png')}}">
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in shadow"

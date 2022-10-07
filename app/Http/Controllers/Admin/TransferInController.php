@@ -30,7 +30,7 @@ class TransferInController extends Controller
             $html = '';
             foreach($items as $item){
                 $quantity = ($item->item_quantity == 0) ? '<small class="text-danger">Out of Stock</small>' : $item->item_quantity;
-                $img = empty($item->item_photo) ? asset('img/default_item_photo.png') : asset('img/item_photo/'.$item->item_photo.'');
+                $img = empty($item->item_photo) ? asset('img/default_item_photo.jpg') : asset('img/item_photo/'.$item->item_photo.'');
                 $html .= '<tr><td>';
                 $html .='<a href="'. $img .'" target="_blank"><img class="img-fluid item-photo" src="'. $img .'" alt="'.$item->item_name.'"></a>';
                 $html .='</td>';
@@ -49,10 +49,13 @@ class TransferInController extends Controller
                 $html .='</div>';
                 $html .='</td></tr>';
             }
-            return response(json_encode(['status' => 200, 'data' => $html]));
-        }else{
-            return response(json_encode(['status' => 200, 'data' => 'No Items Found']));
+            return response()->json([
+                'data' => $html,
+            ], 200);
         }
+        return response()->json([
+            'errors' => '<tr><td>No Item available<td><tr>',
+        ], 410);
     }
 
     public function checkItems(Request $request){
@@ -99,10 +102,13 @@ class TransferInController extends Controller
                 $html .='</div>';
                 $html .='</td></tr>';
             }
-            return response(json_encode(['status' => 200, 'data' => $html]));
-        }else{
-            return response(json_encode(['status' => 200, 'data' => '<tr><td>No Item found<td><tr>']));
+            return response()->json([
+                'data' => $html,
+            ], 200);
         }
+        return response()->json([
+            'errors' => '<tr><td>No Item available</td></tr>',
+        ], 410);
     }
 
     public function collectSubCategory($id){
@@ -112,10 +118,13 @@ class TransferInController extends Controller
             foreach($subCategories as $subCategory){
                 $html .= '<option>'.$subCategory->sub_category_name.'</option>';
             }
-            return response(json_encode(['status' => 200, 'data' => $html]));
-        }else{
-            return response(json_encode(['status' => 200, 'data' => '<option>No sub category found</option>']));
+            return response()->json([
+                'data' => $html,
+            ], 200);
         }
+        return response()->json([
+            'errors' => '<option>No sub category found</option>',
+        ], 404);
     }
 
     public function store(Request $request){
@@ -142,8 +151,10 @@ class TransferInController extends Controller
             }
         }
         if($this->checkItems($request)){
-            return response(json_encode(['status' => 400, 'message' => ucfirst($request->item_name). ' exist. Update anyway.']));
-            exit();
+            // return response(json_encode(['status' => 400, 'message' => ucfirst($request->item_name). ' exist. Update anyway.']));
+            return response()->json([
+                'error' => ucfirst($request->item_name). ucfirst($request->item_name). ' exist. Update anyway.',
+            ], 409);
         }
 
         if(!empty($request->item_photo)){
@@ -170,13 +181,14 @@ class TransferInController extends Controller
             if(!empty($request->item_photo)){
                 $request->item_photo->move(public_path('img/item_photo'), $item_photo);
             }
-            return response(json_encode(['status' => 200, 'message' => ucfirst($request->item_name). ' Added Successfully.']));
+            return response()->json([
+                'message' => ucfirst($request->item_name). ' Added Successfully.',
+            ], 200);
         }
     }
 
     public function editItems(String $id){
-        $checkItem = Items::findOrFail($id);
-        if($checkItem){
+        if($checkItem = Items::where('id', $id)->first()){
             $html = '<input type="hidden" name="_token" value="'.csrf_token().'">';
             $html .= '<input type="hidden" name="item_id" value="'.$checkItem->id.'">';
             $html .= '<div class="row">';
@@ -234,8 +246,13 @@ class TransferInController extends Controller
             $html .= '<button type="submit" class="btn text-light">Update Items</button>';
             $html .= '</div>';
             $html .= '</div>';
-            echo $html;
+            return response()->json([
+                'data' => $html,
+            ], 200);
         }
+        return response()->json([
+            'errors' => $id . ' not found',
+        ], 404);
     }
 
     public function update(Request $request){

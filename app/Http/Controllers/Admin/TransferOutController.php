@@ -24,7 +24,7 @@ class TransferOutController extends Controller
         if($items->count() > 0){
             $html = '';
             foreach($items as $item){
-                $img = empty($item->item_photo) ? asset('img/default_item_photo.png') : asset('img/item_photo/'.$item->item_photo.'');
+                $img = empty($item->item_photo) ? asset('img/default_item_photo.jpg') : asset('img/item_photo/'.$item->item_photo.'');
                 $qty = $item->item_quantity === 0 ? '<span class="text-danger">Out of Stock</span>' : 'Available: '.$item->item_quantity.'';
                 $html .= '<div class="col-xl-3 col-lg-4">';
                 $html .= '<div class="card text-center">';
@@ -60,26 +60,24 @@ class TransferOutController extends Controller
     {
         $carts = Cart::orderBy('created_at', 'desc')->get();
         if($carts->count() > 0){
-            $totalAmount = 0;
             $html = '';
             foreach($carts as $cart){
-                $totalAmount = $totalAmount + ((int) $cart->cart_quantity * (int) $cart->cart_sell);
-                $img = empty($cart->cart_photo) ? asset('img/default_item_photo.png') : asset('img/item_photo/'.$cart->cart_photo.'');
+                $img = empty($cart->cart_photo) ? asset('img/default_item_photo.jpg') : asset('img/item_photo/'.$cart->cart_photo.'');
                 $html .= '<div class="card mb-2 order-item">';
                 $html .= '<div class="card-body">';
-                $html .= '<div class="row">';
+                $html .= '<div class="row align-items-center justify-content-center">';
                 $html .= '<div class="col-lg-2">';
                 $html .= '<img class="img-fluid" src="'.$img.'" alt="'.$cart->cart_name.'">';
                 $html .= '</div>';
-                $html .= '<div class="col-lg-6 d-flex flex-column">';
+                $html .= '<div class="col-lg-5 d-flex flex-column pl-0">';
                 $html .= '<small>'.$cart->cart_name.'</small>';
-                $html .= '<small>'.$cart->cart_sell.'</small>';
+                $html .= '<small>$'.number_format($cart->cart_sell).'</small>';
+                $html .= '</div>';
+                $html .= '<div class="col-lg-3 d-flex align-items-center justify-content-end">';
+                $html .= '<input type="number" role="button" value="'.$cart->cart_quantity.'" class="form-control ch-input" data="'.$cart->item_id.'" onchange="upadateQuantity(this)">';
                 $html .= '</div>';
                 $html .= '<div class="col-lg-2 d-flex align-items-center justify-content-end">';
-                $html .= '<input type="number" value="'.$cart->cart_quantity.'" class="form-control ch-input">';
-                $html .= '</div>';
-                $html .= '<div class="col-lg-2 d-flex align-items-center justify-content-end">';
-                $html .= '<button class="btn">';
+                $html .= '<button role="button" type="button" class="btn" data="'.$cart->id.'" onclick="deleteCart(this)">';
                 $html .= '<i class="fas fa-trash text-light"></i>';
                 $html .= '</button>';
                 $html .= '</div>';
@@ -89,7 +87,6 @@ class TransferOutController extends Controller
             }
             return response()->json([
                 'data' => $html,
-                'totalAmount' => $totalAmount,
             ], 200);
         }
 
@@ -101,10 +98,10 @@ class TransferOutController extends Controller
         $empty .= '</div>';
         return response()->json([
             'errors' => $empty,
-        ], 404);
+        ], 410);
     }
 
-    public function getItemQuantity($id)
+    public function getItemQuantity(String $id)
     {
         if($itemData = Items::where('id', $id)->firstOrFail()){
             if($itemData->item_quantity == 0){
@@ -119,6 +116,40 @@ class TransferOutController extends Controller
         
     }
 
+    public function getCartTotalAmount()
+    {
+        $carts = Cart::get();
+        $totalAmount = 0;
+        foreach($carts as $cart){
+            $totalAmount = $totalAmount + ((int)$cart->cart_sell * (int)$cart->cart_quantity);
+        }
+        return response()->json([
+            'totalAmount' => $totalAmount,
+        ], 200);
+    }
+
+    public function updateCartQuantity(Request $request)
+    {
+        dd($request->all());
+        if($cart = Cart::where('item_id', $request->id)->first()){
+
+
+            $cart->update(['cart_quantity' => $request->quantity]);
+            $item = Items::where('id', $request->id)->first();
+
+            $item->decrement('item_quantity', 1);
+
+
+
+            return response()->json([
+                'success' => $cart->cart_name . 'is updated.',
+            ], 200);
+        }
+        return response()->json([
+            'errors' => 'Something went wrong.',
+        ], 404);
+    }
+
     public function addItemToCart(Request $request)
     {
         $itemID = $request->data;
@@ -127,7 +158,7 @@ class TransferOutController extends Controller
         if($itemData){
             // check if cart is not equal to 10 else return a message "cart limit to 10"
             if(Cart::count() != 10){
-                // check if item is already exist in cartthen increment the cart quantity to 1 else add it to cart
+                // check if item is already exist in cart then increment the cart quantity to 1 else add it to cart
                 if($itemData->item_quantity == 0){
                     return response()->json([
                         'errors' => $itemData->item_name . ' is out of stock.',
@@ -165,5 +196,18 @@ class TransferOutController extends Controller
                 }
             }
         }
+    }
+
+    public function deleteCart(String $id)
+    {
+        if($cart = Cart::where('id', $id)->first()){
+            $cart->delete();
+            return response()->json([
+                'message' => 'Item Deleted.',
+            ], 200);
+        }
+        return response()->json([
+            'errors' => $id .' Not Found.',
+        ], 404);
     }
 }
