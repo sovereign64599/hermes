@@ -16,17 +16,16 @@ class CreateItemsTable extends Migration
         Schema::create('items', function (Blueprint $table) {
             $table->uuid('id');
             $table->primary('id');
-            $table->string('item_name');
+            $table->string('item_name')->nullable();
             $table->string('item_category');
             $table->string('item_sub_category');
-            $table->integer('item_quantity');
+            $table->integer('item_quantity')->nullable();
             $table->string('item_barcode');
             $table->string('item_description');
-            $table->integer('item_cost');
-            $table->integer('item_sell');
+            $table->float('item_cost');
+            $table->float('item_sell');
             $table->string('item_notes')->nullable();
             $table->string('item_photo')->nullable();
-            $table->rememberToken();
             $table->timestamps();
         });
     }

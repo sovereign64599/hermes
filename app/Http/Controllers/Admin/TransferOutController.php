@@ -52,7 +52,7 @@ class TransferOutController extends Controller
             ], 200);
         }
         return response()->json([
-            'errors' => '<img class="w-25" src="'.asset('img/no-item.svg').'" alt="No Item">',
+            'errors' => '<img class="w-25" src="'.asset('img/undraw_rocket.svg').'" alt="No Item">',
         ], 404);
     }
 
@@ -121,7 +121,7 @@ class TransferOutController extends Controller
         $carts = Cart::get();
         $totalAmount = 0;
         foreach($carts as $cart){
-            $totalAmount = $totalAmount + ((int)$cart->cart_sell * (int)$cart->cart_quantity);
+            $totalAmount = $totalAmount + ((float)$cart->cart_sell * (float)$cart->cart_quantity);
         }
         return response()->json([
             'totalAmount' => $totalAmount,
@@ -130,15 +130,20 @@ class TransferOutController extends Controller
 
     public function updateCartQuantity(Request $request)
     {
-        dd($request->all());
         if($cart = Cart::where('item_id', $request->id)->first()){
 
+            if($request->quantity > $cart->cart_quantity){
+                $qty = (float)$request->quantity - (float)$cart->cart_quantity;
+            }else{
+                $qty =  (float)$cart->cart_quantity -(float)$request->quantity;
+            }
 
-            $cart->update(['cart_quantity' => $request->quantity]);
-            $item = Items::where('id', $request->id)->first();
+            dd((int)$qty + (int)$request->quantity);
 
-            $item->decrement('item_quantity', 1);
+            // $cart->update(['cart_quantity' => $qty]);
+            // $item = Items::where('id', $request->id)->first();
 
+            // $item->decrement('item_quantity', $qty);
 
 
             return response()->json([
@@ -156,45 +161,48 @@ class TransferOutController extends Controller
         // get the item where id is equal to item id
         $itemData = Items::where('id', $itemID)->firstOrFail();
         if($itemData){
-            // check if cart is not equal to 10 else return a message "cart limit to 10"
-            if(Cart::count() != 10){
-                // check if item is already exist in cart then increment the cart quantity to 1 else add it to cart
+                // check if item is already exist in cart then increment the cart quantity to 1 else add it to cart 
                 if($itemData->item_quantity == 0){
                     return response()->json([
                         'errors' => $itemData->item_name . ' is out of stock.',
                     ], 422);
                 }
+                $itemData->decrement('item_quantity', 1);
                 if(Cart::where('item_id', $itemID)->exists()){
                     Cart::where('item_id', $itemID)->increment('cart_quantity', 1);
-                    $itemData->decrement('item_quantity', 1);
                     return response()->json([
                         'success' => $itemData->item_name . ' quantity incremented',
                     ], 200);
                 }else{
-                    $addCart = Cart::create([
-                        'item_id' => $itemData->id,
-                        'cart_name' => $itemData->item_name,
-                        'cart_category' => $itemData->item_category,
-                        'cart_sub_category' => $itemData->item_sub_category,
-                        'cart_quantity' => 1,
-                        'cart_barcode' => $itemData->item_barcode,
-                        'cart_description' => $itemData->item_description,
-                        'cart_cost' => $itemData->item_cost,
-                        'cart_sell' => $itemData->item_sell,
-                        'cart_notes' => $itemData->item_notes,
-                        'cart_photo' => $itemData->item_photo
-                    ]);
-                    if($addCart){
-                        return response()->json([
-                            'success' => $itemData->item_name . ' added to cart',
-                        ], 200);
-                    }else{
-                        return response()->json([
-                            'errors' => "Connection lost.",
-                        ], 422);
+                    if(Cart::count() < 10){
+                        $addCart = Cart::create([
+                            'item_id' => $itemData->id,
+                            'cart_name' => $itemData->item_name,
+                            'cart_category' => $itemData->item_category,
+                            'cart_sub_category' => $itemData->item_sub_category,
+                            'cart_quantity' => 1,
+                            'cart_barcode' => $itemData->item_barcode,
+                            'cart_description' => $itemData->item_description,
+                            'cart_cost' => $itemData->item_cost,
+                            'cart_sell' => $itemData->item_sell,
+                            'cart_notes' => $itemData->item_notes,
+                            'cart_photo' => $itemData->item_photo
+                        ]);
+                        if($addCart){
+                            return response()->json([
+                                'success' => $itemData->item_name . ' Added to cart',
+                            ], 200);
+                        }else{
+                            return response()->json([
+                                'errors' => "Something went wrong.",
+                            ], 422);
+                        }
                     }
+                    return response()->json([
+                        'errors' => "Cart limit to " . Cart::count(),
+                    ], 410);
                 }
-            }
+            
         }
     }
 

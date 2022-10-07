@@ -8,7 +8,6 @@
     <script src="{{ asset('js/app.js') }}" defer></script>
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link rel="shortcut icon" href="{{asset('img/shorticon.png')}}">
-    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ asset('css/admin.min.css') }}" rel="stylesheet">
@@ -20,7 +19,7 @@
 
     <ul class="navbar-nav admin-sidebar sidebar sidebar-dark accordion" id="accordionSidebar">
 
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{route('dashboard')}}l">
             <div class="sidebar-brand-text mx-3">HERMES</div>
         </a>
 
@@ -90,20 +89,6 @@
                 <i class="fas fa-fw fa-chart-area"></i>
                 <span>Report</span>
             </a>
-        </li>
-
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#resourcesCollapse"
-                aria-expanded="true" aria-controls="resourcesCollapse">
-                <i class="fas fa-fw fa-folder"></i>
-                <span>Resources</span>
-            </a>
-            <div id="resourcesCollapse" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                <div class="bg-secondary py-2 collapse-inner rounded">
-                    <a class="collapse-item text-white mb-1" href="login.html"><i class="fas fa-level-down-alt mr-3 text-tertiary"></i><span>Import</span></a>
-                    <a class="collapse-item text-white mb-1" href="register.html"><i class="fas fa-level-up-alt mr-3 text-tertiary"></i><span>Export</span></a>
-                </div>
-            </div>
         </li>
 
         <hr class="sidebar-divider d-none d-md-block">
@@ -203,8 +188,8 @@
     <script src="{{ asset('js/demo/chart-area-demo.js') }}"></script>
     <script src="{{ asset('js/demo/chart-pie-demo.js') }}"></script>
     @endif
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.27.2/axios.min.js"></script>
-    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{{asset('vendor/axios/axios.min.js')}}"></script>
+    <script src="{{asset('vendor/sweetalert/sweetalert.min.js')}}"></script>
     @yield('script')
     @else
         @yield('content')

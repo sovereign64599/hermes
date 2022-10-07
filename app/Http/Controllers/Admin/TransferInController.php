@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\ItemsExport;
 use App\Http\Controllers\Controller;
+use App\Imports\ItemCategory;
+use App\Imports\ItemImport;
+use App\Imports\ItemSubCategory;
 use App\Models\Category;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Items;
 use App\Models\SubCategory;
 use Illuminate\Http\Request;
@@ -44,8 +49,8 @@ class TransferInController extends Controller
                 $html .='<td>'.$item->item_sell.'</td>';
                 $html .='<td>';
                 $html .='<div class="d-flex gap-1">';
-                $html .='<button data="'.$item->id.'" class="btn bg-secondary text-light btn-sm" onclick="editItem(this)"><i class="fas fa-pencil-alt mr-1 fa-sm"></i><small>Edit</small></button>';
-                $html .='<button data="'.$item->id.'" class="btn text-light btn-sm" onclick="deleteItem(this)"><i class="fas fa-trash mr-1 fa-sm"></i><small>Delete</small></button>';
+                $html .='<button data="'.$item->id.'" class="btn bg-secondary text-light btn-sm" onclick="editItem(this)"><i class="fas fa-pencil-alt mr-1 fa-sm"></i></button>';
+                $html .='<button data="'.$item->id.'" class="btn text-light btn-sm" onclick="deleteItem(this)"><i class="fas fa-trash mr-1 fa-sm"></i></button>';
                 $html .='</div>';
                 $html .='</td></tr>';
             }
@@ -125,6 +130,22 @@ class TransferInController extends Controller
         return response()->json([
             'errors' => '<option>No sub category found</option>',
         ], 404);
+    }
+
+    public function importItems(Request $request)
+    {
+        $file = $request->file('file');
+
+        Excel::import(new ItemImport, $file);
+        Excel::import(new ItemCategory, $file);
+        // Excel::import(new ItemSubCategory, $file);
+
+        return back()->with('success', 'import successfully');
+    }
+
+    public function exportItems()
+    {
+        return Excel::download(new ItemsExport, 'items.xlsx');
     }
 
     public function store(Request $request){

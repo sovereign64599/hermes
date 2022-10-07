@@ -322,9 +322,16 @@
                 }
             }
         }
-        
+        #showCart {
+            max-height: 500px;
+            overflow-y: scroll;
+            scrollbar-width: 5px;
+        }
+        #showCart::-webkit-scrollbar {
+            width: 1em;
+        }
         .card {
-
+            
             .card-body{
                 position: relative;
             }

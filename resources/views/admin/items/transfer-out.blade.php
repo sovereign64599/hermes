@@ -12,22 +12,6 @@
                     </div>
                     <div class="d-flex gap-3 align-items-center">
                         <div class="form-group">
-                            <select class="form-select">
-                                <option selected>Category</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <select class="form-select">
-                                <option selected>Sub Category</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
                             <input type="text" class="form-control" placeholder="Search for..">
                         </div>
                     </div>
@@ -58,13 +42,13 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-body h-100 pt-0 pb-4 position-relative" id="showCart">
+                    <div class="card-body pt-0 pb-4 position-relative" id="showCart">
                         {{-- show carts --}}
                     </div>
                     <div class="card-footer bg-transparent border-0">
                         <h5 class="text-light">Total Amount: $<span id="totalAmount">0</span></h5>
                         <hr class="bg-light">
-                        <button class="btn text-light">Submit</button>
+                        <button class="btn text-light">Place Order</button>
                     </div>
                 </form>
             </div>
@@ -137,6 +121,7 @@
                             timerProgressBar: true,
                         });
                         getCart()
+                        getCartTotal()
                     }
                 })
                 .catch(function (error) {
@@ -178,7 +163,6 @@
         }
 
         async function upadateQuantity(data){
-            console.log(data);return;
             const dataID = data.getAttribute('data');
             const dataQuantity = data.value;
             

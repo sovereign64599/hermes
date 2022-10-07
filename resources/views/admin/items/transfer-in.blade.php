@@ -100,8 +100,12 @@
                     <h4 class="text-tertiary">Items Available</h4>
                     <div class="d-flex justify-content-between">
                         <div class="d-flex gap-1">
-                            <button class="btn btn-sm text-light"><i class="fas fa-file-import mr-2"></i><span>Import Items</span></button>
-                            <button class="btn btn-sm text-light"><i class="fas fa-file-export mr-2"></i><span>Export Items</span></button>
+                            <form id="importForm" action="{{route('import.items')}}" method="POST" enctype="multipart/form-data">
+                                @csrf
+                                <input type="file" name="file" class="d-none" id="import" onchange="document.getElementById('importForm').submit()">
+                            </form>
+                            <button type="button" role="button" class="btn btn-sm text-light" onclick="document.getElementById('import').click();"><i class="fas fa-file-import mr-2"></i><span>Import Items</span></button>
+                            <a href="{{route('export.items')}}" class="btn btn-sm text-light d-flex align-items-center"><i class="fas fa-file-export mr-2"></i><span>Export Items</span></a>
                         </div>
                         <div>
                             <input type="text" placeholder="Search Item" oninput="filter(this)">

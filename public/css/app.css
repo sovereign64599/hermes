@@ -11076,6 +11076,14 @@ textarea.form-control-lg {
   display: flex;
   flex-direction: column;
 }
+#page-top #content .transfer-out #showCart {
+  max-height: 500px;
+  overflow-y: scroll;
+  scrollbar-width: 5px;
+}
+#page-top #content .transfer-out #showCart::-webkit-scrollbar {
+  width: 1em;
+}
 #page-top #content .transfer-out .card .card-body {
   position: relative;
 }

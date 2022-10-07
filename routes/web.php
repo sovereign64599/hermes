@@ -16,11 +16,13 @@ Route::group(['middleware' => 'auth'], function(){
     Route::get('/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
 
     // transfer in post action
+    Route::post('/import-items', [App\Http\Controllers\Admin\TransferInController::class, 'importItems'])->name('import.items');
     Route::post('/store-items', [App\Http\Controllers\Admin\TransferInController::class, 'store']);
     Route::post('/update-items', [App\Http\Controllers\Admin\TransferInController::class, 'update']);
     Route::post('/update-exist-items', [App\Http\Controllers\Admin\TransferInController::class, 'updateExistItem']);
 
     // transfer in get action 
+    Route::get('/export-items', [App\Http\Controllers\Admin\TransferInController::class, 'exportItems'])->name('export.items');
     Route::get('/get-items', [App\Http\Controllers\Admin\TransferInController::class, 'getItems']);
     Route::get('/check-items', [App\Http\Controllers\Admin\TransferInController::class, 'checkItems']);
     Route::get('/edit-items/{id}', [App\Http\Controllers\Admin\TransferInController::class, 'editItems']);
