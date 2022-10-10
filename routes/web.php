@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
+//hermes-store-website
 
 Route::get('/', function () {
     return view('welcome');
@@ -14,6 +15,15 @@ Route::match(['get'], 'login', function(){ return redirect('/'); })->name('login
 Route::group(['middleware' => 'auth'], function(){
     
     Route::get('/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/sales', [App\Http\Controllers\Admin\DashboardController::class, 'sales'])->name('sales');
+    Route::get('/show-users', [App\Http\Controllers\Admin\DashboardController::class, 'showUsers'])->name('user');
+    Route::get('/add-users', [App\Http\Controllers\Admin\DashboardController::class, 'addUsers'])->name('add.user');
+    Route::get('/edit-user/{id}', [App\Http\Controllers\Admin\DashboardController::class, 'editUsers'])->name('edit.user');
+    Route::get('/dleete-user/{id}', [App\Http\Controllers\Admin\DashboardController::class, 'deleteUser'])->name('delete.user');
+
+    // dashboard post action
+    Route::post('/add-users', [App\Http\Controllers\Admin\DashboardController::class, 'storeUser'])->name('store.user');
+    Route::patch('/update-user/{id}', [App\Http\Controllers\Admin\DashboardController::class, 'updateUser'])->name('update.user');
 
     // transfer in post action
     Route::post('/import-items', [App\Http\Controllers\Admin\TransferInController::class, 'importItems'])->name('import.items');

@@ -20,11 +20,11 @@ class CreateUsersTable extends Migration
             $table->string('middlename');
             $table->string('lastname');
             $table->string('gender');
-            $table->string('role')->default('Staff');
             $table->string('email')->unique();
             $table->string('avatar')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('role')->default('user');
             $table->rememberToken();
             $table->timestamps();
         });

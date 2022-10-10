@@ -18,8 +18,8 @@ class CreateSubCategoriesTable extends Migration
             $table->primary('id');
             $table->uuid('category_id')->nullable();
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
-            $table->string('category_name');
-            $table->string('sub_category_name');
+            $table->string('category_name')->nullable();
+            $table->string('sub_category_name')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

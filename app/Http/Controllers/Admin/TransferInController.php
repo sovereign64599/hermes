@@ -140,7 +140,7 @@ class TransferInController extends Controller
         Excel::import(new ItemCategory, $file);
         // Excel::import(new ItemSubCategory, $file);
 
-        return back()->with('success', 'import successfully');
+        return back()->with('success', 'File Imported successfully');
     }
 
     public function exportItems()

@@ -26,30 +26,33 @@
         <hr class="sidebar-divider mb-4">
 
         <div class="sidebar-heading">
-            Management
+            Inventory
         </div>
 
         <li class="nav-item @if(Route::currentRouteName() == 'dashboard') active @endif">
             <a class="nav-link" href="{{route('dashboard')}}">
                 <i class="far fa-chart-bar"></i>
-                <span>Dashboard (Sales)</span>
+                <span>Dashboard</span>
             </a>
         </li>
-
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#itemsCollapse"
-                aria-expanded="true" aria-controls="itemsCollapse">
-                <i class="fas fa-box-open"></i>
-                <span>Inventory</span>
+        <li class="nav-item @if(Route::currentRouteName() == 'sales') active @endif">
+            <a class="nav-link"  href="{{route('sales')}}">
+                <i class="far fa-chart-bar"></i>
+                <span>Sales</span>
             </a>
-            <div id="itemsCollapse" class="collapse @if(Route::currentRouteName() == 'transfer.in' || Route::currentRouteName() == 'transfer.out') show @endif" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                <div class="bg-secondary py-2 collapse-inner rounded">
-                    <a class="collapse-item text-white mb-1  @if(Route::currentRouteName() == 'transfer.in') active @endif" href="{{route('transfer.in')}}"><i class="fas fa-level-down-alt mr-3 text-tertiary"></i><span>Transfer In</span></a>
-                    <a class="collapse-item text-white mb-1  @if(Route::currentRouteName() == 'transfer.out') active @endif" href="{{route('transfer.out')}}"><i class="fas fa-level-up-alt mr-3 text-tertiary"></i><span>Transfer Out</span></a>
-                </div>
-            </div>
         </li>
-
+        <li class="nav-item @if(Route::currentRouteName() == 'transfer.in') active @endif">
+            <a class="nav-link"  href="{{route('transfer.in')}}">
+                <i class="fas fa-level-down-alt mr-3 text-tertiary"></i>
+                <span>Transfer In</span>
+            </a>
+        </li>
+        <li class="nav-item @if(Route::currentRouteName() == 'transfer.out') active @endif">
+            <a class="nav-link"  href="{{route('transfer.out')}}">
+                <i class="fas fa-level-up-alt mr-3 text-tertiary"></i>
+                <span>Transfer Out</span>
+            </a>
+        </li>
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#categoryCollapse"
                 aria-expanded="true" aria-controls="categoryCollapse">
@@ -63,7 +66,24 @@
                 </div>
             </div>
         </li>
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#itemsCollapse"
+                aria-expanded="true" aria-controls="itemsCollapse">
+                <i class="fas fa-users"></i>
+                <span>User Management</span>
+            </a>
+            <div id="itemsCollapse" class="collapse @if(Route::currentRouteName() == 'user' || Route::currentRouteName() == 'add.user' || Route::currentRouteName() == 'edit.user') show @endif" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                <div class="bg-secondary py-2 collapse-inner rounded">
+                    <a class="collapse-item text-white mb-1  @if(Route::currentRouteName() == 'user' || Route::currentRouteName() == 'edit.user') active @endif" href="{{route('user')}}"><i class="fas fa-user mr-2 text-tertiary"></i><span>Users</span></a>
+                    <a class="collapse-item text-white mb-1  @if(Route::currentRouteName() == 'add.user') active @endif" href="{{route('add.user')}}"><i class="fas fa-user-plus mr-2 text-tertiary"></i><span>Add New User</span></a>
+                </div>
+            </div>
+        </li>
+        <hr class="sidebar-divider">
 
+        <div class="sidebar-heading">
+            Actions
+        </div>
         <li class="nav-item ">
             <a class="nav-link" href="tables.html">
                 <i class="fas fa-tasks"></i>
@@ -77,13 +97,6 @@
                 <span>Inventory Quantity Check</span>
             </a>
         </li>
-
-        <hr class="sidebar-divider">
-
-        <div class="sidebar-heading">
-            Actions
-        </div>
-
         <li class="nav-item">
             <a class="nav-link" href="charts.html">
                 <i class="fas fa-fw fa-chart-area"></i>
@@ -145,10 +158,34 @@
             <div class="container-fluid">
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
                     <h1 class="h3 mb-0 text-light text-capitalize">{{str_replace("."," ", Route::currentRouteName())}}</h1>
-                    {{-- <a href="#" class="d-none d-sm-inline-block btn text-light btn-sm shadow-sm">
-                        <i class="fas fa-download fa-sm"></i> Generate Report
-                    </a> --}}
                 </div>
+                {{-- errors MESSAGE --}}
+                @if ($errors->any())
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                @endif
+
+                {{-- success MESSAGE --}}
+                @if(session()->has('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ session()->get('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                @endif
+
+                {{-- error MESSAGE --}}
+                @if(session()->has('error'))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ session()->get('error') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                @endif
 
                 @yield('content')
             
