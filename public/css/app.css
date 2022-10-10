@@ -10949,11 +10949,8 @@ textarea.form-control-lg {
 #page-top #content .transfer-in {
   position: relative;
 }
-#page-top #content .transfer-in .modal form {
-  position: relative;
-}
-#page-top #content .transfer-in .modal form input, #page-top #content .transfer-in .modal form select, #page-top #content .transfer-in .modal form textarea {
-  background-color: var(--primary);
+#page-top #content .transfer-in input, #page-top #content .transfer-in select, #page-top #content .transfer-in textarea {
+  background-color: var(--secondary);
   border: 0;
   outline: 0;
   color: var(--gray);
@@ -11001,15 +10998,6 @@ textarea.form-control-lg {
   -o-object-fit: cover;
      object-fit: cover;
   border-radius: 10%;
-}
-#page-top #content .transfer-in .card form {
-  position: relative;
-}
-#page-top #content .transfer-in .card form input, #page-top #content .transfer-in .card form select, #page-top #content .transfer-in .card form textarea {
-  background-color: var(--secondary);
-  border: 0;
-  outline: 0;
-  color: var(--gray);
 }
 #page-top #content .transfer-out {
   position: relative;

@@ -41,16 +41,22 @@
                 <span>Sales</span>
             </a>
         </li>
+        <li class="nav-item @if(Route::currentRouteName() == 'add.items') active @endif">
+            <a class="nav-link"  href="{{route('add.items')}}">
+                <i class="fas fa-plus mr-3 text-tertiary"></i>
+                <span>Add Items</span>
+            </a>
+        </li>
         <li class="nav-item @if(Route::currentRouteName() == 'transfer.in') active @endif">
             <a class="nav-link"  href="{{route('transfer.in')}}">
                 <i class="fas fa-level-down-alt mr-3 text-tertiary"></i>
                 <span>Transfer In</span>
             </a>
         </li>
-        <li class="nav-item @if(Route::currentRouteName() == 'transfer.out') active @endif">
-            <a class="nav-link"  href="{{route('transfer.out')}}">
+        <li class="nav-item @if(Route::currentRouteName() == 'deduct.items') active @endif">
+            <a class="nav-link"  href="{{route('deduct.items')}}">
                 <i class="fas fa-level-up-alt mr-3 text-tertiary"></i>
-                <span>Transfer Out</span>
+                <span>Deduct Items</span>
             </a>
         </li>
         <li class="nav-item">
@@ -103,13 +109,6 @@
                 <span>Report</span>
             </a>
         </li>
-
-        <hr class="sidebar-divider d-none d-md-block">
-
-        <div class="sidebar-card d-none d-lg-flex">
-            <img class="sidebar-card-illustration mb-2" src="img/undraw_rocket.svg" alt="Have a Good Day!">
-            <p class="text-center mb-2">Have a Good day!</p>
-        </div>
 
     </ul>
 

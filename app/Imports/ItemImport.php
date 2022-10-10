@@ -15,10 +15,10 @@ class ItemImport implements ToModel, WithHeadingRow
     */
     public function model(array $row)
     {
-        $checkItem = Items::where('item_name', $row['item_name'])
-                    ->where('item_category', $row['item_category'])
-                    ->where('item_sub_category', $row['item_sub_category'])
-                    ->where('item_barcode', $row['item_barcode'])->first();
+        $checkItem = Items::where('item_name', '=', $row['item_name'])
+                    ->where('item_category', '=', $row['item_category'])
+                    ->where('item_sub_category', '=', $row['item_sub_category'])
+                    ->where('item_barcode', '=', $row['item_barcode'])->first();
 
         if(empty($checkItem)){
             $qty = empty($row['item_quantity']) ? 0 : $row['item_quantity'];
@@ -31,8 +31,7 @@ class ItemImport implements ToModel, WithHeadingRow
                 'item_description' => $row['item_description'],
                 'item_cost' => (float) str_replace(',', '', $row['item_cost']),
                 'item_sell' => (float) str_replace(',', '', $row['item_sell']),
-                'item_notes' => $row['item_notes'],
-                'item_photo' => $row['item_photo']
+                'item_notes' => $row['item_notes']
             ]);
         }
     }

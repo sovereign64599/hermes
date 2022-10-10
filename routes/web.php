@@ -52,8 +52,9 @@ Route::group(['middleware' => 'auth'], function(){
     Route::get('/delete-cart/{id}', [App\Http\Controllers\Admin\TransferOutController::class, 'deleteCart']);
 
     // inventory show pages
+    Route::get('/add-items', [App\Http\Controllers\Admin\TransferInController::class, 'index'])->name('add.items');
     Route::get('/transfer-in', [App\Http\Controllers\Admin\TransferInController::class, 'index'])->name('transfer.in');
-    Route::get('/transfer-out', [App\Http\Controllers\Admin\TransferOutController::class, 'index'])->name('transfer.out');
+    Route::get('/deduct-items', [App\Http\Controllers\Admin\TransferOutController::class, 'index'])->name('deduct.items');
 
     // category post action
     Route::post('/create-category', [App\Http\Controllers\Admin\CategoriesController::class, 'store'])->name('store.category');

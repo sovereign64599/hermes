@@ -6,164 +6,176 @@
     <div class="row transfer-in">
         <div class="col-lg-4">
             <div class="card text-left sticky-top p-4">
-                <div class="card-header p-3">
-                    <h4 class="m-0 text-tertiary">Add Items</h4>
-                    <p class="text-light-400">Unlimited Items</p>
-                </div>
                 <div class="card-body pt-0">
-                    <form id="transferIn" enctype="multipart/form-data">
-                        @csrf
-                        <div class="row">
+                    @csrf
+                    <div class="row">
+                        <div class="form-group">
+                            <label><small>Item Name</small></label>
+                            <input type="text" name="item_name" class="form-control" placeholder="Item Name">
+                        </div>
+                        @if($getSubCategories->count() > 0)
+                        <div class="col-lg-6">
                             <div class="form-group">
-                                <label><small>Item Name</small></label>
-                                <input type="text" name="item_name" class="form-control" placeholder="Item Name">
-                            </div>
-                            @if($getSubCategories->count() > 0)
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <label><small>Item Category</small></label>
-                                    <select class="form-select" name="item_category" onchange="collectSubCategory(this)">
-                                        <option value="" selected>Select Category</option>
-                                        @foreach($getSubCategories as $category)
-                                            <option data="{{$category->category_id}}" value="{{$category->category_name}}">{{$category->category_name}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <label><small>Item Sub Category</small></label>
-                                    <select class="form-select" name="item_sub_category" id="item_sub_category">
-                                        <option value="" selected>Choose Category first</option>
-                                    </select>
-                                </div>
-                            </div>
-                            @else 
-                                <div class="col-lg-12">
-                                    <div class="form-group">
-                                        <label><small>Category and Sub Category List is not created yet.</small></label>
-                                        <br />
-                                        <a class="btn btn-tertiary text-light" href="{{route('categories')}}">Create Categories</a>
-                                    </div>
-                                </div>
-                            @endif
-                            <div class="col-lg-4">
-                                <div class="form-group">
-                                    <label><small>Item Quantity</small></label>
-                                    <input type="text" name="item_quantity" class="form-control" class="form-control" placeholder="Item Quantity" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');">
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <div class="form-group">
-                                    <label><small>Item barcode</small></label>
-                                    <input type="text" name="item_barcode" class="form-control" placeholder="Item Bar code" maxlength="6" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');">
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <div class="form-group">
-                                    <label><small>Item Cost</small></label>
-                                    <input type="text" name="item_cost" class="form-control" placeholder="Cost" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');">
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <label><small>Item Sell</small></label>
-                                    <input type="text" name="item_sell" class="form-control" placeholder="Sell" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');">
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <label for="item_img"><small>Item photo (Optional)</small></label>
-                                    <input type="file" name="item_photo" class="form-control" id="item_img" placeholder="Cost">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label><small>Item Description</small></label>
-                                <textarea name="item_description" rows="3" class="form-control" placeholder="Description"></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label><small>Add Notes (Optional)</small></label>
-                                <textarea name="item_notes" rows="3" class="form-control" value="No Notes" placeholder="Add notes"></textarea>
-                            </div>
-                            <div class="form-group">
-                                <button class="btn btn-primary text-light">Reset Form</button>
-                                <button class="btn text-light">Submit Items</button>
+                                <label><small>Item Category</small></label>
+                                <select class="form-select" name="item_category" onchange="collectSubCategory(this)">
+                                    <option value="" selected>Select Category</option>
+                                    @foreach($getSubCategories as $category)
+                                        <option data="{{$category->category_id}}" value="{{$category->category_name}}">{{$category->category_name}}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
-                    </form>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label><small>Item Sub Category</small></label>
+                                <select class="form-select" name="item_sub_category" id="item_sub_category">
+                                    <option value="" selected>Choose Category first</option>
+                                </select>
+                            </div>
+                        </div>
+                        @else 
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label><small>Category and Sub Category List is not created yet.</small></label>
+                                    <br />
+                                    <a class="btn btn-tertiary text-light" href="{{route('categories')}}">Create Categories</a>
+                                </div>
+                            </div>
+                        @endif
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label><small>Item barcode</small></label>
+                                <input type="text" class="form-control" placeholder="Item Bar code" maxlength="6" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');" disabled>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label><small>Item Cost</small></label>
+                                <input type="text" name="item_cost" class="form-control" placeholder="Cost" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');">
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label><small>Item Sell</small></label>
+                                <input type="text" name="item_sell" class="form-control" placeholder="Sell" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');">
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label><small>Current Quantity</small></label>
+                                <input type="text" name="item_quantity" class="form-control" class="form-control" placeholder="Current Quantity" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');">
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label><small>Added Quantity</small></label>
+                                <input type="text" name="item_quantity" class="form-control" class="form-control" placeholder="Added Quantity" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');">
+                            </div>
+                        </div>
+                        
+                        
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label for="item_img"><small>Item photo (Optional)</small></label>
+                                <input type="file" name="item_photo" class="form-control" id="item_img" placeholder="Cost">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label><small>Item Description</small></label>
+                            <textarea name="item_description" rows="3" class="form-control" placeholder="Description"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label><small>Add Notes (Optional)</small></label>
+                            <textarea name="item_notes" rows="3" class="form-control" value="No Notes" placeholder="Add notes"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <button class="btn text-light">Add Items</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="col-lg-8">
-            <div class="card shadow p-4">
-                <div class="card-header">
-                    <h4 class="text-tertiary">Items Available</h4>
-                    <div class="d-flex justify-content-between">
-                        <div class="d-flex gap-1">
-                            <form id="importForm" action="{{route('import.items')}}" method="POST" enctype="multipart/form-data">
-                                @csrf
-                                <input type="file" name="file" class="d-none" id="import" onchange="document.getElementById('importForm').submit()">
-                            </form>
-                            <button type="button" role="button" class="btn btn-sm text-light" onclick="document.getElementById('import').click();"><i class="fas fa-file-import mr-2"></i><span>Import Items</span></button>
-                            <a href="{{route('export.items')}}" class="btn btn-sm text-light d-flex align-items-center"><i class="fas fa-file-export mr-2"></i><span>Export Items</span></a>
-                        </div>
-                        <div>
-                            <input type="text" placeholder="Search Item" oninput="filter(this)">
+            <form id="transferIn" enctype="multipart/form-data">
+                <div class="card shadow p-4">
+                    <div class="card-header">
+                        <div class="d-flex justify-content-between">
+                            <div class="m-0 text-tertiary">
+                                Form # 
+                                <input type="text" name="form_number" style='width:auto' class="ch-input" value="{{str_pad(mt_rand(0, 999999), 6, '0', STR_PAD_LEFT)}}">
+                            </div>
+                            <div class="date-now">
+                                @php
+                                    date_default_timezone_set('Asia/Manila');
+                                    $dateToday = date("Y-m-d");
+                                @endphp
+                                <input type="date" name="date" class="ch-input" value="{{$dateToday}}">
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table" width="100%" cellspacing="0">
-                            <thead>
-                                <tr>
-                                    <th>Photo</th>
-                                    <th>Name</th>
-                                    <th>Category</th>
-                                    <th>Sub Category</th>
-                                    <th>Quantity</th>
-                                    <th>Bar Code</th>
-                                    <th>Description</th>
-                                    <th>Cost</th>
-                                    <th>Sell</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody id="showItems">
-                                
-                            </tbody>
-                        </table>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>Item Name</th>
+                                        <th>Item Category</th>
+                                        <th>Sub Category</th>
+                                        <th>Item Barcode</th>
+                                        <th>Item Cost</th>
+                                        <th>Item Sell</th>
+                                        <th>Current Quantity</th>
+                                        <th>Added Quantity</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if($items->count() > 0)
+                                        @foreach ($items as $item)
+                                            <tr>
+                                                <td>{{$item->item_name}}</td>
+                                                <td>{{$item->item_category}}</td>
+                                                <td>{{$item->item_sub_category}}</td>
+                                                <td>{{$item->item_barcode}}</td>
+                                                <td>{{$item->item_cost}}</td>
+                                                <td>{{$item->item_sell}}</td>
+                                                <td>
+                                                    @if($item->item_quantity == 0)
+                                                    <small class="text-danger">Out of Stock</small>
+                                                    @else
+                                                    {{$item->item_quantity}}
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if($item->item_quantity == 0)
+                                                    <small class="text-danger">Out of Stock</small>
+                                                    @else
+                                                    {{$item->item_quantity}}
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @else 
+                                        <tr><td>No Items</td></tr>
+                                    @endif
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                </div>
+                    <div class="card-footer bg-transparent border-0">
+                        <p class="text-tertiary">Items (3/10)</p>
+                        <button class="btn text-light">Submit</button>
+                    </div>
+                </form>
             </div>
-
-            {{-- modal --}}
-            <div class="modal fade" id="editItems" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
-                <div class="modal-dialog modal-lg modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header border-0">
-                            <h5 class="modal-title">Update Item</h5>
-                        </div>
-                        <div class="modal-body border-0">
-                            <form id="updateItems" class="modal-item" enctype="multipart/form-data">
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {{-- end modal --}}
-        </div>  
+        </div>
     </div>
+
 @endsection
 
-@section('script')
+{{-- @section('script')
     <script>
         const transferIn = document.querySelector('#transferIn');
         const updateItem = document.querySelector('#updateItems');
-        const modalItem = document.querySelector('.modal-item');
-        var myModal = new bootstrap.Modal(document.getElementById('editItems'), {
-            // keyboard: false
-        })
         getItems();
 
         async function getItems(){
@@ -180,28 +192,6 @@
                 .catch(function (error) {
                     document.querySelector('#showItems').innerHTML = `<tr><td>${error.response.data.errors}</td></tr>`;
                 })
-        }
-
-        async function filter(input) {
-            document.querySelector('#showItems').innerHTML = `<div class="d-flex align-items-center justify-content-center py-4"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div></div>`;
-            let incrementedLengthInput = input.value.length + 1;
-            if(incrementedLengthInput > 1){
-                await axios.get('/filter-items/'+input.value)
-                .then(function (response) {
-                    setTimeout(() => {
-                        if(response.status == 200){
-                            document.querySelector('#showItems').innerHTML = response.data.data;
-                        }
-                    }, 1000);
-                })
-                .catch(function (error) {
-                    document.querySelector('#showItems').innerHTML = error.response.data.errors;
-                })
-            }else{
-                getItems();
-            }
         }
 
         transferIn.addEventListener('submit', function(e){
@@ -231,8 +221,7 @@
                                 errors.item_description,
                                 errors.item_cost,
                                 errors.item_sell,
-                                errors.item_notes,
-                                errors.item_photo,
+                                errors.item_notes
                             ]
                             let errMessage = [];
                             errorMsg.forEach(function(item, key){
@@ -277,26 +266,7 @@
                 })
         }
 
-        function updateExistItems(dataToUpdate) {
-            axios.post('/update-exist-items', dataToUpdate)
-                .then((response) => {
-                    if(response.data.status == 200){
-                        Swal.fire({
-                            icon: 'success',
-                            text: response.data.message,
-                            timer: 2000,
-                            color: '#ffffff',
-                            background: '#24283b',
-                            timerProgressBar: true,
-                        });
-                        transferIn.reset("reset");
-                        getItems();
-                    }
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-        }
+        
 
         if(updateItem){
             updateItem.addEventListener('submit', function(e){
@@ -315,7 +285,6 @@
                             timerProgressBar: true,
                         });
                         updateItem.reset("reset");
-                        myModal.hide()
                         getItems();
                     }
                 })
@@ -364,32 +333,6 @@
             })
         }
 
-        async function editItem(id){
-            const dataID = id.getAttribute('data');
-            await axios.get('/edit-items/' + dataID)
-                .then(function (response) {
-                    // console.log(response);return;
-                    if(response.status == 200){
-                        myModal.show()
-                        modalItem.innerHTML = response.data.data;
-                    }
-                })
-                .catch(function (error) {
-                    if(error){
-                        if(error.response.status == 404){
-                            Swal.fire({
-                                icon: 'error',
-                                text: error.response.data.errors,
-                                timer: 2000,
-                                color: '#ffffff',
-                                background: '#24283b',
-                                timerProgressBar: true,
-                            });
-                        }
-                    }
-                })
-        }
-
         function deleteItem(id){
             const dataID = id.getAttribute('data');
             Swal.fire({
@@ -434,4 +377,4 @@
         }
 
     </script>
-@endsection
+@endsection --}}

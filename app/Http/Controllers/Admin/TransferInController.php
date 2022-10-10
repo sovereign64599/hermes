@@ -25,8 +25,8 @@ class TransferInController extends Controller
 
         $unique->values()->all();
         $getSubCategories = $unique;
-        // dd($checkCategories);
-        return view('admin.items.transfer-in', compact(['getSubCategories']));
+        $items = Items::orderBy('created_at', 'desc')->paginate(3);
+        return view('admin.items.transfer-in', compact(['getSubCategories', 'items']));
     }
     
     public function getItems(){
@@ -36,23 +36,16 @@ class TransferInController extends Controller
             foreach($items as $item){
                 $quantity = ($item->item_quantity == 0) ? '<small class="text-danger">Out of Stock</small>' : $item->item_quantity;
                 $img = empty($item->item_photo) ? asset('img/default_item_photo.jpg') : asset('img/item_photo/'.$item->item_photo.'');
-                $html .= '<tr><td>';
-                $html .='<a href="'. $img .'" target="_blank"><img class="img-fluid item-photo" src="'. $img .'" alt="'.$item->item_name.'"></a>';
-                $html .='</td>';
+                $html .= '<tr>';
                 $html .='<td>'.$item->item_name.'</td>';
                 $html .='<td>'.$item->item_category.'</td>';
                 $html .='<td>'.$item->item_sub_category.'</td>';
-                $html .='<td>'.$quantity.'</td>';
                 $html .='<td>'.$item->item_barcode.'</td>';
-                $html .='<td>'.$item->item_description.'</td>';
                 $html .='<td>'.$item->item_cost.'</td>';
                 $html .='<td>'.$item->item_sell.'</td>';
-                $html .='<td>';
-                $html .='<div class="d-flex gap-1">';
-                $html .='<button data="'.$item->id.'" class="btn bg-secondary text-light btn-sm" onclick="editItem(this)"><i class="fas fa-pencil-alt mr-1 fa-sm"></i></button>';
-                $html .='<button data="'.$item->id.'" class="btn text-light btn-sm" onclick="deleteItem(this)"><i class="fas fa-trash mr-1 fa-sm"></i></button>';
-                $html .='</div>';
-                $html .='</td></tr>';
+                $html .='<td>'.$quantity.'</td>';
+                $html .='<td>'.$quantity.'</td>';
+                $html .='</tr>';
             }
             return response()->json([
                 'data' => $html,
@@ -138,7 +131,6 @@ class TransferInController extends Controller
 
         Excel::import(new ItemImport, $file);
         Excel::import(new ItemCategory, $file);
-        // Excel::import(new ItemSubCategory, $file);
 
         return back()->with('success', 'File Imported successfully');
     }
@@ -192,8 +184,8 @@ class TransferInController extends Controller
             'item_quantity' => $quantity,
             'item_barcode' => $barcode,
             'item_description' => ucfirst($request->item_description),
-            'item_cost' => $request->item_cost,
-            'item_sell' => $request->item_sell,
+            'item_cost' => (float) str_replace(',', '', $request->item_cost),
+            'item_sell' => (float) str_replace(',', '', $request->item_sell),
             'item_notes' => $request->item_notes,
             'item_photo' => $item_photo,
         ]);
@@ -318,8 +310,8 @@ class TransferInController extends Controller
                 'item_quantity' => $quantity,
                 'item_barcode' => ucfirst($request->item_barcode),
                 'item_description' => $request->item_description,
-                'item_cost' => $request->item_cost,
-                'item_sell' => $request->item_sell,
+                'item_cost' => (float) str_replace(',', '', $request->item_cost),
+                'item_sell' => (float) str_replace(',', '', $request->item_sell),
                 'item_notes' => $request->item_notes,
                 'item_photo' => $item_photo,
             ]);

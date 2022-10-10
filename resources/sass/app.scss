@@ -161,17 +161,11 @@
     #content .transfer-in{
         position: relative;
 
-        .modal {
-            form{
-                position: relative;
-
-                input, select, textarea{
-                    background-color: var(--primary);
-                    border: 0;
-                    outline: 0;
-                    color: var(--gray);
-                }
-            }
+        input, select, textarea{
+            background-color: var(--secondary);
+            border: 0;
+            outline: 0;
+            color: var(--gray);
         }
         
         .card {
@@ -230,16 +224,7 @@
                 }
             }
 
-            form{
-                position: relative;
-
-                input, select, textarea{
-                    background-color: var(--secondary);
-                    border: 0;
-                    outline: 0;
-                    color: var(--gray);
-                }
-            }
+            
         }
     }
 
