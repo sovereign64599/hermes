@@ -41,8 +41,8 @@
                 <span>Sales</span>
             </a>
         </li>
-        <li class="nav-item @if(Route::currentRouteName() == 'add.items') active @endif">
-            <a class="nav-link"  href="{{route('add.items')}}">
+        <li class="nav-item @if(Route::currentRouteName() == 'items' || Route::currentRouteName() == 'edit.item') active @endif">
+            <a class="nav-link"  href="{{route('items')}}">
                 <i class="fas fa-plus mr-3 text-tertiary"></i>
                 <span>Add Items</span>
             </a>
@@ -172,16 +172,22 @@
 
                 {{-- success MESSAGE --}}
                 @if(session()->has('success'))
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    {{ session()->get('success') }}
+                <div class="alert alert-success alert-dismissible fade show d-flex align-items-center gap-4" role="alert">
+                    <i class="fas fa-check-circle fa-lg"></i>
+                    <div>
+                        {{ session()->get('success') }}
+                    </div>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
                 @endif
 
                 {{-- error MESSAGE --}}
                 @if(session()->has('error'))
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    {{ session()->get('error') }}
+                <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center gap-4" role="alert">
+                    <i class="fas fa-exclamation-triangle fa-lg"></i>
+                    <div>
+                        {{ session()->get('error') }}
+                    </div>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
                 @endif
@@ -226,6 +232,13 @@
     @endif
     <script src="{{asset('vendor/axios/axios.min.js')}}"></script>
     <script src="{{asset('vendor/sweetalert/sweetalert.min.js')}}"></script>
+    <script>
+        if(document.querySelector('.alert .btn-close')){
+            setTimeout(() => {
+                document.querySelector('.alert .btn-close').click()
+            }, 4000);
+        }
+    </script>
     @yield('script')
     @else
         @yield('content')

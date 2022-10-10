@@ -72,14 +72,6 @@
                                 <input type="text" name="item_quantity" class="form-control" class="form-control" placeholder="Added Quantity" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');">
                             </div>
                         </div>
-                        
-                        
-                        <div class="col-lg-12">
-                            <div class="form-group">
-                                <label for="item_img"><small>Item photo (Optional)</small></label>
-                                <input type="file" name="item_photo" class="form-control" id="item_img" placeholder="Cost">
-                            </div>
-                        </div>
                         <div class="form-group">
                             <label><small>Item Description</small></label>
                             <textarea name="item_description" rows="3" class="form-control" placeholder="Description"></textarea>

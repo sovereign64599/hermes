@@ -16,43 +16,45 @@ Route::group(['middleware' => 'auth'], function(){
     
     Route::get('/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
     Route::get('/sales', [App\Http\Controllers\Admin\DashboardController::class, 'sales'])->name('sales');
+
+    // user management get request
     Route::get('/show-users', [App\Http\Controllers\Admin\DashboardController::class, 'showUsers'])->name('user');
     Route::get('/add-users', [App\Http\Controllers\Admin\DashboardController::class, 'addUsers'])->name('add.user');
     Route::get('/edit-user/{id}', [App\Http\Controllers\Admin\DashboardController::class, 'editUsers'])->name('edit.user');
     Route::get('/dleete-user/{id}', [App\Http\Controllers\Admin\DashboardController::class, 'deleteUser'])->name('delete.user');
 
-    // dashboard post action
+    // user management post request
     Route::post('/add-users', [App\Http\Controllers\Admin\DashboardController::class, 'storeUser'])->name('store.user');
     Route::patch('/update-user/{id}', [App\Http\Controllers\Admin\DashboardController::class, 'updateUser'])->name('update.user');
 
-    // transfer in post action
-    Route::post('/import-items', [App\Http\Controllers\Admin\TransferInController::class, 'importItems'])->name('import.items');
-    Route::post('/store-items', [App\Http\Controllers\Admin\TransferInController::class, 'store']);
-    Route::post('/update-items', [App\Http\Controllers\Admin\TransferInController::class, 'update']);
-    Route::post('/update-exist-items', [App\Http\Controllers\Admin\TransferInController::class, 'updateExistItem']);
+    // items post action
+    Route::post('/import-items', [App\Http\Controllers\Admin\ItemsController::class, 'importItems'])->name('import.items');
+    Route::post('/store-items', [App\Http\Controllers\Admin\ItemsController::class, 'store'])->name('store.items');
+    Route::patch('/update-items/{id}', [App\Http\Controllers\Admin\ItemsController::class, 'update'])->name('update.item');
+    Route::post('/update-exist-items', [App\Http\Controllers\Admin\ItemsController::class, 'updateExistItem']);
 
-    // transfer in get action 
-    Route::get('/export-items', [App\Http\Controllers\Admin\TransferInController::class, 'exportItems'])->name('export.items');
-    Route::get('/get-items', [App\Http\Controllers\Admin\TransferInController::class, 'getItems']);
-    Route::get('/check-items', [App\Http\Controllers\Admin\TransferInController::class, 'checkItems']);
-    Route::get('/edit-items/{id}', [App\Http\Controllers\Admin\TransferInController::class, 'editItems']);
-    Route::get('/delete-items/{id}', [App\Http\Controllers\Admin\TransferInController::class, 'destroy']);
-    Route::get('/filter-items/{input}', [App\Http\Controllers\Admin\TransferInController::class, 'filter']);
-    Route::get('/collect-sub-categories/{id}', [App\Http\Controllers\Admin\TransferInController::class, 'collectSubCategory']);
+    // items get action 
+    Route::get('/export-items', [App\Http\Controllers\Admin\ItemsController::class, 'exportItems'])->name('export.items');
+    Route::get('/get-items', [App\Http\Controllers\Admin\ItemsController::class, 'getItems']);
+    Route::get('/check-items', [App\Http\Controllers\Admin\ItemsController::class, 'checkItems']);
+    Route::get('/edit-items/{id}', [App\Http\Controllers\Admin\ItemsController::class, 'editItems'])->name('edit.item');
+    Route::get('/delete-items/{id}', [App\Http\Controllers\Admin\ItemsController::class, 'destroy']);
+    Route::get('/filter-items/{input}', [App\Http\Controllers\Admin\ItemsController::class, 'filter']);
+    Route::get('/collect-sub-categories/{id}', [App\Http\Controllers\Admin\ItemsController::class, 'collectSubCategory']);
 
     // transfer out post action
     Route::post('/add-item-to-cart', [App\Http\Controllers\Admin\TransferOutController::class, 'addItemToCart']);
     Route::post('/update-cart-quantity', [App\Http\Controllers\Admin\TransferOutController::class, 'updateCartQuantity']);
 
-    // transfer out get action
+    // deduct items get action
     Route::get('/show-items', [App\Http\Controllers\Admin\TransferOutController::class, 'showItems']);
     Route::get('/get-cart', [App\Http\Controllers\Admin\TransferOutController::class, 'getCart']);
     Route::get('/get-item-quantity/{id}', [App\Http\Controllers\Admin\TransferOutController::class, 'getItemQuantity']);
     Route::get('/get-cart-total-amount', [App\Http\Controllers\Admin\TransferOutController::class, 'getCartTotalAmount']);
     Route::get('/delete-cart/{id}', [App\Http\Controllers\Admin\TransferOutController::class, 'deleteCart']);
 
-    // inventory show pages
-    Route::get('/add-items', [App\Http\Controllers\Admin\TransferInController::class, 'index'])->name('add.items');
+    // add items, transfer in , deduct items show pages
+    Route::get('/items', [App\Http\Controllers\Admin\ItemsController::class, 'index'])->name('items');
     Route::get('/transfer-in', [App\Http\Controllers\Admin\TransferInController::class, 'index'])->name('transfer.in');
     Route::get('/deduct-items', [App\Http\Controllers\Admin\TransferOutController::class, 'index'])->name('deduct.items');
 
