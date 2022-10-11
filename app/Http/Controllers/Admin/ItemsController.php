@@ -9,6 +9,7 @@ use App\Imports\ItemImport;
 use App\Models\Items;
 use App\Models\SubCategory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ItemsController extends Controller
@@ -41,11 +42,14 @@ class ItemsController extends Controller
                 $html .='<td>'.$item->item_cost.'</td>';
                 $html .='<td>'.$item->item_sell.'</td>';
                 $html .='<td>'.$quantity.'</td>';
-                $html .='<td>'.$quantity.'</td>';
+                $html .='<td>'.$item->item_description.'</td>';
                 $html .='<td>';
                 $html .='<div class="d-flex gap-1">';
-                $html .='<a href="/edit-items/'.$item->id.'" class="btn bg-secondary btn-sm text-light"><i class="fas fa-pencil-alt fa-sm"></i></a>';
-                $html .='<a data="'.$item->id.'" onclick="deleteItem(this)" class="btn bg-tertiary btn-sm text-light"><i class="fas fa-trash fa-sm"></i></a>';
+                $html .='<a data="'.$item->id.'" onclick="viewItem(this)" class="btn bg-info btn-sm text-light"><i class="fas fa-eye fa-sm"></i></a>';
+                if(Auth::user()->role == 'Admin'){
+                    $html .='<a href="/edit-items/'.$item->id.'" class="btn bg-secondary btn-sm text-light"><i class="fas fa-pencil-alt fa-sm"></i></a>';
+                    $html .='<a data="'.$item->id.'" onclick="deleteItem(this)" class="btn bg-tertiary btn-sm text-light"><i class="fas fa-trash fa-sm"></i></a>';
+                }
                 $html .='</div>';
                 $html .='</td></tr>';
             }
@@ -55,6 +59,53 @@ class ItemsController extends Controller
         }
         return response()->json([
             'errors' => '<tr><td>No Item available<td><tr>',
+        ], 410);
+    }
+
+    public function viewItems($id)
+    {
+        $item = Items::find($id);
+        if($item){
+            $img = empty($item->item_photo) ? asset('img/default_item_photo.jpg') : asset('img/item_photo/'.$item->item_photo.'');
+            $html = '<div class="row">';
+            $html .= '<div class="col-lg-6">';
+            $html .= '<a href="">';
+            $html .= '<img class="img-fluid item-photo" src="'.$img.'" alt="'.$item->item_name.'">';
+            $html .= '</a>';
+            $html .= '</div>';
+            $html .= '<div class="col-lg-6 m-auto">';
+            $html .= '<div>';
+            $html .= '<h1>$'.$item->item_sell.'</h1>';
+            $html .= '<br>';
+            $html .= '<p>'.$item->item_name.'</p>';
+            $html .= '<hr class="bg-tertiary">';
+            $html .= '<p>'.$item->item_description.'</p>';
+            $html .= '<small class="text-secondary">Item Quantity</small>';
+            $html .= '<p>'.$item->item_quantity.'</p>';
+            $html .= '<div class="row">';
+            $html .= '<div class="col-lg-4">';
+            $html .= '<small class="text-secondary">Item barcode</small>';
+            $html .= '<p>'.$item->item_barcode.'</p>';
+            $html .= '</div>';
+            $html .= '<div class="col-lg-4">';
+            $html .= '<small class="text-secondary">Item Cost</small>';
+            $html .= '<p>$'.$item->item_cost.'</p>';
+            $html .= '</div>';
+            $html .= '<div class="col-lg-4">';
+            $html .= '<small class="text-secondary">Item Sell</small>';
+            $html .= '<p>$'.$item->item_sell.'</p>';
+            $html .= '</div>';
+            $html .= '</div>';
+            $html .= '</div>';
+            $html .= '</div>';
+            $html .= '</div>';
+
+            return response()->json([
+                'data' => $html,
+            ], 200);
+        }
+        return response()->json([
+            'data' => 'Opppppps',
         ], 410);
     }
 
@@ -68,6 +119,7 @@ class ItemsController extends Controller
                 ->orWhere('item_sub_category', 'like', '%'.$input.'%')
                 ->orWhere('item_barcode', 'like', '%'.$input.'%')
                 ->orderBy('created_at', 'desc')->get();
+                
         if($items->count() > 0){
             $html = '';
             foreach($items as $item){
@@ -81,11 +133,14 @@ class ItemsController extends Controller
                 $html .='<td>'.$item->item_cost.'</td>';
                 $html .='<td>'.$item->item_sell.'</td>';
                 $html .='<td>'.$quantity.'</td>';
-                $html .='<td>'.$quantity.'</td>';
+                $html .='<td>'.$item->item_description.'</td>';
                 $html .='<td>';
                 $html .='<div class="d-flex gap-1">';
-                $html .='<a href="/edit-items/'.$item->id.'" class="btn bg-secondary btn-sm text-light"><i class="fas fa-pencil-alt fa-sm"></i></a>';
-                $html .='<a data="'.$item->id.'" onclick="deleteItem(this)" class="btn bg-tertiary btn-sm text-light"><i class="fas fa-trash fa-sm"></i></a>';
+                $html .='<a data="'.$item->id.'" onclick="viewItem(this)" class="btn bg-info btn-sm text-light"><i class="fas fa-eye fa-sm"></i></a>';
+                if(Auth::user()->role == 'Admin'){
+                    $html .='<a href="/edit-items/'.$item->id.'" class="btn bg-secondary btn-sm text-light"><i class="fas fa-pencil-alt fa-sm"></i></a>';
+                    $html .='<a data="'.$item->id.'" onclick="deleteItem(this)" class="btn bg-tertiary btn-sm text-light"><i class="fas fa-trash fa-sm"></i></a>';
+                }
                 $html .='</div>';
                 $html .='</td></tr>';
             }
@@ -119,7 +174,7 @@ class ItemsController extends Controller
         $file = $request->file('file');
 
         Excel::import(new ItemImport, $file);
-        Excel::import(new ItemCategory, $file);
+        // Excel::import(new ItemCategory, $file);
 
         return back()->with('success', 'File Imported successfully');
     }
@@ -153,9 +208,10 @@ class ItemsController extends Controller
         $item = Items::where('item_category', $request->item_category)
                 ->where('item_sub_category', $request->item_sub_category)
                 ->where('item_barcode', $request->item_barcode)->first();
-        if($item){
+
+        if($item->count() > 0){
             $item->where('id', $item->id)->increment('item_quantity', $quantity);
-            return back()->with('success', ucfirst($request->item_name). ' exist and updated.');
+            return back()->with('success', ucfirst($request->item_name). ' exist and incremented.');
         }
 
         if(!empty($request->item_photo)){

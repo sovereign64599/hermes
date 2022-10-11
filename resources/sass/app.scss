@@ -167,7 +167,6 @@
             outline: 0;
             color: var(--gray);
         }
-        
         .card {
             .card-header{
                 input, select, textarea{
@@ -181,7 +180,6 @@
             }
 
             .card-body{
-                
                 input{
                     background-color: var(--secondary);
                     border: 0;
@@ -390,6 +388,14 @@
             .card-body{
                 position: relative;
             }
+        }
+    }
+
+    #content{
+        .item-photo{
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
         }
     }
 
