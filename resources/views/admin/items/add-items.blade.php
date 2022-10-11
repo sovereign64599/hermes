@@ -118,11 +118,11 @@
                                     <th>Name</th>
                                     <th>Category</th>
                                     <th>Sub Category</th>
-                                    <th>Quantity</th>
                                     <th>Bar Code</th>
-                                    <th>Description</th>
                                     <th>Cost</th>
                                     <th>Sell</th>
+                                    <th>Quantity</th>
+                                    <th>Description</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -135,12 +135,39 @@
             </div>
         </div>  
     </div>
+
+    {{-- view item modal --}}
+    <div class="modal fade" id="viewItem" tabindex="-1" aria-labelledby="viewItemLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+          <div class="modal-content">
+            <div class="modal-body border-0 text-center" id="viewItemsContent">
+                
+            </div>
+          </div>
+        </div>
+      </div>
 @endsection
 
 @section('script')
     <script>
-        const transferIn = document.querySelector('#transferIn');
+        const viewItemsContent = document.querySelector('#viewItemsContent')
         getItems();
+        // modal init
+        var viewItemModal = new bootstrap.Modal(document.getElementById('viewItem'))
+        async function viewItem(item){
+            const dataID = item.getAttribute('data');
+
+            await axios.get(`/view-items/${dataID}`)
+                .then(function (response) {
+                    if(response.status == 200){
+                        viewItemsContent.innerHTML = response.data.data
+                        viewItemModal.show()
+                    }
+                })
+                .catch(function (error) {
+                    document.querySelector('#showItems').innerHTML = `<tr><td>${error.response.data.errors}</td></tr>`;
+                })
+        }
         async function getItems(){
             document.querySelector('#showItems').innerHTML = `<div class="d-flex align-items-center justify-content-center py-4"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
                 <span class="visually-hidden">Loading...</span>

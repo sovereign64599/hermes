@@ -72,6 +72,7 @@
                 </div>
             </div>
         </li>
+        @if(Auth::user()->role == 'Admin')
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#itemsCollapse"
                 aria-expanded="true" aria-controls="itemsCollapse">
@@ -85,6 +86,7 @@
                 </div>
             </div>
         </li>
+        @endif
         <hr class="sidebar-divider">
 
         <div class="sidebar-heading">

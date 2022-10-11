@@ -11128,6 +11128,12 @@ textarea.form-control-lg {
 #page-top #content .transfer-out .card .card-body {
   position: relative;
 }
+#page-top #content .item-photo {
+  height: 100%;
+  width: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
 #page-top #content .categories {
   position: relative;
 }
