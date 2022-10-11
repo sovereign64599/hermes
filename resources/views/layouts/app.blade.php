@@ -38,7 +38,7 @@
         <li class="nav-item @if(Route::currentRouteName() == 'sales') active @endif">
             <a class="nav-link"  href="{{route('sales')}}">
                 <i class="far fa-chart-bar"></i>
-                <span>Sales</span>
+                <span>Sales Module</span>
             </a>
         </li>
         <li class="nav-item @if(Route::currentRouteName() == 'items' || Route::currentRouteName() == 'edit.item') active @endif">
@@ -49,13 +49,13 @@
         </li>
         <li class="nav-item @if(Route::currentRouteName() == 'transfer.in') active @endif">
             <a class="nav-link"  href="{{route('transfer.in')}}">
-                <i class="fas fa-level-down-alt mr-3 text-tertiary"></i>
+                <i class="fas fa-share mr-2 text-tertiary"></i>
                 <span>Transfer In</span>
             </a>
         </li>
         <li class="nav-item @if(Route::currentRouteName() == 'deduct.items') active @endif">
             <a class="nav-link"  href="{{route('deduct.items')}}">
-                <i class="fas fa-level-up-alt mr-3 text-tertiary"></i>
+                <i class="fas fa-reply mr-2 text-tertiary"></i>
                 <span>Deduct Items</span>
             </a>
         </li>
@@ -223,6 +223,7 @@
     </div>
     </div>
     </div>
+
     <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('vendor/jquery-easing/jquery.easing.min.js') }}"></script>
@@ -242,6 +243,28 @@
         }
     </script>
     @yield('script')
+
+    @if(Route::currentRouteName() == 'sales' || Route::currentRouteName() == 'transfer.in' || Route::currentRouteName() == 'deduct.items')
+    {{-- under development --}}
+    <div class="modal fade" id="underDevelopment" tabindex="-1" aria-labelledby="underDevelopment" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-body border-0 text-center p-4" id="underDevelopment">
+                    <img class="img-fluid" src="{{asset('img/underdevelopment.svg')}}" alt="Under Development">
+                    <div class="text-center my-4">
+                        Under Development
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var underDevelopment = new bootstrap.Modal(document.getElementById('underDevelopment'))
+        underDevelopment.show()
+    </script>
+    {{-- under development --}}
+    @endif
+
     @else
         @yield('content')
     @endauth

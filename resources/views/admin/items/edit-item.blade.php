@@ -73,7 +73,7 @@
                             </div>
                             <div class="form-group">
                                 <label><small>Item Description</small></label>
-                                <textarea name="item_description" value="{{$item->item_description}}" rows="3" class="form-control" placeholder="Description"></textarea>
+                                <textarea name="item_description" value="{{$item->item_description}}" rows="3" class="form-control" placeholder="Description">{{$item->item_description}}</textarea>
                             </div>
                             <div class="form-group">
                                 <label><small>Add Notes (Optional)</small></label>

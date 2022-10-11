@@ -5,87 +5,89 @@
 @section('content')
     <div class="row transfer-in">
         <div class="col-lg-4">
-            <div class="card text-left sticky-top p-4">
-                <div class="card-body pt-0">
-                    @csrf
-                    <div class="row">
-                        <div class="form-group">
-                            <label><small>Item Name</small></label>
-                            <input type="text" name="item_name" class="form-control" placeholder="Item Name">
-                        </div>
-                        @if($getSubCategories->count() > 0)
-                        <div class="col-lg-6">
+            <form action="">
+                <div class="card text-left sticky-top p-4">
+                    <div class="card-body pt-0">
+                        @csrf
+                        <div class="row">
                             <div class="form-group">
-                                <label><small>Item Category</small></label>
-                                <select class="form-select" name="item_category" onchange="collectSubCategory(this)">
-                                    <option value="" selected>Select Category</option>
-                                    @foreach($getSubCategories as $category)
-                                        <option data="{{$category->category_id}}" value="{{$category->category_name}}">{{$category->category_name}}</option>
-                                    @endforeach
-                                </select>
+                                <label><small>Item Name</small></label>
+                                <input type="text" name="item_name" class="form-control" placeholder="Item Name">
                             </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label><small>Item Sub Category</small></label>
-                                <select class="form-select" name="item_sub_category" id="item_sub_category">
-                                    <option value="" selected>Choose Category first</option>
-                                </select>
-                            </div>
-                        </div>
-                        @else 
-                            <div class="col-lg-12">
+                            @if($getSubCategories->count() > 0)
+                            <div class="col-lg-6">
                                 <div class="form-group">
-                                    <label><small>Category and Sub Category List is not created yet.</small></label>
-                                    <br />
-                                    <a class="btn btn-tertiary text-light" href="{{route('categories')}}">Create Categories</a>
+                                    <label><small>Item Category</small></label>
+                                    <select class="form-select" name="item_category" onchange="collectSubCategory(this)">
+                                        <option value="" selected>Select Category</option>
+                                        @foreach($getSubCategories as $category)
+                                            <option data="{{$category->category_id}}" value="{{$category->category_name}}">{{$category->category_name}}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
-                        @endif
-                        <div class="col-lg-4">
-                            <div class="form-group">
-                                <label><small>Item barcode</small></label>
-                                <input type="text" class="form-control" placeholder="Item Bar code" maxlength="6" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');" disabled>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label><small>Item Sub Category</small></label>
+                                    <select class="form-select" name="item_sub_category" id="item_sub_category">
+                                        <option value="" selected>Choose Category first</option>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="form-group">
-                                <label><small>Item Cost</small></label>
-                                <input type="text" name="item_cost" class="form-control" placeholder="Cost" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');">
+                            @else 
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label><small>Category and Sub Category List is not created yet.</small></label>
+                                        <br />
+                                        <a class="btn btn-tertiary text-light" href="{{route('categories')}}">Create Categories</a>
+                                    </div>
+                                </div>
+                            @endif
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label><small>Item barcode</small></label>
+                                    <input type="text" class="form-control" placeholder="Item Bar code" maxlength="6" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');" disabled>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="form-group">
-                                <label><small>Item Sell</small></label>
-                                <input type="text" name="item_sell" class="form-control" placeholder="Sell" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');">
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label><small>Item Cost</small></label>
+                                    <input type="text" name="item_cost" class="form-control" placeholder="Cost" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');">
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label><small>Current Quantity</small></label>
-                                <input type="text" name="item_quantity" class="form-control" class="form-control" placeholder="Current Quantity" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');">
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label><small>Item Sell</small></label>
+                                    <input type="text" name="item_sell" class="form-control" placeholder="Sell" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');">
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label><small>Added Quantity</small></label>
-                                <input type="text" name="item_quantity" class="form-control" class="form-control" placeholder="Added Quantity" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label><small>Current Quantity</small></label>
+                                    <input type="text" name="item_quantity" class="form-control" class="form-control" placeholder="Current Quantity" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');">
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label><small>Item Description</small></label>
-                            <textarea name="item_description" rows="3" class="form-control" placeholder="Description"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label><small>Add Notes (Optional)</small></label>
-                            <textarea name="item_notes" rows="3" class="form-control" value="No Notes" placeholder="Add notes"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <button class="btn text-light">Add Items</button>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label><small>Added Quantity</small></label>
+                                    <input type="text" name="item_quantity" class="form-control" class="form-control" placeholder="Added Quantity" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label><small>Item Description</small></label>
+                                <textarea name="item_description" rows="3" class="form-control" placeholder="Description"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label><small>Add Notes (Optional)</small></label>
+                                <textarea name="item_notes" rows="3" class="form-control" value="No Notes" placeholder="Add notes"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <button class="btn text-light">Add Items</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
         <div class="col-lg-8">
             <form id="transferIn" enctype="multipart/form-data">
@@ -118,6 +120,7 @@
                                         <th>Item Sell</th>
                                         <th>Current Quantity</th>
                                         <th>Added Quantity</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -144,6 +147,9 @@
                                                     {{$item->item_quantity}}
                                                     @endif
                                                 </td>
+                                                <td>
+                                                    <button class="btn btn-sm text-light"><i class="fas fa-trash fa-sm"></i></button>
+                                                </td>
                                             </tr>
                                         @endforeach
                                     @else 
@@ -153,12 +159,13 @@
                             </table>
                         </div>
                     </div>
-                    <div class="card-footer bg-transparent border-0">
-                        <p class="text-tertiary">Items (3/10)</p>
+                    <div class="card-footer bg-transparent border-0 text-right">
+                        <hr class="bg-tertiary">
+                        <p><small class="text-tertiary">Items (3/10)</small></p>
                         <button class="btn text-light">Submit</button>
                     </div>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
     </div>
 

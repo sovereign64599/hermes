@@ -1,33 +1,98 @@
 @extends('layouts.app')
 
-@section('title', 'Transfer Out')
+@section('title', 'Transfer In')
 
 @section('content')
-    <div class="row transfer-out">
-        <div class="col-lg-8 t-o-left">
-            <form action="" class="sticky-top">
-                <div class="d-flex align-items-center justify-content-between">
-                    <div>
-                        <h5 class="text-white">Choose Items</h5>
-                    </div>
-                    <div class="d-flex gap-3 align-items-center">
-                        <div class="form-group">
-                            <input type="text" class="form-control" placeholder="Search for..">
+    <div class="row transfer-in">
+        <div class="col-lg-4">
+            <form action="">
+                <div class="card text-left sticky-top p-4">
+                    <div class="card-body pt-0">
+                        @csrf
+                        <div class="row">
+                            <div class="form-group">
+                                <label><small>Item Name</small></label>
+                                <input type="text" name="item_name" class="form-control" placeholder="Item Name">
+                            </div>
+                            @if($getSubCategories->count() > 0)
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label><small>Item Category</small></label>
+                                    <select class="form-select" name="item_category" onchange="collectSubCategory(this)">
+                                        <option value="" selected>Select Category</option>
+                                        @foreach($getSubCategories as $category)
+                                            <option data="{{$category->category_id}}" value="{{$category->category_name}}">{{$category->category_name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label><small>Item Sub Category</small></label>
+                                    <select class="form-select" name="item_sub_category" id="item_sub_category">
+                                        <option value="" selected>Choose Category first</option>
+                                    </select>
+                                </div>
+                            </div>
+                            @else 
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label><small>Category and Sub Category List is not created yet.</small></label>
+                                        <br />
+                                        <a class="btn btn-tertiary text-light" href="{{route('categories')}}">Create Categories</a>
+                                    </div>
+                                </div>
+                            @endif
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label><small>Item barcode</small></label>
+                                    <input type="text" class="form-control" placeholder="Item Bar code" maxlength="6" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');" disabled>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label><small>Item Cost</small></label>
+                                    <input type="text" name="item_cost" class="form-control" placeholder="Cost" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');">
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label><small>Item Sell</small></label>
+                                    <input type="text" name="item_sell" class="form-control" placeholder="Sell" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');">
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label><small>Current Quantity</small></label>
+                                    <input type="text" name="item_quantity" class="form-control" class="form-control" placeholder="Current Quantity" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');">
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label><small>Added Quantity</small></label>
+                                    <input type="text" name="item_quantity" class="form-control" class="form-control" placeholder="Added Quantity" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label><small>Item Description</small></label>
+                                <textarea name="item_description" rows="3" class="form-control" placeholder="Description"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label><small>Add Notes (Optional)</small></label>
+                                <textarea name="item_notes" rows="3" class="form-control" value="No Notes" placeholder="Add notes"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <button class="btn text-light">Add Items</button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </form>
-            <hr class="bg-dark">
-            <div class="row t-o-items justify-content-center" id="showItems">
-                {{-- show items here --}}
-            </div>
         </div>
-        <div class="col-lg-4 t-o-right">
-            <div class="card sticky-top p-4">
-                <form action="">
-                    <div class="card-header py-4 ">
-                        <h3>Cart</h3>
-                        <small>Form # and date is auto generated. (Editable)</small>
+        <div class="col-lg-8">
+            <form id="transferIn" enctype="multipart/form-data">
+                <div class="card shadow p-4">
+                    <div class="card-header">
                         <div class="d-flex justify-content-between">
                             <div class="m-0 text-tertiary">
                                 Form # 
@@ -42,166 +107,206 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-body pt-0 pb-4 position-relative" id="showCart">
-                        {{-- show carts --}}
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Quantity</th>
+                                        <th>Code</th>
+                                        <th>Description</th>
+                                        <th>Unit Price</th>
+                                        <th>Amount</th>
+                                        <th>For Delivery</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>No Item</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    <div class="card-footer bg-transparent border-0">
-                        <h5 class="text-light">Total Amount: $<span id="totalAmount">0</span></h5>
-                        <hr class="bg-light">
-                        <button class="btn text-light">Place Order</button>
+                    <div class="card-footer bg-transparent border-0 text-right">
+                        <hr class="bg-tertiary">
+                        <p><small class="text-tertiary">Items (3/10)</small></p>
+                        <button class="btn text-light">Submit</button>
                     </div>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
     </div>
+
 @endsection
 
-@section('script')
+{{-- @section('script')
     <script>
-
-        const headers = {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        }
-
-        window.onload = function(){
-            getItems();
-            getCart();
-            getCartTotal()
-        }
-
-        // add comma to number >= 4 digits
-        function numberWithCommas(x) {
-            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        }
+        const transferIn = document.querySelector('#transferIn');
+        const updateItem = document.querySelector('#updateItems');
+        getItems();
 
         async function getItems(){
-            document.querySelector('#showItems').innerHTML = `<div class="w-100 text-center"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+            document.querySelector('#showItems').innerHTML = `<div class="d-flex align-items-center justify-content-center py-4"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
                 <span class="visually-hidden">Loading...</span>
             </div></div>`;
             
-            await axios.get('/show-items')
+            await axios.get('/get-items')
                 .then(function (response) {
                     if(response.status == 200){
-                        document.querySelector('#showItems').innerHTML = response.data.data;
+                        document.querySelector('#showItems').innerHTML = `<tr><td>${response.data.data}</td></tr>`;
                     }
                 })
                 .catch(function (error) {
-                    document.querySelector('#showItems').innerHTML = error.response.data.errors;
+                    document.querySelector('#showItems').innerHTML = `<tr><td>${error.response.data.errors}</td></tr>`;
                 })
         }
 
-        async function getItemQuantity(id){
-            await axios.get('/get-item-quantity/'+id)
-                .then(function (response) {
-                    if(response.status == 200){
-                        document.querySelector('.item-qty-'+id).innerHTML = response.data.quantity;
-                    }
-                })
-                .catch(function (error) {
-                    console.log(error);
-                })
-        }
-
-        async function addCart(item){
-            const dataID = item.getAttribute('data');
-            
-            await axios.post('/add-item-to-cart', {data:dataID}, {
-                headers: headers
-            })
+        transferIn.addEventListener('submit', function(e){
+            e.preventDefault();
+            let formData = new FormData(this);
+            axios.post('/store-items', formData)
                 .then((response) => {
                     if(response.status == 200){
-                        getItemQuantity(dataID)
                         Swal.fire({
                             icon: 'success',
-                            text: response.data.success,
+                            text: response.data.message
+                        });
+                        transferIn.reset("reset");
+                        getItems();
+                    }
+                })
+                .catch(function (error) {
+                    if(error){
+                        if( error.response.status === 422 ) {
+                            var errors = error.response.data.errors;
+                            errorMsg = [
+                                errors.item_name, 
+                                errors.item_barcode, 
+                                errors.item_category, 
+                                errors.item_sub_category,
+                                errors.item_quantity,
+                                errors.item_description,
+                                errors.item_cost,
+                                errors.item_sell,
+                                errors.item_notes
+                            ]
+                            let errMessage = [];
+                            errorMsg.forEach(function(item, key){
+                                errMessage += `<li style="list-style:none;">${item == null ? '' : item}</li>`;
+                            })
+                            Swal.fire({
+                                icon: 'error',
+                                html: `<ul>${errMessage}</ul>`,
+                            });
+                        }else{
+                            Swal.fire({
+                                text: error.response.data.error,
+                                icon: 'info',
+                                color: '#ffffff',
+                                background: '#24283b',
+                                showCancelButton: true,
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'Update'
+                                }).then((result) => {
+                                if (result.isConfirmed) {
+                                    let dataToUpdate = new FormData(document.querySelector('#transferIn'));
+                                    updateExistItems(dataToUpdate)
+                                }
+                            })
+                        }
+                    }
+                });
+        })
+
+        async function collectSubCategory(data){
+            var selectedOption = data.options[data.selectedIndex];
+            var dataID = selectedOption.getAttribute('data');
+            await axios.get('/collect-sub-categories/' + dataID)
+                .then(function (response) {
+                    if(response.status == 200){
+                        document.querySelector('#item_sub_category').innerHTML = response.data.data;
+                    }
+                })
+                .catch(function (error) {
+                    document.querySelector('#item_sub_category').innerHTML = error.response.data.errors;
+                })
+        }
+
+        
+
+        if(updateItem){
+            updateItem.addEventListener('submit', function(e){
+                e.preventDefault();
+                let formData = new FormData(this);
+
+                axios.post('/update-items', formData)
+                .then((response) => {
+                    if(response.data.status == 200){
+                        Swal.fire({
+                            icon: 'success',
+                            text: response.data.message,
                             timer: 2000,
                             color: '#ffffff',
                             background: '#24283b',
                             timerProgressBar: true,
                         });
-                        getCart()
-                        getCartTotal()
-                    }
-                })
-                .catch(function (error) {
-                    Swal.fire({
-                        icon: 'warning',
-                        text: error.response.data.errors,
-                        timer: 2000,
-                        color: '#ffffff',
-                        background: '#24283b',
-                        timerProgressBar: true,
-                    });
-                });
-        }
-
-        async function getCart(){
-            await axios.get('/get-cart')
-                .then(function (response) {
-                    if(response.status == 200){
-                        document.querySelector('#showCart').innerHTML = response.data.data;
+                        updateItem.reset("reset");
+                        getItems();
                     }
                 })
                 .catch(function (error) {
                     if(error){
-                        document.querySelector('#showCart').innerHTML = error.response.data.errors;
+                        if( error.response.status === 422 ) {
+                            var errors = error.response.data.errors;
+                            errorMsg = [
+                                errors.item_name, 
+                                errors.item_barcode, 
+                                errors.item_category, 
+                                errors.item_sub_category,
+                                errors.item_quantity,
+                                errors.item_description,
+                                errors.item_cost,
+                                errors.item_sell,
+                                errors.item_notes,
+                                errors.item_photo,
+                            ]
+                            let errMessage = [];
+                            errorMsg.forEach(function(item, key){
+                                errMessage += `<li style="list-style:none;">${item == null ? '' : item}</li>`;
+                            })
+                            Swal.fire({
+                                icon: 'error',
+                                html: `<ul>${errMessage}</ul>`,
+                                timer: 2000,
+                                color: '#ffffff',
+                                background: '#24283b',
+                                timerProgressBar: true,
+                            });
+                        }
+                        if(error.response.status == 404){
+                            Swal.fire({
+                                icon: 'error',
+                                text: error.response.statusText,
+                                timer: 2000,
+                                color: '#ffffff',
+                                background: '#24283b',
+                                timerProgressBar: true,
+                            });
+                            getItems();
+                        }
                     }
-                })
-        }
-
-        async function getCartTotal(){
-            await axios.get('/get-cart-total-amount')
-                .then(function (response) {
-                    if(response.status == 200){
-                        document.querySelector('#totalAmount').innerHTML = numberWithCommas(response.data.totalAmount);
-                    }
-                })
-                .catch(function (error) {
-                    console.log(error);
-                })
-        }
-
-        async function upadateQuantity(data){
-            const dataID = data.getAttribute('data');
-            const dataQuantity = data.value;
-            
-            await axios.post('/update-cart-quantity', {
-                id:dataID,
-                quantity:dataQuantity,
-            }, {
-                headers: headers
-            })
-                .then((response) => {
-                    if(response.status == 200){
-                        getItemQuantity(dataID)
-                        // Swal.fire({
-                        //     icon: 'success',
-                        //     text: response.data.success,
-                        //     timer: 2000,
-                        //     color: '#ffffff',
-                        //     background: '#24283b',
-                        //     timerProgressBar: true,
-                        // });
-                        getCartTotal();
-                    }
-                })
-                .catch(function (error) {
-                    Swal.fire({
-                        icon: 'warning',
-                        text: error.response.data.errors,
-                        timer: 2000,
-                        color: '#ffffff',
-                        background: '#24283b',
-                        timerProgressBar: true,
-                    });
                 });
+            })
         }
 
-        function deleteCart(id){
+        function deleteItem(id){
             const dataID = id.getAttribute('data');
             Swal.fire({
-                text: "Are you sure?",
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
                 icon: 'warning',
                 color: '#ffffff',
                 background: '#24283b',
@@ -211,16 +316,15 @@
                 confirmButtonText: 'Yes, delete it!'
                 }).then((result) => {
                 if (result.isConfirmed) {
-                axios.get('/delete-cart/' + dataID)
+                axios.get('/delete-items/' + dataID)
                         .then(function (response) {
-                            if(response.status == 200){
+                            if(response.data.status == 200){
                                 Swal.fire({
                                     icon: 'success',
                                     text: response.data.message,
                                     timer: 2000,
                                     timerProgressBar: true,
                                 });
-                                getCart();
                                 getItems();
                             }
                         })
@@ -228,12 +332,13 @@
                             if(error.response.status == 404){
                                 Swal.fire({
                                     icon: 'error',
-                                    text: error.response.data.errors,
+                                    text: error.response.statusText,
                                     timer: 2000,
                                     color: '#ffffff',
                                     background: '#24283b',
                                     timerProgressBar: true,
                                 });
+                                getItems();
                             }
                         })
                 }
@@ -241,4 +346,4 @@
         }
 
     </script>
-@endsection
+@endsection --}}

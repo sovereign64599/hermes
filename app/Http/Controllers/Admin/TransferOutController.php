@@ -15,6 +15,12 @@ class TransferOutController extends Controller
     }
 
     public function index(){
+        $collection = collect(SubCategory::get());
+        $unique = $collection->unique(['category_name']);
+        $unique->values()->all();
+        $getSubCategories = $unique;
+        $items = Items::orderBy('created_at', 'desc')->paginate(3);
+        return view('admin.items.transfer-out', compact(['getSubCategories', 'items']));
         return view('admin.items.transfer-out');
     }
 

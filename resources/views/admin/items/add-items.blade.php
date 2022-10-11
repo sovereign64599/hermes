@@ -55,7 +55,7 @@
                             <div class="col-lg-4">
                                 <div class="form-group">
                                     <label><small>Item barcode</small></label>
-                                    <input type="text" name="item_barcode" class="form-control" placeholder="Item Bar code" maxlength="6" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');">
+                                    <input type="text" name="item_barcode" class="form-control" placeholder="Item Bar code" minlength="8" maxlength="8" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');">
                                 </div>
                             </div>
                             <div class="col-lg-4">
@@ -98,12 +98,14 @@
                     <h4 class="text-tertiary">Items Available</h4>
                     <div class="d-flex justify-content-between">
                         <div class="d-flex gap-1">
-                            <form id="importForm" action="{{route('import.items')}}" method="POST" enctype="multipart/form-data">
+                            <form action="{{route('import.items')}}" method="POST" id="importForm" enctype="multipart/form-data">
+                                @method('POST')
                                 @csrf
                                 <input type="file" name="file" class="d-none" id="import" onchange="document.getElementById('importForm').submit()">
                             </form>
                             <button type="button" role="button" class="btn btn-sm text-light" onclick="document.getElementById('import').click();"><i class="fas fa-file-import mr-2"></i><span>Import Items</span></button>
                             <a href="{{route('export.items')}}" class="btn btn-sm text-light d-flex align-items-center"><i class="fas fa-file-export mr-2"></i><span>Export Items</span></a>
+                            <a href="{{asset('vendor/item-format.xlsx')}}" class="btn btn-info btn-sm text-light d-flex align-items-center"><i class="fas fa-file-excel mr-2" download></i><span>Download Item Format</span></a>
                         </div>
                         <div>
                             <input type="text" placeholder="Search Item" oninput="filter(this)">
@@ -137,23 +139,24 @@
     </div>
 
     {{-- view item modal --}}
-    <div class="modal fade" id="viewItem" tabindex="-1" aria-labelledby="viewItemLabel" aria-hidden="true">
+    <div class="modal fade" id="viewItemsModal" tabindex="-1" aria-labelledby="viewItemLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
-          <div class="modal-content">
-            <div class="modal-body border-0 text-center" id="viewItemsContent">
-                
+            <div class="modal-content">
+                <div class="modal-body border-0 text-center" id="viewItemsContent">
+                    
+                </div>
             </div>
-          </div>
         </div>
-      </div>
+    </div>
 @endsection
 
 @section('script')
     <script>
         const viewItemsContent = document.querySelector('#viewItemsContent')
-        getItems();
         // modal init
-        var viewItemModal = new bootstrap.Modal(document.getElementById('viewItem'))
+        var viewItemModal = new bootstrap.Modal(document.getElementById('viewItemsModal'))
+        getItems();
+        
         async function viewItem(item){
             const dataID = item.getAttribute('data');
 

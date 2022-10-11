@@ -15,7 +15,7 @@ Route::match(['get'], 'login', function(){ return redirect('/'); })->name('login
 Route::group(['middleware' => 'auth'], function(){
     
     Route::get('/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/sales', [App\Http\Controllers\Admin\DashboardController::class, 'sales'])->name('sales');
+    Route::get('/sales', [App\Http\Controllers\Admin\SalesController::class, 'index'])->name('sales');
 
     Route::group(['middleware' => 'isAdmin'], function(){
         // user management get request
@@ -50,21 +50,10 @@ Route::group(['middleware' => 'auth'], function(){
     Route::get('/filter-items/{input}', [App\Http\Controllers\Admin\ItemsController::class, 'filter']);
     Route::get('/collect-sub-categories/{id}', [App\Http\Controllers\Admin\ItemsController::class, 'collectSubCategory']);
 
-    // transfer out post action
-    Route::post('/add-item-to-cart', [App\Http\Controllers\Admin\TransferOutController::class, 'addItemToCart']);
-    Route::post('/update-cart-quantity', [App\Http\Controllers\Admin\TransferOutController::class, 'updateCartQuantity']);
-
-    // deduct items get action
-    Route::get('/show-items', [App\Http\Controllers\Admin\TransferOutController::class, 'showItems']);
-    Route::get('/get-cart', [App\Http\Controllers\Admin\TransferOutController::class, 'getCart']);
-    Route::get('/get-item-quantity/{id}', [App\Http\Controllers\Admin\TransferOutController::class, 'getItemQuantity']);
-    Route::get('/get-cart-total-amount', [App\Http\Controllers\Admin\TransferOutController::class, 'getCartTotalAmount']);
-    Route::get('/delete-cart/{id}', [App\Http\Controllers\Admin\TransferOutController::class, 'deleteCart']);
-
     // add items, transfer in , deduct items show pages
     Route::get('/items', [App\Http\Controllers\Admin\ItemsController::class, 'index'])->name('items');
     Route::get('/transfer-in', [App\Http\Controllers\Admin\TransferInController::class, 'index'])->name('transfer.in');
-    Route::get('/deduct-items', [App\Http\Controllers\Admin\TransferOutController::class, 'index'])->name('deduct.items');
+    Route::get('/deduct-items', [App\Http\Controllers\Admin\DeductController::class, 'index'])->name('deduct.items');
 
     // category post action
     Route::post('/create-category', [App\Http\Controllers\Admin\CategoriesController::class, 'store'])->name('store.category');

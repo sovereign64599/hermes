@@ -19,17 +19,17 @@ class ItemCategory implements ToCollection, WithHeadingRow
     public function collection(Collection $rows)
     {
         foreach ($rows as $row) {
-            $checkDuplicate = Category::where('category_name', $row['item_category'])->first();
+            $checkDuplicate = Category::where('category_name', $row['category'])->first();
             if(empty($checkDuplicate)){
                 $category = Category::create([
-                    'category_name' => $row['item_category']
+                    'category_name' => $row['category']
                 ]);
             }
-            $subCategory = SubCategory::where('category_name', '=', $row['item_category'])->where('sub_category_name', '=', $row['item_sub_category'])->first();
+            $subCategory = SubCategory::where('category_name', $row['category'])->where('sub_category_name', $row['subcategory'])->first();
             if(empty($subCategory)){
                 $category->subcategory()->create([
-                    'category_name' => $row['item_category'],
-                    'sub_category_name' => $row['item_sub_category']
+                    'category_name' => $row['category'],
+                    'sub_category_name' => $row['subcategory']
                 ]);
             }
         }

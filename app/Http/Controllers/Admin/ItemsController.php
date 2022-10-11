@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Exports\ItemsExport;
 use App\Http\Controllers\Controller;
 use App\Imports\ItemCategory;
 use App\Imports\ItemImport;
+use App\Models\Category;
 use App\Models\Items;
 use App\Models\SubCategory;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Http\Request;
 
 class ItemsController extends Controller
 {
@@ -27,22 +27,38 @@ class ItemsController extends Controller
         return view('admin.items.add-items', compact(['getSubCategories', 'items']));
     }
 
+    public function importItems(Request $request)
+    {
+        $file = $request->file('file');
+
+        Excel::import(new ItemImport, $file);
+        Excel::import(new ItemCategory, $file);
+
+        return back()->with('success', 'File Imported successfully');
+    }
+
+    public function exportItems()
+    {
+        return Excel::download(new ItemsExport, 'items.xlsx');
+    }
+
     public function getItems(){
         $items = Items::orderBy('created_at', 'desc')->get();
         if($items->count() > 0){
             $html = '';
             foreach($items as $item){
                 $quantity = ($item->item_quantity == 0) ? '<small class="text-danger">Out of Stock</small>' : $item->item_quantity;
-                $img = empty($item->item_photo) ? asset('img/default_item_photo.jpg') : asset('img/item_photo/'.$item->item_photo.'');
+                $description = empty($item->item_description) ? 'No item Description' : $item->item_description;
+                $item_name = empty($item->item_name) ? 'No item Name' : $item->item_name;
                 $html .= '<tr>';
-                $html .='<td>'.$item->item_name.'</td>';
+                $html .='<td>'.$item_name.'</td>';
                 $html .='<td>'.$item->item_category.'</td>';
                 $html .='<td>'.$item->item_sub_category.'</td>';
                 $html .='<td>'.$item->item_barcode.'</td>';
                 $html .='<td>'.$item->item_cost.'</td>';
                 $html .='<td>'.$item->item_sell.'</td>';
                 $html .='<td>'.$quantity.'</td>';
-                $html .='<td>'.$item->item_description.'</td>';
+                $html .='<td>'.$description.'</td>';
                 $html .='<td>';
                 $html .='<div class="d-flex gap-1">';
                 $html .='<a data="'.$item->id.'" onclick="viewItem(this)" class="btn bg-info btn-sm text-light"><i class="fas fa-eye fa-sm"></i></a>';
@@ -67,19 +83,21 @@ class ItemsController extends Controller
         $item = Items::find($id);
         if($item){
             $img = empty($item->item_photo) ? asset('img/default_item_photo.jpg') : asset('img/item_photo/'.$item->item_photo.'');
+            $description = empty($item->item_description) ? 'No item Description' : $item->item_description;
+            $item_name = empty($item->item_name) ? 'No item Name' : $item->item_name;
             $html = '<div class="row">';
             $html .= '<div class="col-lg-6">';
             $html .= '<a href="">';
-            $html .= '<img class="img-fluid item-photo" src="'.$img.'" alt="'.$item->item_name.'">';
+            $html .= '<img class="img-fluid item-photo" src="'.$img.'" alt="'.$item_name.'">';
             $html .= '</a>';
             $html .= '</div>';
             $html .= '<div class="col-lg-6 m-auto">';
             $html .= '<div>';
             $html .= '<h1>$'.$item->item_sell.'</h1>';
             $html .= '<br>';
-            $html .= '<p>'.$item->item_name.'</p>';
+            $html .= '<p>'.$item_name.'</p>';
             $html .= '<hr class="bg-tertiary">';
-            $html .= '<p>'.$item->item_description.'</p>';
+            $html .= '<p>'.$description.'</p>';
             $html .= '<small class="text-secondary">Item Quantity</small>';
             $html .= '<p>'.$item->item_quantity.'</p>';
             $html .= '<div class="row">';
@@ -124,16 +142,17 @@ class ItemsController extends Controller
             $html = '';
             foreach($items as $item){
                 $quantity = ($item->item_quantity == 0) ? '<small class="text-danger">Out of Stock</small>' : $item->item_quantity;
-                $img = empty($item->item_photo) ? asset('img/default_item_photo.jpg') : asset('img/item_photo/'.$item->item_photo.'');
+                $description = empty($item->item_description) ? 'No item Description' : $item->item_description;
+                $item_name = empty($item->item_name) ? 'No item Description' : $item->item_name;
                 $html .= '<tr>';
-                $html .='<td>'.$item->item_name.'</td>';
+                $html .='<td>'.$item_name.'</td>';
                 $html .='<td>'.$item->item_category.'</td>';
                 $html .='<td>'.$item->item_sub_category.'</td>';
                 $html .='<td>'.$item->item_barcode.'</td>';
                 $html .='<td>'.$item->item_cost.'</td>';
                 $html .='<td>'.$item->item_sell.'</td>';
                 $html .='<td>'.$quantity.'</td>';
-                $html .='<td>'.$item->item_description.'</td>';
+                $html .='<td>'.$description.'</td>';
                 $html .='<td>';
                 $html .='<div class="d-flex gap-1">';
                 $html .='<a data="'.$item->id.'" onclick="viewItem(this)" class="btn bg-info btn-sm text-light"><i class="fas fa-eye fa-sm"></i></a>';
@@ -169,31 +188,18 @@ class ItemsController extends Controller
         ], 404);
     }
 
-    public function importItems(Request $request)
-    {
-        $file = $request->file('file');
-
-        Excel::import(new ItemImport, $file);
-        // Excel::import(new ItemCategory, $file);
-
-        return back()->with('success', 'File Imported successfully');
-    }
-
-    public function exportItems()
-    {
-        return Excel::download(new ItemsExport, 'items.xlsx');
-    }
-
     public function store(Request $request){
         $request->validate([
             'item_category' => 'required',
             'item_sub_category' => 'required',
-            'item_quantity' => 'required|numeric|min:0',
-            'item_barcode' => 'required|numeric',
+            'item_quantity' => 'required|numeric|min:1',
+            'item_barcode' => 'required|digits_between:8,8',
             'item_cost' => 'required|numeric',
             'item_sell' => 'required|numeric',
+        ],
+        [
+            'item_barcode.digits_between' => 'Barcode must be 8 digits.',
         ]);
-
         $like = scandir('img/item_photo');
         foreach ($like as $thisFile) {
             $rs = Items::where('item_photo', $thisFile)->first();
@@ -209,7 +215,7 @@ class ItemsController extends Controller
                 ->where('item_sub_category', $request->item_sub_category)
                 ->where('item_barcode', $request->item_barcode)->first();
 
-        if($item->count() > 0){
+        if(!empty($item)){
             $item->where('id', $item->id)->increment('item_quantity', $quantity);
             return back()->with('success', ucfirst($request->item_name). ' exist and incremented.');
         }
