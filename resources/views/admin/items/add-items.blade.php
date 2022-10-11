@@ -73,7 +73,7 @@
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label for="item_img"><small>Item photo (Optional)</small></label>
-                                    <input type="file" name="item_photo" class="form-control" id="item_img" placeholder="Cost">
+                                    <input type="file" name="item_photo" class="form-control" id="item_img">
                                 </div>
                             </div>
                             <div class="form-group">
