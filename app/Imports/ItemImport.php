@@ -8,7 +8,6 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
 class ItemImport implements ToModel, WithHeadingRow
 {
-    
     public function model(array $row)
     {
         $checkItem = Items::where('item_name', $row['name'])
@@ -18,8 +17,9 @@ class ItemImport implements ToModel, WithHeadingRow
 
         if(empty($checkItem)){
             $qty = empty($row['quantity']) ? 0 : $row['quantity'];
+            $name = empty($row['name']) ? 'Item ' . bin2hex(random_bytes(2)) : $row['name'];
             return new Items([
-                'item_name' => $row['name'],
+                'item_name' => $name,
                 'item_category' => $row['category'],
                 'item_sub_category' => $row['subcategory'],
                 'item_quantity' => $qty,

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\ItemsExport;
 use App\Http\Controllers\Controller;
 use App\Imports\ItemCategory;
 use App\Imports\ItemImport;
@@ -11,6 +12,7 @@ use App\Models\SubCategory;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
+use Validator;
 
 class ItemsController extends Controller
 {
@@ -29,36 +31,53 @@ class ItemsController extends Controller
 
     public function importItems(Request $request)
     {
-        $file = $request->file('file');
+        $validator = Validator::make(
+        [
+            'file'      => $request->file,
+            'extension' => strtolower($request->file->getClientOriginalExtension()),
+        ],
+        [
+            'file'          => 'required',
+            'extension'      => 'required|in:xlsx',
+        ]);
 
-        Excel::import(new ItemImport, $file);
-        Excel::import(new ItemCategory, $file);
+        if ($validator->fails()) {
+            return back()->with('error', 'File type must be xlsx file.');
+        } else {
+            $file = $request->file('file');
 
-        return back()->with('success', 'File Imported successfully');
+            Excel::import(new ItemImport, $file);
+            Excel::import(new ItemCategory, $file);
+
+            return back()->with('success', 'File Imported successfully');
+        }
     }
 
     public function exportItems()
     {
-        return Excel::download(new ItemsExport, 'items.xlsx');
+        $items = Items::all();
+        if($items->count() > 0){
+            return Excel::download(new ItemsExport, 'items.xlsx');
+        }
+        return back()->with('error', 'No Items found');
     }
 
     public function getItems(){
-        $items = Items::orderBy('created_at', 'desc')->get();
+        $items = Items::orderBy('updated_at', 'desc')->get();
         if($items->count() > 0){
             $html = '';
             foreach($items as $item){
                 $quantity = ($item->item_quantity == 0) ? '<small class="text-danger">Out of Stock</small>' : $item->item_quantity;
                 $description = empty($item->item_description) ? 'No item Description' : $item->item_description;
-                $item_name = empty($item->item_name) ? 'No item Name' : $item->item_name;
                 $html .= '<tr>';
-                $html .='<td>'.$item_name.'</td>';
+                $html .='<td>'.$item->item_name.'</td>';
                 $html .='<td>'.$item->item_category.'</td>';
                 $html .='<td>'.$item->item_sub_category.'</td>';
                 $html .='<td>'.$item->item_barcode.'</td>';
                 $html .='<td>'.$item->item_cost.'</td>';
                 $html .='<td>'.$item->item_sell.'</td>';
                 $html .='<td>'.$quantity.'</td>';
-                $html .='<td>'.$description.'</td>';
+                $html .='<td>'.mb_strimwidth($description, 0, 10, "...").'</td>';
                 $html .='<td>';
                 $html .='<div class="d-flex gap-1">';
                 $html .='<a data="'.$item->id.'" onclick="viewItem(this)" class="btn bg-info btn-sm text-light"><i class="fas fa-eye fa-sm"></i></a>';
@@ -136,23 +155,22 @@ class ItemsController extends Controller
                 ->orWhere('item_sub_category', 'like', '%'.ucfirst($input).'%')
                 ->orWhere('item_sub_category', 'like', '%'.$input.'%')
                 ->orWhere('item_barcode', 'like', '%'.$input.'%')
-                ->orderBy('created_at', 'desc')->get();
+                ->orderBy('updated_at', 'desc')->get();
                 
         if($items->count() > 0){
             $html = '';
             foreach($items as $item){
                 $quantity = ($item->item_quantity == 0) ? '<small class="text-danger">Out of Stock</small>' : $item->item_quantity;
                 $description = empty($item->item_description) ? 'No item Description' : $item->item_description;
-                $item_name = empty($item->item_name) ? 'No item Description' : $item->item_name;
                 $html .= '<tr>';
-                $html .='<td>'.$item_name.'</td>';
+                $html .='<td>'.$item->item_name.'</td>';
                 $html .='<td>'.$item->item_category.'</td>';
                 $html .='<td>'.$item->item_sub_category.'</td>';
                 $html .='<td>'.$item->item_barcode.'</td>';
                 $html .='<td>'.$item->item_cost.'</td>';
                 $html .='<td>'.$item->item_sell.'</td>';
                 $html .='<td>'.$quantity.'</td>';
-                $html .='<td>'.$description.'</td>';
+                $html .='<td>'.mb_strimwidth($description, 0, 10, "...").'</td>';
                 $html .='<td>';
                 $html .='<div class="d-flex gap-1">';
                 $html .='<a data="'.$item->id.'" onclick="viewItem(this)" class="btn bg-info btn-sm text-light"><i class="fas fa-eye fa-sm"></i></a>';
@@ -217,7 +235,7 @@ class ItemsController extends Controller
 
         if(!empty($item)){
             $item->where('id', $item->id)->increment('item_quantity', $quantity);
-            return back()->with('success', ucfirst($request->item_name). ' exist and incremented.');
+            return back()->with('success', ucfirst($request->item_name). ' already exist. Item quantity updated.');
         }
 
         if(!empty($request->item_photo)){

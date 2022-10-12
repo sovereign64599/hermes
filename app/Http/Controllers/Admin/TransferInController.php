@@ -28,4 +28,28 @@ class TransferInController extends Controller
         $items = Items::orderBy('created_at', 'desc')->paginate(3);
         return view('admin.items.transfer-in', compact(['getSubCategories', 'items']));
     }
+
+    public function collectItemName($input){
+        $items = Items::where('item_name', 'like', '%'.ucfirst($input).'%')
+                ->orWhere('item_name', 'like', '%'.$input.'%')
+                ->orWhere('item_name', 'like', '%'.strtolower($input).'%')->get();
+
+        if($items->count() > 0){
+            $html = '';
+            foreach($items as $item){
+                $html .= '<li data="'.$item->id.'" onclick="setValue(this)">'.$item->item_name.'</li>';
+            }
+            return response()->json([
+                'data' => $html,
+            ], 200);
+        }
+        return response()->json([
+            'errors' => '<li>No Item Found</li>',
+        ], 410);
+    }
+
+    public function addList(Request $request)
+    {
+        dd($request->all());
+    }
 }

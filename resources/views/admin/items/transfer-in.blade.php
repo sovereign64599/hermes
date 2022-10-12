@@ -5,33 +5,31 @@
 @section('content')
     <div class="row transfer-in">
         <div class="col-lg-4">
-            <form action="">
+            <form id="add_list">
                 <div class="card text-left sticky-top p-4">
                     <div class="card-body pt-0">
-                        @csrf
                         <div class="row">
                             <div class="form-group">
                                 <label><small>Item Name</small></label>
-                                <input type="text" name="item_name" class="form-control" placeholder="Item Name">
+                                <div class="auto-sugguestion">
+                                    <input type="search" class="form-control" id="search_item" placeholder="Search Item Name"  oninput="collectItemNames(this)" autocomplete="false">
+                                    <i class="fas fa-search"></i>
+                                    <ul class="list-item">
+                                        
+                                    </ul>
+                                </div>
                             </div>
                             @if($getSubCategories->count() > 0)
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label><small>Item Category</small></label>
-                                    <select class="form-select" name="item_category" onchange="collectSubCategory(this)">
-                                        <option value="" selected>Select Category</option>
-                                        @foreach($getSubCategories as $category)
-                                            <option data="{{$category->category_id}}" value="{{$category->category_name}}">{{$category->category_name}}</option>
-                                        @endforeach
-                                    </select>
+                                    <input readonly class="form-control" placeholder="Category" disabled>
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label><small>Item Sub Category</small></label>
-                                    <select class="form-select" name="item_sub_category" id="item_sub_category">
-                                        <option value="" selected>Choose Category first</option>
-                                    </select>
+                                    <input type="text" class="form-control" placeholder="Sub Category" disabled>
                                 </div>
                             </div>
                             @else 
@@ -46,43 +44,43 @@
                             <div class="col-lg-4">
                                 <div class="form-group">
                                     <label><small>Item barcode</small></label>
-                                    <input type="text" class="form-control" placeholder="Item Bar code" maxlength="6" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');" disabled>
+                                    <input type="text" class="form-control" placeholder="Item Bar code" maxlength="6" disabled>
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group">
                                     <label><small>Item Cost</small></label>
-                                    <input type="text" name="item_cost" class="form-control" placeholder="Cost" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');">
+                                    <input type="text" class="form-control" placeholder="Item cost" disabled>
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group">
                                     <label><small>Item Sell</small></label>
-                                    <input type="text" name="item_sell" class="form-control" placeholder="Sell" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');">
+                                    <input type="text" class="form-control" placeholder="Item Sell" disabled>
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label><small>Current Quantity</small></label>
-                                    <input type="text" name="item_quantity" class="form-control" class="form-control" placeholder="Current Quantity" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');">
+                                    <input type="text" class="form-control" placeholder="Current Quantity" disabled>
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label><small>Added Quantity</small></label>
-                                    <input type="text" name="item_quantity" class="form-control" class="form-control" placeholder="Added Quantity" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');">
+                                    <input type="text" id="item_added_quantity" class="form-control bg-light" class="form-control" placeholder="Added Quantity" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label><small>Item Description</small></label>
-                                <textarea name="item_description" rows="3" class="form-control" placeholder="Description"></textarea>
+                                <textarea rows="3" class="form-control" placeholder="Description" disabled></textarea>
                             </div>
                             <div class="form-group">
                                 <label><small>Add Notes (Optional)</small></label>
-                                <textarea name="item_notes" rows="3" class="form-control" value="No Notes" placeholder="Add notes"></textarea>
+                                <textarea id="item_notes" rows="3" class="form-control bg-light" value="No Notes" placeholder="Add notes"></textarea>
                             </div>
                             <div class="form-group">
-                                <button class="btn text-light">Add Items</button>
+                                <button class="btn text-light">Add to list</button>
                             </div>
                         </div>
                     </div>
@@ -93,6 +91,7 @@
             <form id="transferIn" enctype="multipart/form-data">
                 <div class="card shadow p-4">
                     <div class="card-header">
+                        <h4 class="text-tertiary">Transfer In List</h4>
                         <div class="d-flex justify-content-between">
                             <div class="m-0 text-tertiary">
                                 Form # 
@@ -171,101 +170,95 @@
 
 @endsection
 
-{{-- @section('script')
+@section('script')
     <script>
-        const transferIn = document.querySelector('#transferIn');
+        const addList = document.querySelector('#add_list');
+        const searchItemInput = document.querySelector('#search_item');
         const updateItem = document.querySelector('#updateItems');
-        getItems();
+        const listItem = document.querySelector('.list-item');
+        // getItems();
 
-        async function getItems(){
-            document.querySelector('#showItems').innerHTML = `<div class="d-flex align-items-center justify-content-center py-4"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div></div>`;
+        // async function getItems(){
+        //     document.querySelector('#showItems').innerHTML = `<div class="d-flex align-items-center justify-content-center py-4"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+        //         <span class="visually-hidden">Loading...</span>
+        //     </div></div>`;
             
-            await axios.get('/get-items')
-                .then(function (response) {
-                    if(response.status == 200){
-                        document.querySelector('#showItems').innerHTML = `<tr><td>${response.data.data}</td></tr>`;
-                    }
-                })
-                .catch(function (error) {
-                    document.querySelector('#showItems').innerHTML = `<tr><td>${error.response.data.errors}</td></tr>`;
-                })
-        }
+        //     await axios.get('/get-items')
+        //         .then(function (response) {
+        //             if(response.status == 200){
+        //                 document.querySelector('#showItems').innerHTML = `<tr><td>${response.data.data}</td></tr>`;
+        //             }
+        //         })
+        //         .catch(function (error) {
+        //             document.querySelector('#showItems').innerHTML = `<tr><td>${error.response.data.errors}</td></tr>`;
+        //         })
+        // }
 
-        transferIn.addEventListener('submit', function(e){
+        addList.addEventListener('submit', function(e){
             e.preventDefault();
-            let formData = new FormData(this);
-            axios.post('/store-items', formData)
+            let id = document.querySelector('#search_item').getAttribute('data')
+            let added_quantity = document.querySelector('#item_added_quantity').value
+            let notes = document.querySelector('#item_notes').value
+
+            let formData = {
+                id: id,
+                addedQty: added_quantity,
+                notes: notes
+            };
+            axios.post('/add-list', formData)
                 .then((response) => {
                     if(response.status == 200){
-                        Swal.fire({
-                            icon: 'success',
-                            text: response.data.message
-                        });
-                        transferIn.reset("reset");
-                        getItems();
+                        console.log(response);
+                        // Swal.fire({
+                        //     icon: 'success',
+                        //     text: response.data.message
+                        // });
+                        // transferIn.reset("reset");
+                        // getItems();
                     }
                 })
                 .catch(function (error) {
-                    if(error){
-                        if( error.response.status === 422 ) {
-                            var errors = error.response.data.errors;
-                            errorMsg = [
-                                errors.item_name, 
-                                errors.item_barcode, 
-                                errors.item_category, 
-                                errors.item_sub_category,
-                                errors.item_quantity,
-                                errors.item_description,
-                                errors.item_cost,
-                                errors.item_sell,
-                                errors.item_notes
-                            ]
-                            let errMessage = [];
-                            errorMsg.forEach(function(item, key){
-                                errMessage += `<li style="list-style:none;">${item == null ? '' : item}</li>`;
-                            })
-                            Swal.fire({
-                                icon: 'error',
-                                html: `<ul>${errMessage}</ul>`,
-                            });
-                        }else{
-                            Swal.fire({
-                                text: error.response.data.error,
-                                icon: 'info',
-                                color: '#ffffff',
-                                background: '#24283b',
-                                showCancelButton: true,
-                                confirmButtonColor: '#3085d6',
-                                cancelButtonColor: '#d33',
-                                confirmButtonText: 'Update'
-                                }).then((result) => {
-                                if (result.isConfirmed) {
-                                    let dataToUpdate = new FormData(document.querySelector('#transferIn'));
-                                    updateExistItems(dataToUpdate)
-                                }
-                            })
-                        }
-                    }
+                    console.log(error.response);
                 });
         })
 
-        async function collectSubCategory(data){
-            var selectedOption = data.options[data.selectedIndex];
-            var dataID = selectedOption.getAttribute('data');
-            await axios.get('/collect-sub-categories/' + dataID)
+        async function collectItemNames(input){
+            let dataID = input.value.length + 1;
+            if(dataID > 1){
+                await axios.get('/collect-item-names/'+input.value)
                 .then(function (response) {
                     if(response.status == 200){
-                        document.querySelector('#item_sub_category').innerHTML = response.data.data;
+                        listItem.classList.add('show')
+                        listItem.innerHTML = response.data.data;
                     }
                 })
                 .catch(function (error) {
-                    document.querySelector('#item_sub_category').innerHTML = error.response.data.errors;
+                    listItem.classList.add('show')
+                    listItem.innerHTML = error.response.data.errors;
                 })
+            }else{
+                listItem.classList.remove('show');
+            }
         }
 
-        
+        async function setValue(data) {
+            searchItemInput.setAttribute('data', data.getAttribute('data'))
+            searchItemInput.value = data.innerHTML;
+            listItem.classList.remove('show')
+            listItem.innerHTML = '';
+
+            await axios.get('/collect-data/'+input.value)
+                .then(function (response) {
+                    if(response.status == 200){
+                        listItem.classList.add('show')
+                        listItem.innerHTML = response.data.data;
+                    }
+                })
+                .catch(function (error) {
+                    listItem.classList.add('show')
+                    listItem.innerHTML = error.response.data.errors;
+                })
+        }
 
         if(updateItem){
             updateItem.addEventListener('submit', function(e){
@@ -376,4 +369,4 @@
         }
 
     </script>
-@endsection --}}
+@endsection
