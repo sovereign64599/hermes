@@ -11012,10 +11012,10 @@ textarea.form-control-lg {
   top: 0.7rem;
   right: 1em;
 }
-#page-top #content .transfer-in .auto-sugguestion ul.list-item.show {
+#page-top #content .transfer-in .auto-sugguestion ul.list-item-option.show {
   display: block;
 }
-#page-top #content .transfer-in .auto-sugguestion ul.list-item {
+#page-top #content .transfer-in .auto-sugguestion ul.list-item-option {
   position: absolute;
   display: none;
   z-index: 2;
@@ -11028,12 +11028,12 @@ textarea.form-control-lg {
   padding: 0;
   overflow: auto;
 }
-#page-top #content .transfer-in .auto-sugguestion ul.list-item li {
+#page-top #content .transfer-in .auto-sugguestion ul.list-item-option li {
   cursor: pointer;
   margin: 5px 0;
   padding: 0.6rem;
 }
-#page-top #content .transfer-in .auto-sugguestion ul.list-item li:hover {
+#page-top #content .transfer-in .auto-sugguestion ul.list-item-option li:hover {
   background: var(--primary);
   color: var(--light);
 }

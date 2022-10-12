@@ -82,6 +82,8 @@ Route::group(['middleware' => 'auth'], function(){
     // transfer in get method
     Route::get('/collect-item-names/{id}', [App\Http\Controllers\Admin\TransferInController::class, 'collectItemName']);
     Route::get('/collect-data/{id}', [App\Http\Controllers\Admin\TransferInController::class, 'collectData']);
+    Route::get('/get-list', [App\Http\Controllers\Admin\TransferInController::class, 'getList']);
+    Route::get('/delete-list/{id}', [App\Http\Controllers\Admin\TransferInController::class, 'deleteList']);
     
 
 });

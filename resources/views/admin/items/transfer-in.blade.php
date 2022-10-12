@@ -6,7 +6,7 @@
     <div class="row transfer-in">
         <div class="col-lg-4">
             <form id="add_list">
-                <div class="card text-left sticky-top p-4">
+                <div class="card text-left sticky-top p-2">
                     <div class="card-body pt-0">
                         <div class="row">
                             <div class="form-group">
@@ -14,7 +14,7 @@
                                 <div class="auto-sugguestion">
                                     <input type="search" class="form-control" id="search_item" placeholder="Search Item Name"  oninput="collectItemNames(this)" autocomplete="false">
                                     <i class="fas fa-search"></i>
-                                    <ul class="list-item">
+                                    <ul class="list-item-option">
                                         
                                     </ul>
                                 </div>
@@ -23,13 +23,13 @@
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label><small>Item Category</small></label>
-                                    <input readonly class="form-control" placeholder="Category" disabled>
+                                    <input readonly class="form-control item-category" placeholder="Category" disabled>
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label><small>Item Sub Category</small></label>
-                                    <input type="text" class="form-control" placeholder="Sub Category" disabled>
+                                    <input readonly class="form-control item-sub-category" placeholder="Sub Category" disabled>
                                 </div>
                             </div>
                             @else 
@@ -44,36 +44,36 @@
                             <div class="col-lg-4">
                                 <div class="form-group">
                                     <label><small>Item barcode</small></label>
-                                    <input type="text" class="form-control" placeholder="Item Bar code" maxlength="6" disabled>
+                                    <input readonly class="form-control item-barcode" placeholder="Item Bar code" maxlength="6" disabled>
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group">
                                     <label><small>Item Cost</small></label>
-                                    <input type="text" class="form-control" placeholder="Item cost" disabled>
+                                    <input readonly class="form-control item-cost" placeholder="Item cost" disabled>
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group">
                                     <label><small>Item Sell</small></label>
-                                    <input type="text" class="form-control" placeholder="Item Sell" disabled>
+                                    <input readonly class="form-control item-sell" placeholder="Item Sell" disabled>
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label><small>Current Quantity</small></label>
-                                    <input type="text" class="form-control" placeholder="Current Quantity" disabled>
+                                    <input readonly class="form-control item-quantity" placeholder="Current Quantity" disabled>
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label><small>Added Quantity</small></label>
-                                    <input type="text" id="item_added_quantity" class="form-control bg-light" class="form-control" placeholder="Added Quantity" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');">
+                                    <input type="text" id="item_added_quantity" class="form-control bg-light" class="form-control" placeholder="Add Quantity" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label><small>Item Description</small></label>
-                                <textarea rows="3" class="form-control" placeholder="Description" disabled></textarea>
+                                <textarea readonly rows="3" class="form-control item-description" placeholder="Description" disabled></textarea>
                             </div>
                             <div class="form-group">
                                 <label><small>Add Notes (Optional)</small></label>
@@ -89,9 +89,8 @@
         </div>
         <div class="col-lg-8">
             <form id="transferIn" enctype="multipart/form-data">
-                <div class="card shadow p-4">
+                <div class="card shadow p-2">
                     <div class="card-header">
-                        <h4 class="text-tertiary">Transfer In List</h4>
                         <div class="d-flex justify-content-between">
                             <div class="m-0 text-tertiary">
                                 Form # 
@@ -99,7 +98,6 @@
                             </div>
                             <div class="date-now">
                                 @php
-                                    date_default_timezone_set('Asia/Manila');
                                     $dateToday = date("Y-m-d");
                                 @endphp
                                 <input type="date" name="date" class="ch-input" value="{{$dateToday}}">
@@ -122,38 +120,8 @@
                                         <th>Action</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    @if($items->count() > 0)
-                                        @foreach ($items as $item)
-                                            <tr>
-                                                <td>{{$item->item_name}}</td>
-                                                <td>{{$item->item_category}}</td>
-                                                <td>{{$item->item_sub_category}}</td>
-                                                <td>{{$item->item_barcode}}</td>
-                                                <td>{{$item->item_cost}}</td>
-                                                <td>{{$item->item_sell}}</td>
-                                                <td>
-                                                    @if($item->item_quantity == 0)
-                                                    <small class="text-danger">Out of Stock</small>
-                                                    @else
-                                                    {{$item->item_quantity}}
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    @if($item->item_quantity == 0)
-                                                    <small class="text-danger">Out of Stock</small>
-                                                    @else
-                                                    {{$item->item_quantity}}
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    <button class="btn btn-sm text-light"><i class="fas fa-trash fa-sm"></i></button>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    @else 
-                                        <tr><td>No Items</td></tr>
-                                    @endif
+                                <tbody id="showList">
+                                    {{-- show list here --}}
                                 </tbody>
                             </table>
                         </div>
@@ -175,31 +143,18 @@
         const addList = document.querySelector('#add_list');
         const searchItemInput = document.querySelector('#search_item');
         const updateItem = document.querySelector('#updateItems');
-        const listItem = document.querySelector('.list-item');
-        // getItems();
+        const listItemOption = document.querySelector('.list-item-option');
+        const showList = document.querySelector('#showList');
 
-        // async function getItems(){
-        //     document.querySelector('#showItems').innerHTML = `<div class="d-flex align-items-center justify-content-center py-4"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
-        //         <span class="visually-hidden">Loading...</span>
-        //     </div></div>`;
-            
-        //     await axios.get('/get-items')
-        //         .then(function (response) {
-        //             if(response.status == 200){
-        //                 document.querySelector('#showItems').innerHTML = `<tr><td>${response.data.data}</td></tr>`;
-        //             }
-        //         })
-        //         .catch(function (error) {
-        //             document.querySelector('#showItems').innerHTML = `<tr><td>${error.response.data.errors}</td></tr>`;
-        //         })
-        // }
+        window.onload = () => {
+            getList()
+        }
 
         addList.addEventListener('submit', function(e){
             e.preventDefault();
             let id = document.querySelector('#search_item').getAttribute('data')
             let added_quantity = document.querySelector('#item_added_quantity').value
             let notes = document.querySelector('#item_notes').value
-
             let formData = {
                 id: id,
                 addedQty: added_quantity,
@@ -208,17 +163,57 @@
             axios.post('/add-list', formData)
                 .then((response) => {
                     if(response.status == 200){
-                        console.log(response);
-                        // Swal.fire({
-                        //     icon: 'success',
-                        //     text: response.data.message
-                        // });
-                        // transferIn.reset("reset");
-                        // getItems();
+                        addList.reset();
+                        Swal.fire({
+                            toast: true,
+                            icon: 'success',
+                            text: response.data.message,
+                            animation: false,
+                            position: 'top-right',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            color: '#ffffff',
+                            background: '#24283b',
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer)
+                                toast.addEventListener('mouseleave', Swal.resumeTimer)
+                            }
+                        });
+                        getList()
                     }
                 })
                 .catch(function (error) {
-                    console.log(error.response);
+                    
+                    if (error.response.status === 422) {
+                        Swal.fire({
+                            icon: 'error',
+                            text: error.response.data.errors.addedQty,
+                            timer: 2000,
+                            timerProgressBar: true,
+                            color: '#ffffff',
+                            background: '#24283b'
+                        });
+                    }else if(error.response.status === 404){
+                        Swal.fire({
+                            icon: 'error',
+                            text: error.response.data.error,
+                            timer: 2000,
+                            timerProgressBar: true,
+                            color: '#ffffff',
+                            background: '#24283b'
+                        });
+                    }else{
+                        Swal.fire({
+                            icon: 'error',
+                            text: error.response.data.error,
+                            timer: 2000,
+                            timerProgressBar: true,
+                            color: '#ffffff',
+                            background: '#24283b'
+                        });
+                    }
+                    
                 });
         })
 
@@ -228,105 +223,75 @@
                 await axios.get('/collect-item-names/'+input.value)
                 .then(function (response) {
                     if(response.status == 200){
-                        listItem.classList.add('show')
-                        listItem.innerHTML = response.data.data;
+                        listItemOption.classList.add('show')
+                        listItemOption.innerHTML = response.data.data;
                     }
                 })
                 .catch(function (error) {
-                    listItem.classList.add('show')
-                    listItem.innerHTML = error.response.data.errors;
+                    listItemOption.classList.add('show')
+                    listItemOption.innerHTML = error.response.data.errors;
                 })
             }else{
-                listItem.classList.remove('show');
+                listItemOption.classList.remove('show');
             }
         }
 
         async function setValue(data) {
             searchItemInput.setAttribute('data', data.getAttribute('data'))
             searchItemInput.value = data.innerHTML;
-            listItem.classList.remove('show')
-            listItem.innerHTML = '';
+            listItemOption.classList.remove('show')
+            listItemOption.innerHTML = '';
 
-            await axios.get('/collect-data/'+input.value)
+            //input to fill
+            let itemCategory = document.querySelector('.item-category');
+            let itemSubCategory = document.querySelector('.item-sub-category');
+            let itemBarcode = document.querySelector('.item-barcode');
+            let itemCost = document.querySelector('.item-cost');
+            let itemSell = document.querySelector('.item-sell');
+            let itemQuantity = document.querySelector('.item-quantity');
+            let itemDescription = document.querySelector('.item-description');
+
+
+            await axios.get('/collect-data/'+data.getAttribute('data'))
                 .then(function (response) {
                     if(response.status == 200){
-                        listItem.classList.add('show')
-                        listItem.innerHTML = response.data.data;
+                        let item = response.data.data;
+                        
+                        itemCategory.value = item.category;
+                        itemSubCategory.value = item.subCategory;
+                        itemBarcode.value = item.barcode;
+                        itemCost.value = item.cost;
+                        itemSell.value = item.sell;
+                        itemQuantity.value = item.quantity
+                        itemDescription.value = item.description;
                     }
                 })
                 .catch(function (error) {
-                    listItem.classList.add('show')
-                    listItem.innerHTML = error.response.data.errors;
+                    Swal.fire({
+                        icon: 'error',
+                        text: error.response.data.error,
+                        timer: 2000,
+                        timerProgressBar: true,
+                        color: '#ffffff',
+                        background: '#24283b'
+                    });
                 })
         }
 
-        if(updateItem){
-            updateItem.addEventListener('submit', function(e){
-                e.preventDefault();
-                let formData = new FormData(this);
-
-                axios.post('/update-items', formData)
-                .then((response) => {
-                    if(response.data.status == 200){
-                        Swal.fire({
-                            icon: 'success',
-                            text: response.data.message,
-                            timer: 2000,
-                            color: '#ffffff',
-                            background: '#24283b',
-                            timerProgressBar: true,
-                        });
-                        updateItem.reset("reset");
-                        getItems();
+        async function getList(){
+            await axios.get('/get-list')
+                .then(function (response) {
+                    if(response.status == 200){
+                        showList.innerHTML = response.data.data;
                     }
                 })
                 .catch(function (error) {
-                    if(error){
-                        if( error.response.status === 422 ) {
-                            var errors = error.response.data.errors;
-                            errorMsg = [
-                                errors.item_name, 
-                                errors.item_barcode, 
-                                errors.item_category, 
-                                errors.item_sub_category,
-                                errors.item_quantity,
-                                errors.item_description,
-                                errors.item_cost,
-                                errors.item_sell,
-                                errors.item_notes,
-                                errors.item_photo,
-                            ]
-                            let errMessage = [];
-                            errorMsg.forEach(function(item, key){
-                                errMessage += `<li style="list-style:none;">${item == null ? '' : item}</li>`;
-                            })
-                            Swal.fire({
-                                icon: 'error',
-                                html: `<ul>${errMessage}</ul>`,
-                                timer: 2000,
-                                color: '#ffffff',
-                                background: '#24283b',
-                                timerProgressBar: true,
-                            });
-                        }
-                        if(error.response.status == 404){
-                            Swal.fire({
-                                icon: 'error',
-                                text: error.response.statusText,
-                                timer: 2000,
-                                color: '#ffffff',
-                                background: '#24283b',
-                                timerProgressBar: true,
-                            });
-                            getItems();
-                        }
-                    }
-                });
-            })
+                    showList.innerHTML = error.response.data.error;
+                })
         }
 
-        function deleteItem(id){
-            const dataID = id.getAttribute('data');
+        function deleteList(data){
+            const dataID = data.getAttribute('data');
             Swal.fire({
                 title: 'Are you sure?',
                 text: "You won't be able to revert this!",
@@ -339,16 +304,16 @@
                 confirmButtonText: 'Yes, delete it!'
                 }).then((result) => {
                 if (result.isConfirmed) {
-                axios.get('/delete-items/' + dataID)
+                axios.get('/delete-list/' + dataID)
                         .then(function (response) {
-                            if(response.data.status == 200){
+                            if(response.status == 200){
                                 Swal.fire({
                                     icon: 'success',
                                     text: response.data.message,
                                     timer: 2000,
                                     timerProgressBar: true,
                                 });
-                                getItems();
+                                getList();
                             }
                         })
                         .catch(function (error) {
@@ -361,7 +326,6 @@
                                     background: '#24283b',
                                     timerProgressBar: true,
                                 });
-                                getItems();
                             }
                         })
                 }
