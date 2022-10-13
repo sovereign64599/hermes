@@ -3,7 +3,7 @@
 @section('title', 'Transfer In')
 
 @section('content')
-    <div class="row transfer-in">
+    <div class="row pages">
         <div class="col-lg-4">
             <form id="add_list">
                 <div class="card text-left sticky-top p-2">
@@ -68,7 +68,7 @@
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label><small>Added Quantity</small></label>
-                                    <input type="text" id="item_added_quantity" class="form-control bg-light" class="form-control" placeholder="Add Quantity" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');">
+                                    <input type="text" id="item_added_quantity" class="form-control bg-black" class="form-control" placeholder="Add Quantity" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -77,7 +77,7 @@
                             </div>
                             <div class="form-group">
                                 <label><small>Add Notes (Optional)</small></label>
-                                <textarea id="item_notes" rows="3" class="form-control bg-light" value="No Notes" placeholder="Add notes"></textarea>
+                                <textarea id="item_notes" rows="3" class="form-control bg-black" value="No Notes" placeholder="Add notes"></textarea>
                             </div>
                             <div class="form-group">
                                 <button class="btn text-light">Add to list</button>
@@ -88,7 +88,7 @@
             </form>
         </div>
         <div class="col-lg-8">
-            <form id="transferIn" enctype="multipart/form-data">
+            <form id="submit_list">
                 <div class="card shadow p-2">
                     <div class="card-header">
                         <div class="d-flex justify-content-between">
@@ -126,9 +126,8 @@
                             </table>
                         </div>
                     </div>
-                    <div class="card-footer bg-transparent border-0 text-right">
-                        <hr class="bg-tertiary">
-                        <p><small class="text-tertiary">Items (3/10)</small></p>
+                    <div class="card-footer bg-transparent border-0 d-flex justify-content-between align-items-center">
+                        <p><small class="text-tertiary limit">Items (0/10)</small></p>
                         <button class="btn text-light">Submit</button>
                     </div>
                 </div>
@@ -283,10 +282,12 @@
                 .then(function (response) {
                     if(response.status == 200){
                         showList.innerHTML = response.data.data;
+                        document.querySelector('.limit').innerHTML = response.data.limit;
                     }
                 })
                 .catch(function (error) {
                     showList.innerHTML = error.response.data.error;
+                    document.querySelector('.limit').innerHTML = error.response.data.limit;
                 })
         }
 

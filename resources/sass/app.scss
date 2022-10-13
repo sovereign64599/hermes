@@ -157,78 +157,8 @@
         }
     }
 
-    // pages
-    #content .pages{
-        position: relative;
-
-        input, select, textarea{
-            background-color: var(--secondary);
-            border: 0;
-            outline: 0;
-            color: var(--gray);
-        }
-        .card {
-            .card-header{
-                input, select, textarea{
-                    background-color: var(--secondary);
-                    border: 0;
-                    outline: 0;
-                    color: var(--gray);
-                    padding: 10px;
-                    border-radius: 10px;
-                }
-            }
-
-            .card-body{
-                input{
-                    background-color: var(--secondary);
-                    border: 0;
-                    outline: 0;
-                    color: var(--gray);
-                    border-radius: 10px;
-                }
-
-                table{
-                    border: 0;
-                    th{
-                        background: var(--secondary);
-                        border: 0;
-                        font-weight: 300;
-                        padding: 1.5rem 10px;
-                        font-size: 13px;
-
-                        &::after{
-                            display: none;
-                        }
-                    }
-
-                    tr{
-                        border: 0 !important;
-
-                        td{
-                            border: 0 !important;
-                            border-bottom: 1px solid var(--secondary);
-                            vertical-align: middle;
-                            font-size: 13px;
-
-                            .item-photo{
-                                height: 50px;
-                                width: 50px;
-                                object-fit: cover;
-                                border-radius: 10%;
-                            }
-                        }
-                    }
-                }
-            }
-
-            
-        }
-    }
-    
-
     // transfer in page
-    #content .transfer-in{
+    #content .pages{
         position: relative;
 
         .auto-sugguestion {
@@ -281,12 +211,11 @@
         
         .card {
             .card-header{
-                input, select, textarea{
+                input{
                     background-color: var(--secondary);
                     border: 0;
                     outline: 0;
-                    color: var(--gray);
-                    padding: 10px;
+                    padding: 5px;
                     border-radius: 10px;
                 }
             }
@@ -302,12 +231,12 @@
                 }
 
                 table{
-                    border: 0;
+                    border: 1px solid #2a2a2a;
                     th{
                         background: var(--secondary);
                         border: 0;
                         font-weight: 300;
-                        padding: 1.5rem 10px;
+                        padding: 0.5rem 10px;
                         font-size: 13px;
 
                         &::after{

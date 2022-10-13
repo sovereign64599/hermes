@@ -78,29 +78,41 @@ class TransferInController extends Controller
         $items = Items::find($request->id);
         if($items){
             $sessionList = session()->get('itemList', []);
-
-            if(isset($sessionList[$request->id])){
+            $itemListLimit = session()->get('itemListLimit', ['count' => 0]);
+            if(isset($itemListLimit['count'])){
+                $itemListLimit['count']+1;
+                session()->put('itemListLimit', $itemListLimit);
+                // dd( $itemListLimit['count']);
+                if($itemListLimit['count'] < 10){
+                    if(isset($sessionList[$request->id])){
+                        return response()->json([
+                            'error' => $items->item_name . ' already listed.'
+                        ], 409);
+                    }
+                    $itemListLimit['count']++;
+        
+                    $sessionList[$request->id] = [
+                        'id' => $request->id,
+                        'name' => $items->item_name,
+                        'category' => $items->item_category,
+                        'subCategory' => $items->item_sub_category,
+                        'barcode' => $items->item_barcode,
+                        'cost' => $items->item_cost,
+                        'sell' => $items->item_sell,
+                        'quantity' => $items->item_quantity,
+                        'addedQty' => $request->addedQty
+                    ];
+        
+                    session()->put('itemList', $sessionList);
+                    session()->put('itemListLimit', $itemListLimit);
+                    return response()->json([
+                        'message' => $items->item_name . ' added to list.'
+                    ], 200);
+                }
                 return response()->json([
-                    'error' => $items->item_name . ' already listed.'
-                ], 409);
+                    'error' => 'The maximum list is 10'
+                ], 404);
             }
-
-            $sessionList[$request->id] = [
-                'id' => $request->id,
-                'name' => $items->item_name,
-                'category' => $items->item_category,
-                'subCategory' => $items->item_sub_category,
-                'barcode' => $items->item_barcode,
-                'cost' => $items->item_cost,
-                'sell' => $items->item_sell,
-                'quantity' => $items->item_quantity,
-                'addedQty' => $request->addedQty
-            ];
-
-            session()->put('itemList', $sessionList);
-            return response()->json([
-                'message' => $items->item_name . ' added to list.'
-            ], 200);
         }else{
             return response()->json([
                 'error' => 'Item not found, please try again.'
@@ -111,6 +123,7 @@ class TransferInController extends Controller
     public function getList()
     {
         $sessionList = session('itemList');
+        $listLimit = session()->get('itemListLimit');
         if(!empty($sessionList)){
             $html = '';
             foreach ($sessionList as $list) {
@@ -122,7 +135,7 @@ class TransferInController extends Controller
                 $html .= '<td>'.$list['cost'].'</td>';
                 $html .= '<td>'.$list['sell'].'</td>';
                 $html .= '<td>'.$list['quantity'].'</td>';
-                $html .= '<td>'.$list['addedQty'].'</td>';
+                $html .= '<td class="text-warning">'.$list['addedQty'].'</td>';
                 $html .= '<td>';
                 $html .= '<button type="button" role="button" class="btn btn-sm text-light" data="'.$list['id'].'" onclick="deleteList(this)"><i class="fas fa-trash fa-sm"></i></button>';
                 $html .= '</td>';
@@ -130,17 +143,22 @@ class TransferInController extends Controller
             }
             return response()->json([
                 'data' => $html,
+                'limit' => 'Item ('.$listLimit['count'].'/10)',
             ], 200);
         }
         return response()->json([
-            'error' => '<tr><td>No List Found</td></tr>',
+            'error' => '<td>No List Found</td>',
+            'limit' => 'Item (0/10)',
         ], 410);
     }
 
     public function deleteList($id)
     {
         $list = session()->get('itemList');
+        $listLimit = session()->get('itemListLimit');
         if(isset($list[$id])) {
+            $listLimit['count']--;
+            session()->put('itemListLimit', $listLimit);
             unset($list[$id]);
             session()->put('itemList', $list);
             return response()->json([
