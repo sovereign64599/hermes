@@ -586,6 +586,7 @@ class ComposerStaticInit9d06bb4e7f9bddae013b9458ca349a49
         'App\\Imports\\ItemImport' => __DIR__ . '/../..' . '/app/Imports/ItemImport.php',
         'App\\Models\\Category' => __DIR__ . '/../..' . '/app/Models/Category.php',
         'App\\Models\\Items' => __DIR__ . '/../..' . '/app/Models/Items.php',
+        'App\\Models\\Reports' => __DIR__ . '/../..' . '/app/Models/Reports.php',
         'App\\Models\\SubCategory' => __DIR__ . '/../..' . '/app/Models/SubCategory.php',
         'App\\Models\\TransferInRecord' => __DIR__ . '/../..' . '/app/Models/TransferInRecord.php',
         'App\\Models\\TransferOutRecord' => __DIR__ . '/../..' . '/app/Models/TransferOutRecord.php',

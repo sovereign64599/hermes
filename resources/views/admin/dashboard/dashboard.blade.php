@@ -29,12 +29,12 @@
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
                                 <div class="text-md text-tertiary text-capitalize mb-1">
-                                    Sales (Monthly)
+                                    Users
                                 </div>
-                                <div class="h5 mb-0 font-weight-bold text-gray">54,000</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray">{{$users}}</div>
                             </div>
                             <div class="col-auto">
-                                <i class="far fa-chart-bar text-tertiary fa-2x"></i>
+                                <i class="fas fa-users text-tertiary fa-2x"></i>
                             </div>
                         </div>
                     </div>
@@ -47,7 +47,7 @@
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
                                 <div class="text-md text-tertiary text-capitalize mb-1">
-                                    Sales (Yearly)
+                                    Sales (Monthly)
                                 </div>
                                 <div class="h5 mb-0 font-weight-bold text-gray">345,000</div>
                             </div>

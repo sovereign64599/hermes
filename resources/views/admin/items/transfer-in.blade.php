@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Transfer Ins')
+@section('title', 'Transfer In')
 
 @section('content')
     <div class="row pages">
@@ -115,8 +115,6 @@
                                         <th>Item Category</th>
                                         <th>Sub Category</th>
                                         <th>Item Barcode</th>
-                                        <th>Item Cost</th>
-                                        <th>Item Sell</th>
                                         <th>Current Quantity</th>
                                         <th>Added Quantity</th>
                                         <th>Action</th>

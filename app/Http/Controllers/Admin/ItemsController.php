@@ -252,8 +252,8 @@ class ItemsController extends Controller
             'item_quantity' => $quantity,
             'item_barcode' => $barcode,
             'item_description' => ucfirst($request->item_description),
-            'item_cost' => $request->item_cost,
-            'item_sell' => $request->item_sell,
+            'item_cost' => (float)$request->item_cost,
+            'item_sell' => (float)$request->item_sell,
             'item_notes' => $request->item_notes,
             'item_photo' => $item_photo,
         ]);
@@ -312,8 +312,8 @@ class ItemsController extends Controller
                     'item_quantity' => $quantity,
                     'item_barcode' => ucfirst($request->item_barcode),
                     'item_description' => $request->item_description,
-                    'item_cost' => (float) str_replace(',', '', $request->item_cost),
-                    'item_sell' => (float) str_replace(',', '', $request->item_sell),
+                    'item_cost' => str_replace(',', '', (float)$request->item_cost),
+                    'item_sell' => str_replace(',', '', (float)$request->item_sell),
                     'item_notes' => $request->item_notes,
                     'item_photo' => $item_photo,
                 ]);

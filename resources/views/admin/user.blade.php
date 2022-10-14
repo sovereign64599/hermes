@@ -14,9 +14,8 @@
                         <table class="table" width="100%" cellspacing="0">
                             <thead>
                                 <tr>
-                                    <th>First Name</th>
-                                    <th>Middle Name</th>
-                                    <th>Last Name</th>
+                                    <th>Name</th>
+                                    <th>Role</th>
                                     <th>Date Created</th>
                                     <th>Action</th>
                                 </tr>
@@ -25,9 +24,8 @@
                                 @if($users->count() > 0)
                                     @foreach ($users as $user)
                                         <tr>
-                                            <td>{{$user->firstname}}</td>
-                                            <td>{{$user->middlename}}</td>
-                                            <td>{{$user->lastname}}</td>
+                                            <td>{{$user->name}}</td>
+                                            <td>{{ucfirst($user->role)}}</td>
                                             <td>{{$user->created_at->diffForHumans()}}</td>
                                             <td>
                                                 <a href="{{route('edit.user', $user->id)}}" class="btn btn-primary">Edit</a>

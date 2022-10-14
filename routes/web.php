@@ -93,4 +93,16 @@ Route::group(['middleware' => 'auth'], function(){
     Route::get('/d-collect-data/{id}', [App\Http\Controllers\Admin\DeductController::class, 'collectData']);
     Route::get('/d-get-list', [App\Http\Controllers\Admin\DeductController::class, 'getList']);
     Route::get('/d-delete-list/{id}', [App\Http\Controllers\Admin\DeductController::class, 'deleteList']);
+
+    //===================================================REPORTS=======================================================================
+    // report view
+    Route::get('/reports/treansfered-in', [App\Http\Controllers\Admin\ReportsController::class, 'transferedIn'])->name('report.transfered.in');
+    Route::get('/reports/treansfered-out', [App\Http\Controllers\Admin\ReportsController::class, 'transferedOut'])->name('report.transfered.out');
+    // export reports
+    Route::get('/reports/export/treansfered-in', [App\Http\Controllers\Admin\ReportsController::class, 'ExportTransferedInReport'])->name('export.report.transfer.in');
+    Route::get('/reports/export/treansfered-out', [App\Http\Controllers\Admin\ReportsController::class, 'ExportTransferedOutReport'])->name('export.report.transfer.out');
+
+    //===================================================ITEM QUANTITY CHECK=======================================================================
+    // item quantity check view
+    Route::get('/item-quantity-check', [App\Http\Controllers\Admin\ItemQuantityCheckController::class, 'index'])->name('item.quantity.check');
 });

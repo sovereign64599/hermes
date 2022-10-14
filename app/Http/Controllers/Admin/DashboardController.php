@@ -18,7 +18,8 @@ class DashboardController extends Controller
     public function index()
     {
         $totalItems = Items::count();
-        return view('admin.dashboard.dashboard', compact(['totalItems']));
+        $users = User::count();
+        return view('admin.dashboard.dashboard', compact(['totalItems', 'users']));
     }
 
     public function sales()
@@ -28,7 +29,7 @@ class DashboardController extends Controller
 
     public function showUsers()
     {
-        $users = User::orderBy('created_at', 'DESC')->where('role', 'user')->get();
+        $users = User::orderBy('created_at', 'DESC')->get();
         return view('admin.user', compact(['users']));
     }
 

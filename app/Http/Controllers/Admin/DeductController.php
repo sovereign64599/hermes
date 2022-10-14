@@ -137,8 +137,6 @@ class DeductController extends Controller
                 $html .= '<td>'.$list['category'].'</td>';
                 $html .= '<td>'.$list['subCategory'].'</td>';
                 $html .= '<td>'.$list['barcode'].'</td>';
-                $html .= '<td>'.$list['cost'].'</td>';
-                $html .= '<td>'.$list['sell'].'</td>';
                 $html .= '<td>'.$list['quantity'].'</td>';
                 $html .= '<td class="text-warning">'.$list['deductQty'].'</td>';
                 $html .= '<td>';
@@ -202,7 +200,7 @@ class DeductController extends Controller
                         'item_quantity' => $data->item_quantity,
                         'item_quantity_deduct' => $list['deductQty'],
                         'item_description' => $data->item_description,
-                        'item_barcode' => $data->item_name,
+                        'item_barcode' => $data->item_barcode,
                         'item_description' => $data->item_name,
                         'item_cost' => $data->item_cost,
                         'item_sell' => $data->item_sell,

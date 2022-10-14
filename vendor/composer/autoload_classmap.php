@@ -40,6 +40,7 @@ return array(
     'App\\Imports\\ItemImport' => $baseDir . '/app/Imports/ItemImport.php',
     'App\\Models\\Category' => $baseDir . '/app/Models/Category.php',
     'App\\Models\\Items' => $baseDir . '/app/Models/Items.php',
+    'App\\Models\\Reports' => $baseDir . '/app/Models/Reports.php',
     'App\\Models\\SubCategory' => $baseDir . '/app/Models/SubCategory.php',
     'App\\Models\\TransferInRecord' => $baseDir . '/app/Models/TransferInRecord.php',
     'App\\Models\\TransferOutRecord' => $baseDir . '/app/Models/TransferOutRecord.php',

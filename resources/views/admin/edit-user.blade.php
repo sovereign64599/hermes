@@ -3,7 +3,7 @@
 @section('title', 'Edit Users')
 
 @section('content')
-    <div class="row transfer-in">
+    <div class="row pages">
         <div class="col-lg">
             <div class="card shadow p-4">
                 <div class="card-header">

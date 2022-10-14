@@ -41,24 +41,33 @@
                 <span>Sales Module</span>
             </a>
         </li>
-        <li class="nav-item @if(Route::currentRouteName() == 'items' || Route::currentRouteName() == 'edit.item') active @endif">
-            <a class="nav-link"  href="{{route('items')}}">
-                <i class="fas fa-plus mr-3 text-tertiary"></i>
-                <span>Add Items</span>
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#itemsCollapse"
+                aria-expanded="true" aria-controls="itemsCollapse">
+                <i class="fas fa-box-open"></i>
+                <span>Manage Items</span>
             </a>
+            <div id="itemsCollapse" class="collapse @if(Route::currentRouteName() == 'items' || Route::currentRouteName() == 'transfer.in' || Route::currentRouteName() == 'deduct.items') show @endif" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                <div class="bg-secondary py-2 collapse-inner rounded">
+                    <a class="collapse-item text-white mb-1  @if(Route::currentRouteName() == 'items' || Route::currentRouteName() == 'edit.item') active @endif" href="{{route('items')}}">
+                        <i class="fas fa-plus mr-3 text-tertiary"></i>
+                        <span>Add Items</span>
+                    </a>
+                    <a class="collapse-item text-white mb-1  @if(Route::currentRouteName() == 'transfer.in') active @endif" href="{{route('transfer.in')}}">
+                        <i class="fas fa-share mr-2 text-tertiary"></i>
+                        <span>Transfer In</span>
+                    </a>
+                    <a class="collapse-item text-white   @if(Route::currentRouteName() == 'deduct.items') active @endif" href="{{route('deduct.items')}}">
+                        <i class="fas fa-reply mr-2 text-tertiary"></i>
+                        <span>Transfer Out</span>
+                    </a>
+                </div>
+            </div>
         </li>
-        <li class="nav-item @if(Route::currentRouteName() == 'transfer.in') active @endif">
-            <a class="nav-link"  href="{{route('transfer.in')}}">
-                <i class="fas fa-share mr-2 text-tertiary"></i>
-                <span>Transfer In</span>
-            </a>
-        </li>
-        <li class="nav-item @if(Route::currentRouteName() == 'deduct.items') active @endif">
-            <a class="nav-link"  href="{{route('deduct.items')}}">
-                <i class="fas fa-reply mr-2 text-tertiary"></i>
-                <span>Deduct Items</span>
-            </a>
-        </li>
+        <hr class="sidebar-divider">
+        <div class="sidebar-heading">
+            Manage
+        </div>
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#categoryCollapse"
                 aria-expanded="true" aria-controls="categoryCollapse">
@@ -74,12 +83,12 @@
         </li>
         @if(Auth::user()->role == 'Admin')
         <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#itemsCollapse"
-                aria-expanded="true" aria-controls="itemsCollapse">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#usersCollapse"
+                aria-expanded="true" aria-controls="usersCollapse">
                 <i class="fas fa-users"></i>
                 <span>User Management</span>
             </a>
-            <div id="itemsCollapse" class="collapse @if(Route::currentRouteName() == 'user' || Route::currentRouteName() == 'add.user' || Route::currentRouteName() == 'edit.user') show @endif" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+            <div id="usersCollapse" class="collapse @if(Route::currentRouteName() == 'user' || Route::currentRouteName() == 'add.user' || Route::currentRouteName() == 'edit.user') show @endif" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                 <div class="bg-secondary py-2 collapse-inner rounded">
                     <a class="collapse-item text-white mb-1  @if(Route::currentRouteName() == 'user' || Route::currentRouteName() == 'edit.user') active @endif" href="{{route('user')}}"><i class="fas fa-user mr-2 text-tertiary"></i><span>Users</span></a>
                     <a class="collapse-item text-white mb-1  @if(Route::currentRouteName() == 'add.user') active @endif" href="{{route('add.user')}}"><i class="fas fa-user-plus mr-2 text-tertiary"></i><span>Add New User</span></a>
@@ -87,31 +96,37 @@
             </div>
         </li>
         @endif
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#reportsCollapse"
+                aria-expanded="true" aria-controls="reportsCollapse">
+                <i class="fas fa-fw fa-chart-area"></i>
+                <span>Reports</span>
+            </a>
+            <div id="reportsCollapse" class="collapse @if(Route::currentRouteName() == 'report.transfered.in' || Route::currentRouteName() == 'report.transfered.out') show @endif" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                <div class="bg-secondary py-2 collapse-inner rounded">
+                    <a class="collapse-item text-white mb-1  @if(Route::currentRouteName() == 'report.transfered.in') active @endif" href="{{route('report.transfered.in')}}">
+                        <i class="fas fa-calendar-check mr-2 text-tertiary"></i>
+                        <span>Transfered In</span>
+                    </a>
+                    <a class="collapse-item text-white mb-1  @if(Route::currentRouteName() == 'report.transfered.out') active @endif" href="{{route('report.transfered.out')}}">
+                        <i class="fas fa-calendar-check mr-2 text-tertiary"></i>
+                        <span>Transfered Out</span>
+                    </a>
+                </span></a>
+                </div>
+            </div>
+        </li>
         <hr class="sidebar-divider">
 
         <div class="sidebar-heading">
             Actions
         </div>
-        <li class="nav-item ">
-            <a class="nav-link" href="tables.html">
+        <li class="nav-item  @if(Route::currentRouteName() == 'item.quantity.check') active @endif">
+            <a class="nav-link" href="{{route('item.quantity.check')}}">
                 <i class="fas fa-tasks"></i>
                 <span>Item Quantity Check</span>
             </a>
         </li>
-
-        <li class="nav-item">
-            <a class="nav-link" href="charts.html">
-                <i class="fas fa-calendar-check"></i>
-                <span>Inventory Quantity Check</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="charts.html">
-                <i class="fas fa-fw fa-chart-area"></i>
-                <span>Report</span>
-            </a>
-        </li>
-
     </ul>
 
     <div id="content-wrapper" class="d-flex flex-column">
@@ -243,27 +258,6 @@
         }
     </script>
     @yield('script')
-
-    @if(Route::currentRouteName() == 'sales')
-    {{-- under development --}}
-    <div class="modal fade" id="underDevelopment" tabindex="-1" aria-labelledby="underDevelopment" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content">
-                <div class="modal-body border-0 text-center p-4" id="underDevelopment">
-                    <img class="img-fluid" src="{{asset('img/underdevelopment.svg')}}" alt="Under Development">
-                    <div class="text-center my-4">
-                        Under Development
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <script>
-        var underDevelopment = new bootstrap.Modal(document.getElementById('underDevelopment'))
-        underDevelopment.show()
-    </script>
-    {{-- under development --}}
-    @endif
 
     @else
         @yield('content')
