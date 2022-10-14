@@ -1,107 +1,108 @@
 @extends('layouts.app')
 
-@section('title', 'Deduct Items')
+@section('title', 'Transfer Out')
 
 @section('content')
-    <div class="row transfer-in">
+    <div class="row pages">
         <div class="col-lg-4">
-            <div class="card text-left sticky-top p-4">
-                <div class="card-body pt-0">
-                    @csrf
-                    <div class="row">
-                        <div class="form-group">
-                            <label><small>Item Name</small></label>
-                            <input type="text" name="item_name" class="form-control" placeholder="Item Name">
-                        </div>
-                        @if($getSubCategories->count() > 0)
-                        <div class="col-lg-6">
+            <form id="add_list">
+                <div class="card text-left sticky-top p-2">
+                    <div class="card-body pt-0">
+                        <div class="row">
                             <div class="form-group">
-                                <label><small>Item Category</small></label>
-                                <select class="form-select" name="item_category" onchange="collectSubCategory(this)">
-                                    <option value="" selected>Select Category</option>
-                                    @foreach($getSubCategories as $category)
-                                        <option data="{{$category->category_id}}" value="{{$category->category_name}}">{{$category->category_name}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label><small>Item Sub Category</small></label>
-                                <select class="form-select" name="item_sub_category" id="item_sub_category">
-                                    <option value="" selected>Choose Category first</option>
-                                </select>
-                            </div>
-                        </div>
-                        @else 
-                            <div class="col-lg-12">
-                                <div class="form-group">
-                                    <label><small>Category and Sub Category List is not created yet.</small></label>
-                                    <br />
-                                    <a class="btn btn-tertiary text-light" href="{{route('categories')}}">Create Categories</a>
+                                <label><small>Item Name</small></label>
+                                <div class="auto-sugguestion">
+                                    <input type="search" class="form-control" id="search_item" placeholder="Search Item Name"  oninput="collectItemNames(this)" autocomplete="false">
+                                    <i class="fas fa-search"></i>
+                                    <ul class="list-item-option">
+                                        
+                                    </ul>
                                 </div>
                             </div>
-                        @endif
-                        <div class="col-lg-4">
-                            <div class="form-group">
-                                <label><small>Item barcode</small></label>
-                                <input type="text" class="form-control" placeholder="Item Bar code" maxlength="6" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');" disabled>
+                            @if($getSubCategories->count() > 0)
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label><small>Item Category</small></label>
+                                    <input readonly class="form-control item-category" placeholder="Category" disabled>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="form-group">
-                                <label><small>Item Cost</small></label>
-                                <input type="text" name="item_cost" class="form-control" placeholder="Cost" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label><small>Item Sub Category</small></label>
+                                    <input readonly class="form-control item-sub-category" placeholder="Sub Category" disabled>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="form-group">
-                                <label><small>Item Sell</small></label>
-                                <input type="text" name="item_sell" class="form-control" placeholder="Sell" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');">
+                            @else 
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label><small>Category and Sub Category List is not created yet.</small></label>
+                                        <br />
+                                        <a class="btn btn-tertiary text-light" href="{{route('categories')}}">Create Categories</a>
+                                    </div>
+                                </div>
+                            @endif
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label><small>Item barcode</small></label>
+                                    <input readonly class="form-control item-barcode" placeholder="Item Bar code" maxlength="6" disabled>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label><small>Current Quantity</small></label>
-                                <input type="text" name="item_quantity" class="form-control" class="form-control" placeholder="Current Quantity" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');">
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label><small>Item Cost</small></label>
+                                    <input readonly class="form-control item-cost" placeholder="Item cost" disabled>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label><small>Deduct Quantity</small></label>
-                                <input type="text" name="item_quantity" class="form-control" class="form-control" placeholder="Deduct Quantity" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');">
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label><small>Item Sell</small></label>
+                                    <input readonly class="form-control item-sell" placeholder="Item Sell" disabled>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label><small>Item Description</small></label>
-                            <textarea name="item_description" rows="3" class="form-control" placeholder="Description"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label><small>Add Notes (Optional)</small></label>
-                            <textarea name="item_notes" rows="3" class="form-control" value="No Notes" placeholder="Add notes"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <button class="btn text-light">Add Items</button>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label><small>Current Quantity</small></label>
+                                    <input readonly class="form-control item-quantity" placeholder="Current Quantity" disabled>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label><small>Deduct Quantity</small></label>
+                                    <input type="text" id="item_deduct_Quantity" class="form-control bg-black" class="form-control" placeholder="Deduct Quantity" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label><small>Item Description</small></label>
+                                <textarea readonly rows="3" class="form-control item-description" placeholder="Description" disabled></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label><small>Add Notes (Optional)</small></label>
+                                <textarea id="item_notes" rows="3" class="form-control bg-black" value="No Notes" placeholder="Add notes"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <button class="btn text-light">Add to list</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
         <div class="col-lg-8">
-            <form id="transferIn" enctype="multipart/form-data">
-                <div class="card shadow p-4">
+            <form id="submit_list">
+                @csrf
+                <div class="card shadow p-2">
                     <div class="card-header">
-                        <div class="d-flex justify-content-between">
-                            <div class="m-0 text-tertiary">
+                        <div class="d-flex justify-content-between text-tertiary">
+                            <div class="m-0">
                                 Form # 
                                 <input type="text" name="form_number" style='width:auto' class="ch-input" value="{{str_pad(mt_rand(0, 999999), 6, '0', STR_PAD_LEFT)}}">
                             </div>
                             <div class="date-now">
                                 @php
-                                    date_default_timezone_set('Asia/Manila');
                                     $dateToday = date("Y-m-d");
                                 @endphp
-                                <input type="date" name="date" class="ch-input" value="{{$dateToday}}">
+                                Date:
+                                <input type="date" name="custom_date" class="ch-input" value="{{$dateToday}}">
                             </div>
                         </div>
                     </div>
@@ -110,196 +111,200 @@
                             <table class="table" width="100%" cellspacing="0">
                                 <thead>
                                     <tr>
-                                        <th>#</th>
-                                        <th>Quantity</th>
-                                        <th>Code</th>
-                                        <th>Description</th>
+                                        <th>Item Name</th>
+                                        <th>Item Category</th>
+                                        <th>Sub Category</th>
+                                        <th>Item Barcode</th>
+                                        <th>Item Cost</th>
+                                        <th>Item Sell</th>
+                                        <th>Current Quantity</th>
+                                        <th>Deduct Quantity</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>No Item</td>
-                                    </tr>
+                                <tbody id="showList">
+                                    {{-- show list here --}}
                                 </tbody>
                             </table>
                         </div>
                     </div>
-                    <div class="card-footer bg-transparent border-0 text-right">
-                        <hr class="bg-tertiary">
-                        <p><small class="text-tertiary">Items (3/10)</small></p>
+                    <div class="card-footer bg-transparent border-0 d-flex justify-content-between align-items-center">
+                        <p><small class="text-tertiary limit">Items (0/10)</small></p>
                         <button class="btn text-light">Submit</button>
                     </div>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
     </div>
 
 @endsection
 
-{{-- @section('script')
+@section('script')
     <script>
-        const transferIn = document.querySelector('#transferIn');
+        const addList = document.querySelector('#add_list');
+        const submit_list = document.querySelector('#submit_list');
+        const searchItemInput = document.querySelector('#search_item');
         const updateItem = document.querySelector('#updateItems');
-        getItems();
+        const listItemOption = document.querySelector('.list-item-option');
+        const showList = document.querySelector('#showList');
 
-        async function getItems(){
-            document.querySelector('#showItems').innerHTML = `<div class="d-flex align-items-center justify-content-center py-4"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div></div>`;
-            
-            await axios.get('/get-items')
-                .then(function (response) {
-                    if(response.status == 200){
-                        document.querySelector('#showItems').innerHTML = `<tr><td>${response.data.data}</td></tr>`;
-                    }
-                })
-                .catch(function (error) {
-                    document.querySelector('#showItems').innerHTML = `<tr><td>${error.response.data.errors}</td></tr>`;
-                })
+        window.onload = () => {
+            getList()
         }
 
-        transferIn.addEventListener('submit', function(e){
+        addList.addEventListener('submit', function(e){
             e.preventDefault();
-            let formData = new FormData(this);
-            axios.post('/store-items', formData)
+            let id = document.querySelector('#search_item').getAttribute('data')
+            let deductQuantity = document.querySelector('#item_deduct_Quantity').value
+            let notes = document.querySelector('#item_notes').value
+            let formData = {
+                id: id,
+                deductQty: deductQuantity,
+                notes: notes
+            };
+            axios.post('/d-add-list', formData)
                 .then((response) => {
                     if(response.status == 200){
+                        addList.reset();
                         Swal.fire({
-                            icon: 'success',
-                            text: response.data.message
-                        });
-                        transferIn.reset("reset");
-                        getItems();
-                    }
-                })
-                .catch(function (error) {
-                    if(error){
-                        if( error.response.status === 422 ) {
-                            var errors = error.response.data.errors;
-                            errorMsg = [
-                                errors.item_name, 
-                                errors.item_barcode, 
-                                errors.item_category, 
-                                errors.item_sub_category,
-                                errors.item_quantity,
-                                errors.item_description,
-                                errors.item_cost,
-                                errors.item_sell,
-                                errors.item_notes
-                            ]
-                            let errMessage = [];
-                            errorMsg.forEach(function(item, key){
-                                errMessage += `<li style="list-style:none;">${item == null ? '' : item}</li>`;
-                            })
-                            Swal.fire({
-                                icon: 'error',
-                                html: `<ul>${errMessage}</ul>`,
-                            });
-                        }else{
-                            Swal.fire({
-                                text: error.response.data.error,
-                                icon: 'info',
-                                color: '#ffffff',
-                                background: '#24283b',
-                                showCancelButton: true,
-                                confirmButtonColor: '#3085d6',
-                                cancelButtonColor: '#d33',
-                                confirmButtonText: 'Update'
-                                }).then((result) => {
-                                if (result.isConfirmed) {
-                                    let dataToUpdate = new FormData(document.querySelector('#transferIn'));
-                                    updateExistItems(dataToUpdate)
-                                }
-                            })
-                        }
-                    }
-                });
-        })
-
-        async function collectSubCategory(data){
-            var selectedOption = data.options[data.selectedIndex];
-            var dataID = selectedOption.getAttribute('data');
-            await axios.get('/collect-sub-categories/' + dataID)
-                .then(function (response) {
-                    if(response.status == 200){
-                        document.querySelector('#item_sub_category').innerHTML = response.data.data;
-                    }
-                })
-                .catch(function (error) {
-                    document.querySelector('#item_sub_category').innerHTML = error.response.data.errors;
-                })
-        }
-
-        
-
-        if(updateItem){
-            updateItem.addEventListener('submit', function(e){
-                e.preventDefault();
-                let formData = new FormData(this);
-
-                axios.post('/update-items', formData)
-                .then((response) => {
-                    if(response.data.status == 200){
-                        Swal.fire({
+                            toast: true,
                             icon: 'success',
                             text: response.data.message,
-                            timer: 2000,
+                            animation: false,
+                            position: 'top-right',
+                            showConfirmButton: false,
+                            timer: 3000,
                             color: '#ffffff',
                             background: '#24283b',
                             timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer)
+                                toast.addEventListener('mouseleave', Swal.resumeTimer)
+                            }
                         });
-                        updateItem.reset("reset");
-                        getItems();
+                        getList()
                     }
                 })
                 .catch(function (error) {
-                    if(error){
-                        if( error.response.status === 422 ) {
-                            var errors = error.response.data.errors;
-                            errorMsg = [
-                                errors.item_name, 
-                                errors.item_barcode, 
-                                errors.item_category, 
-                                errors.item_sub_category,
-                                errors.item_quantity,
-                                errors.item_description,
-                                errors.item_cost,
-                                errors.item_sell,
-                                errors.item_notes,
-                                errors.item_photo,
-                            ]
-                            let errMessage = [];
-                            errorMsg.forEach(function(item, key){
-                                errMessage += `<li style="list-style:none;">${item == null ? '' : item}</li>`;
-                            })
+                    
+                    if (error.response.status === 422) {
+                        if(error.response.data.errors.deductQty){
                             Swal.fire({
                                 icon: 'error',
-                                html: `<ul>${errMessage}</ul>`,
+                                text: error.response.data.errors.deductQty,
                                 timer: 2000,
-                                color: '#ffffff',
-                                background: '#24283b',
                                 timerProgressBar: true,
+                                color: '#ffffff',
+                                background: '#24283b'
                             });
                         }
-                        if(error.response.status == 404){
-                            Swal.fire({
-                                icon: 'error',
-                                text: error.response.statusText,
-                                timer: 2000,
-                                color: '#ffffff',
-                                background: '#24283b',
-                                timerProgressBar: true,
-                            });
-                            getItems();
-                        }
+                        Swal.fire({
+                            icon: 'error',
+                            text: error.response.data.errors.id,
+                            timer: 2000,
+                            timerProgressBar: true,
+                            color: '#ffffff',
+                            background: '#24283b'
+                        });
+                        
+                    }else if(error.response.status === 404){
+                        Swal.fire({
+                            icon: 'error',
+                            text: error.response.data.error,
+                            timer: 2000,
+                            timerProgressBar: true,
+                            color: '#ffffff',
+                            background: '#24283b'
+                        });
+                    }else{
+                        Swal.fire({
+                            icon: 'error',
+                            text: error.response.data.error,
+                            color: '#ffffff',
+                            background: '#24283b'
+                        });
                     }
+                    
                 });
-            })
+        })
+
+        async function collectItemNames(input){
+            let dataID = input.value.length + 1;
+            if(dataID > 1){
+                await axios.get('/d-collect-item-names/'+input.value)
+                .then(function (response) {
+                    if(response.status == 200){
+                        listItemOption.classList.add('show')
+                        listItemOption.innerHTML = response.data.data;
+                    }
+                })
+                .catch(function (error) {
+                    listItemOption.classList.add('show')
+                    listItemOption.innerHTML = error.response.data.errors;
+                })
+            }else{
+                listItemOption.classList.remove('show');
+            }
         }
 
-        function deleteItem(id){
-            const dataID = id.getAttribute('data');
+        async function setValue(data) {
+            searchItemInput.setAttribute('data', data.getAttribute('data'))
+            searchItemInput.value = data.innerHTML;
+            listItemOption.classList.remove('show')
+            listItemOption.innerHTML = '';
+
+            //input to fill
+            let itemCategory = document.querySelector('.item-category');
+            let itemSubCategory = document.querySelector('.item-sub-category');
+            let itemBarcode = document.querySelector('.item-barcode');
+            let itemCost = document.querySelector('.item-cost');
+            let itemSell = document.querySelector('.item-sell');
+            let itemQuantity = document.querySelector('.item-quantity');
+            let itemDescription = document.querySelector('.item-description');
+
+
+            await axios.get('/d-collect-data/'+data.getAttribute('data'))
+                .then(function (response) {
+                    if(response.status == 200){
+                        let item = response.data.data;
+                        
+                        itemCategory.value = item.category;
+                        itemSubCategory.value = item.subCategory;
+                        itemBarcode.value = item.barcode;
+                        itemCost.value = item.cost;
+                        itemSell.value = item.sell;
+                        itemQuantity.value = item.quantity
+                        itemDescription.value = item.description;
+                    }
+                })
+                .catch(function (error) {
+                    Swal.fire({
+                        icon: 'error',
+                        text: error.response.data.error,
+                        timer: 2000,
+                        timerProgressBar: true,
+                        color: '#ffffff',
+                        background: '#24283b'
+                    });
+                })
+        }
+
+        async function getList(){
+            await axios.get('/d-get-list')
+                .then(function (response) {
+                    if(response.status == 200){
+                        showList.innerHTML = response.data.data;
+                        document.querySelector('.limit').innerHTML = response.data.limit;
+                    }
+                })
+                .catch(function (error) {
+                    showList.innerHTML = error.response.data.error;
+                    document.querySelector('.limit').innerHTML = error.response.data.limit;
+                })
+        }
+
+        function deleteList(data){
+            const dataID = data.getAttribute('data');
             Swal.fire({
                 title: 'Are you sure?',
                 text: "You won't be able to revert this!",
@@ -312,16 +317,16 @@
                 confirmButtonText: 'Yes, delete it!'
                 }).then((result) => {
                 if (result.isConfirmed) {
-                axios.get('/delete-items/' + dataID)
+                axios.get('/d-delete-list/' + dataID)
                         .then(function (response) {
-                            if(response.data.status == 200){
+                            if(response.status == 200){
                                 Swal.fire({
                                     icon: 'success',
                                     text: response.data.message,
                                     timer: 2000,
                                     timerProgressBar: true,
                                 });
-                                getItems();
+                                getList();
                             }
                         })
                         .catch(function (error) {
@@ -334,12 +339,50 @@
                                     background: '#24283b',
                                     timerProgressBar: true,
                                 });
-                                getItems();
                             }
                         })
                 }
             })
         }
 
+        submit_list.addEventListener('submit', function(e){
+            e.preventDefault();
+            let formData = new FormData(this);
+
+            axios.post('/d-submit-list', formData)
+                .then((response) => {
+                    if(response.status == 200){
+                        Swal.fire({
+                            icon: 'success',
+                            text: response.data.message,
+                            timer: 2000,
+                            timerProgressBar: true,
+                        });
+                        getList();
+                    }
+                })
+                .catch(function (error) {
+                    if(error.response.status == 422){
+                        Swal.fire({
+                            icon: 'error',
+                            text: error.response.statusText,
+                            timer: 2000,
+                            color: '#ffffff',
+                            background: '#24283b',
+                            timerProgressBar: true,
+                        });
+                    }else if(error.response.status == 410){
+                        Swal.fire({
+                            icon: 'error',
+                            text: error.response.data.error,
+                            timer: 2000,
+                            color: '#ffffff',
+                            background: '#24283b',
+                            timerProgressBar: true,
+                        });
+                    }
+                });
+        })
+
     </script>
-@endsection --}}
+@endsection

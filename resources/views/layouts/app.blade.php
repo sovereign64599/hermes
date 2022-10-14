@@ -244,7 +244,7 @@
     </script>
     @yield('script')
 
-    @if(Route::currentRouteName() == 'sales' || Route::currentRouteName() == 'deduct.items')
+    @if(Route::currentRouteName() == 'sales')
     {{-- under development --}}
     <div class="modal fade" id="underDevelopment" tabindex="-1" aria-labelledby="underDevelopment" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">

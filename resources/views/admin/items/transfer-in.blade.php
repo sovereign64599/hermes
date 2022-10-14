@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Transfer In')
+@section('title', 'Transfer Ins')
 
 @section('content')
     <div class="row pages">
@@ -89,10 +89,11 @@
         </div>
         <div class="col-lg-8">
             <form id="submit_list">
+                @csrf
                 <div class="card shadow p-2">
                     <div class="card-header">
-                        <div class="d-flex justify-content-between">
-                            <div class="m-0 text-tertiary">
+                        <div class="d-flex justify-content-between text-tertiary">
+                            <div class="m-0">
                                 Form # 
                                 <input type="text" name="form_number" style='width:auto' class="ch-input" value="{{str_pad(mt_rand(0, 999999), 6, '0', STR_PAD_LEFT)}}">
                             </div>
@@ -100,7 +101,8 @@
                                 @php
                                     $dateToday = date("Y-m-d");
                                 @endphp
-                                <input type="date" name="date" class="ch-input" value="{{$dateToday}}">
+                                Date:
+                                <input type="date" name="custom_date" class="ch-input" value="{{$dateToday}}">
                             </div>
                         </div>
                     </div>
@@ -140,6 +142,7 @@
 @section('script')
     <script>
         const addList = document.querySelector('#add_list');
+        const submit_list = document.querySelector('#submit_list');
         const searchItemInput = document.querySelector('#search_item');
         const updateItem = document.querySelector('#updateItems');
         const listItemOption = document.querySelector('.list-item-option');
@@ -332,6 +335,45 @@
                 }
             })
         }
+
+        submit_list.addEventListener('submit', function(e){
+            e.preventDefault();
+            let formData = new FormData(this);
+
+            axios.post('/submit-list', formData)
+                .then((response) => {
+                    if(response.status == 200){
+                        Swal.fire({
+                            icon: 'success',
+                            text: response.data.message,
+                            timer: 2000,
+                            timerProgressBar: true,
+                        });
+                        getList();
+                    }
+                })
+                .catch(function (error) {
+                    if(error.response.status == 422){
+                        Swal.fire({
+                            icon: 'error',
+                            text: error.response.statusText,
+                            timer: 2000,
+                            color: '#ffffff',
+                            background: '#24283b',
+                            timerProgressBar: true,
+                        });
+                    }else if(error.response.status == 410){
+                        Swal.fire({
+                            icon: 'error',
+                            text: error.response.data.error,
+                            timer: 2000,
+                            color: '#ffffff',
+                            background: '#24283b',
+                            timerProgressBar: true,
+                        });
+                    }
+                });
+        })
 
     </script>
 @endsection
