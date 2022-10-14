@@ -7,7 +7,7 @@
         <div class="col-lg">
             <div class="card shadow p-4">
                 <div class="card-header d-flex align-items-center justify-content-between">
-                    <h4 class="text-tertiary">Transfered In</h4>
+                    <h4 class="text-tertiary">Transfered Out</h4>
                     <a href="{{route('export.report.transfer.out')}}" class="btn btn-sm text-light d-flex align-items-center"><i class="fas fa-file-export mr-2"></i><span>Export</span></a>
                 </div>
                 <div class="card-body">
