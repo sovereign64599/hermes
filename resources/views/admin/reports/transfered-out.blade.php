@@ -18,7 +18,7 @@
                                     <th>Item Name</th>
                                     <th>Item Category</th>
                                     <th>Item Sub Category</th>
-                                    <th>Item Quantity</th>
+                                    <th>Item Quantity <small>(before deduct)</small></th>
                                     <th>Item Deduct Quantity</th>
                                     <th>Item Barcode</th>
                                     <th>Item Cost</th>
