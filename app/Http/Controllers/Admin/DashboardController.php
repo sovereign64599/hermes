@@ -35,29 +35,33 @@ class DashboardController extends Controller
             $totalSales = 0;
         }
 
-        $date = new DateTime();
-        $timeZone = $date->getTimezone();
-        date_default_timezone_set($timeZone->getname());
-
         // chart
         // $earnings =  DB::select('select year(created_at) as year, month(created_at) as month, sum(sales_amount) as total_amount from sales group by year(created_at), month(created_at)');
-        $earnings = Sales::select(
-                    DB::raw('sum(sales_amount) as total_amount'), 
-                    DB::raw("DATE_FORMAT(created_at,'%m') as month")
-        )
-        ->groupBy('month')
-        ->get();
+        // $earnings = Sales::select('id', 'created_at', 'sales_amount')->whereYear("created_at", date('Y'))->sum('sales_amount')->get()->groupBy(function($date) {
+        //     //return Carbon::parse($date->created_at)->format('Y'); // grouping by years
+        //     return Carbon::parse($date->created_at)->format('m'); // grouping by months
+        // });
+        $earnings = Sales::selectRaw('SUM(sales_amount) as total')->whereYear("created_at", date('Y'))->get()->groupBy(function($date) {
+            //return Carbon::parse($date->created_at)->format('Y'); // grouping by years
+            return Carbon::parse($date->created_at)->format('m'); // grouping by months
+        });
 
-        
+        $earningscount = [];
         $salesArr = [];
-        $salesCount = 0;
-        for ($month = 1; $month <= 12; $month++) {
-            if((int)$month == (int)$earnings[0]->month){
-                $salesArr[$month] = (int)$earnings[0]->total_amount;
+
+        foreach ($earnings as $key => $value) {
+            $earningscount[(int)$key] = $value[0]['total'];
+        }
+
+        for($i = 1; $i <= 12; $i++){
+            if(!empty($earningscount[$i])){
+                $salesArr[$i] = $earningscount[$i];    
             }else{
-                $salesArr[$month] = 0;
+                $salesArr[$i] = 0;    
             }
         }
+
+        // dd($salesArr);
         
         return view('admin.dashboard.dashboard', compact(['totalItems', 'users', 'totalSales', 'delivered', 'salesArr']));
     }
