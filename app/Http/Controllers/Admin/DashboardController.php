@@ -8,6 +8,7 @@ use App\Models\Items;
 use App\Models\Sales;
 use App\Models\User;
 use Carbon\Carbon;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -34,6 +35,10 @@ class DashboardController extends Controller
             $totalSales = 0;
         }
 
+        $date = new DateTime();
+        $timeZone = $date->getTimezone();
+        date_default_timezone_set($timeZone->getname());
+
         // chart
         // $earnings =  DB::select('select year(created_at) as year, month(created_at) as month, sum(sales_amount) as total_amount from sales group by year(created_at), month(created_at)');
         $earnings = Sales::select(
@@ -43,7 +48,6 @@ class DashboardController extends Controller
         ->groupBy('month')
         ->get();
 
-        // dd($earnings[0]->month);
         
         $salesArr = [];
         $salesCount = 0;
