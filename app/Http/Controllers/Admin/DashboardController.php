@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Delivery;
 use App\Models\Items;
+use App\Models\Sales;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -19,7 +21,18 @@ class DashboardController extends Controller
     {
         $totalItems = Items::count();
         $users = User::count();
-        return view('admin.dashboard.dashboard', compact(['totalItems', 'users']));
+        $delivered = Delivery::where('delivery_status', 'Delivered')->count();
+        $sales = Sales::get();
+        if($sales->count() > 0){
+            $totalSales = 0;
+            foreach($sales as $sale){
+                $totalSales = (float)$totalSales + (float)$sale->sales_amount;
+            }
+        }else{
+            $totalSales = 0;
+        }
+        
+        return view('admin.dashboard.dashboard', compact(['totalItems', 'users', 'totalSales', 'delivered']));
     }
 
     public function sales()
@@ -101,9 +114,13 @@ class DashboardController extends Controller
     public function deleteUser(String $id)
     {
         $check = User::findOrFail($id);
+        
         if($check){
-            $check->delete();
-            return redirect('/show-users')->with('success', ucfirst($check->firstname) . ' Deleted successfully.');
+            if($check->role == 'user'){
+                $check->delete();
+                return redirect('/show-users')->with('success', ucfirst($check->firstname) . ' Deleted successfully.');
+            }
+            return back()->with('error', 'Something went wrong.');
         }
     }
 }

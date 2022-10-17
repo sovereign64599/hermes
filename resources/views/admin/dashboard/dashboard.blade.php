@@ -47,12 +47,12 @@
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
                                 <div class="text-md text-tertiary text-capitalize mb-1">
-                                    Sales (Monthly)
+                                    Items Delivered
                                 </div>
-                                <div class="h5 mb-0 font-weight-bold text-gray">345,000</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray">{{$delivered}}</div>
                             </div>
                             <div class="col-auto">
-                                <i class="far fa-chart-bar text-tertiary fa-2x"></i>
+                                <i class="fas fa-truck-loading text-tertiary fa-2x"></i>
                             </div>
                         </div>
                     </div>
@@ -67,7 +67,7 @@
                                 <div class="text-md text-tertiary text-capitalize mb-1">
                                     Total Sales
                                 </div>
-                                <div class="h5 mb-0 font-weight-bold text-gray">3,230,050</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray">${{number_format($totalSales), 2}}</div>
                             </div>
                             <div class="col-auto">
                                 <i class="fas fa-chart-line text-tertiary fa-2x"></i>

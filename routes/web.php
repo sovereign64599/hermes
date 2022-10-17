@@ -14,8 +14,8 @@ Route::match(['get'], 'login', function(){ return redirect('/'); })->name('login
 Route::group(['middleware' => 'auth'], function(){
     
     Route::get('/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/sales', [App\Http\Controllers\Admin\SalesController::class, 'index'])->name('sales');
 
+    //===================================================ADMIN=======================================================================
     Route::group(['middleware' => 'isAdmin'], function(){
         // user management get request
         Route::get('/show-users', [App\Http\Controllers\Admin\DashboardController::class, 'showUsers'])->name('user');
@@ -30,6 +30,19 @@ Route::group(['middleware' => 'auth'], function(){
         // items post
         Route::patch('/update-items/{id}', [App\Http\Controllers\Admin\ItemsController::class, 'update'])->name('update.item');
     });
+
+    //===================================================SALES=======================================================================
+    // sales view
+    Route::get('/sales', [App\Http\Controllers\Admin\SalesController::class, 'index'])->name('sales');
+    // sales get method
+    Route::get('/sale-collect-item/{input}', [App\Http\Controllers\Admin\SalesController::class, 'collectItemItem']);
+    Route::get('/sales-collect-data/{id}', [App\Http\Controllers\Admin\SalesController::class, 'collectItemData']);
+    Route::get('/get-sales-list', [App\Http\Controllers\Admin\SalesController::class, 'getSalesList']);
+    Route::get('/delete-sales-list/{id}', [App\Http\Controllers\Admin\SalesController::class, 'deleteSalesList']);
+    Route::get('/update-sales-delivery-status/{id}', [App\Http\Controllers\Admin\SalesController::class, 'updateDeliveryStatus']);
+    // sales post method
+    Route::post('/add-sales-list', [App\Http\Controllers\Admin\SalesController::class, 'addSalesList']);
+    Route::post('/submit-sales-list', [App\Http\Controllers\Admin\SalesController::class, 'submitSalesList']);
 
     //===================================================ITEMS=======================================================================
     // items view
@@ -105,4 +118,18 @@ Route::group(['middleware' => 'auth'], function(){
     //===================================================ITEM QUANTITY CHECK=======================================================================
     // item quantity check view
     Route::get('/item-quantity-check', [App\Http\Controllers\Admin\ItemQuantityCheckController::class, 'index'])->name('item.quantity.check');
+    // quantity check post method
+    Route::post('/filter-items-available', [App\Http\Controllers\Admin\ItemQuantityCheckController::class, 'filterItemsAvailable']);
+    // quantity check get method
+    Route::get('/check-sub-categories/{id}', [App\Http\Controllers\Admin\ItemQuantityCheckController::class, 'checkSubCategory']);
+
+    //===================================================DELIVERY=======================================================================
+    // get method
+    Route::get('/delivery', [App\Http\Controllers\Admin\DeliveryController::class, 'index'])->name('delivery');
+    Route::get('/get-delivery-count', [App\Http\Controllers\Admin\DeliveryController::class, 'getDeliveryCount']);
+    // delivery status actions
+    Route::get('/delivered-update/{id}', [App\Http\Controllers\Admin\DeliveryController::class, 'updateToDelivered'])->name('action.delivered');
+    Route::get('/for-delivery-update/{id}', [App\Http\Controllers\Admin\DeliveryController::class, 'updateToForDeliver'])->name('action.for.deliver');
+    Route::get('/cancel-delivery-update/{id}', [App\Http\Controllers\Admin\DeliveryController::class, 'updateToCancelled'])->name('action.cancelled');
+    
 });

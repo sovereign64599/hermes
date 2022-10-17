@@ -10,9 +10,9 @@
                     <div class="card-body pt-0">
                         <div class="row">
                             <div class="form-group">
-                                <label><small>Item Name</small></label>
+                                <label><small>Search Item Name/barcode/description</small></label>
                                 <div class="auto-sugguestion">
-                                    <input type="search" class="form-control" id="search_item" placeholder="Search Item Name"  oninput="collectItemNames(this)" autocomplete="false">
+                                    <input type="search" class="form-control" id="search_item" placeholder="Search Name / barcode / description"  oninput="collectItems(this)" autocomplete="false">
                                     <i class="fas fa-search"></i>
                                     <ul class="list-item-option">
                                         
@@ -55,8 +55,8 @@
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group">
-                                    <label><small>Item Sell</small></label>
-                                    <input readonly class="form-control item-sell" placeholder="Item Sell" disabled>
+                                    <label><small>Price</small></label>
+                                    <input type="text" id="item_price" class="form-control item-sell bg-black" placeholder="Unit Price" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');">
                                 </div>
                             </div>
                             <div class="col-lg-6">
@@ -68,16 +68,12 @@
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label><small>Deduct Quantity</small></label>
-                                    <input type="text" id="item_deduct_Quantity" class="form-control bg-black" class="form-control" placeholder="Deduct Quantity" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');">
+                                    <input type="text" id="item_deduct_Quantity" class="form-control bg-black" class="form-control" placeholder="Deduct uantity" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label><small>Item Description</small></label>
                                 <textarea readonly rows="3" class="form-control item-description" placeholder="Description" disabled></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label><small>Add Notes (Optional)</small></label>
-                                <textarea id="item_notes" rows="3" class="form-control bg-black" value="No Notes" placeholder="Add notes"></textarea>
                             </div>
                             <div class="form-group">
                                 <button class="btn text-light">Add to list</button>
@@ -112,24 +108,28 @@
                                 <thead>
                                     <tr>
                                         <th>Item Name</th>
-                                        <th>Item Category</th>
-                                        <th>Sub Category</th>
                                         <th>Item Barcode</th>
+                                        <th>Unit Price</th>
                                         <th>Quantity</th>
-                                        <th>Amount</th>
+                                        <th>Amount to pay</th>
                                         <th>Action</th>
                                         <th>For Delivery</th>
                                     </tr>
                                 </thead>
                                 <tbody id="showList">
-                                    {{-- show list here --}}
+                                    {{-- show list here 06040241 06030340 04030811 --}}
                                 </tbody>
                             </table>
                         </div>
                     </div>
                     <div class="card-footer bg-transparent border-0 d-flex justify-content-between align-items-center">
                         <p><small class="text-tertiary limit">Items (0/10)</small></p>
-                        <button class="btn text-light">Submit</button>
+                        <div class="d-flex align-items-center gap-4">
+                            <div>
+                                <h5 class="text-tertiary limit mb-0">Total: <span class="text-light totalAmountToPay">9000</span></h5>
+                            </div>
+                            <button class="btn text-light">Submit</button>
+                        </div>
                     </div>
                 </div>
             </form>
@@ -148,20 +148,21 @@
         const showList = document.querySelector('#showList');
 
         window.onload = () => {
-            getList()
+            getSalesList()
         }
 
         addList.addEventListener('submit', function(e){
             e.preventDefault();
             let id = document.querySelector('#search_item').getAttribute('data')
+            let price = document.querySelector('.item-sell').value
             let deductQuantity = document.querySelector('#item_deduct_Quantity').value
-            let notes = document.querySelector('#item_notes').value
+            let item_price = document.querySelector('#item_price').value
             let formData = {
                 id: id,
                 deductQty: deductQuantity,
-                notes: notes
+                price: item_price
             };
-            axios.post('/d-add-list', formData)
+            axios.post('/add-sales-list', formData)
                 .then((response) => {
                     if(response.status == 200){
                         addList.reset();
@@ -181,7 +182,7 @@
                                 toast.addEventListener('mouseleave', Swal.resumeTimer)
                             }
                         });
-                        getList()
+                        getSalesList()
                     }
                 })
                 .catch(function (error) {
@@ -196,8 +197,8 @@
                                 color: '#ffffff',
                                 background: '#24283b'
                             });
-                        }
-                        Swal.fire({
+                        }else{
+                            Swal.fire({
                             icon: 'error',
                             text: error.response.data.errors.id,
                             timer: 2000,
@@ -205,7 +206,7 @@
                             color: '#ffffff',
                             background: '#24283b'
                         });
-                        
+                        }
                     }else if(error.response.status === 404){
                         Swal.fire({
                             icon: 'error',
@@ -227,10 +228,10 @@
                 });
         })
 
-        async function collectItemNames(input){
+        async function collectItems(input){
             let dataID = input.value.length + 1;
             if(dataID > 1){
-                await axios.get('/d-collect-item-names/'+input.value)
+                await axios.get('/sale-collect-item/'+input.value)
                 .then(function (response) {
                     if(response.status == 200){
                         listItemOption.classList.add('show')
@@ -262,7 +263,7 @@
             let itemDescription = document.querySelector('.item-description');
 
 
-            await axios.get('/d-collect-data/'+data.getAttribute('data'))
+            await axios.get('/sales-collect-data/'+data.getAttribute('data'))
                 .then(function (response) {
                     if(response.status == 200){
                         let item = response.data.data;
@@ -272,7 +273,7 @@
                         itemBarcode.value = item.barcode;
                         itemCost.value = item.cost;
                         itemSell.value = item.sell;
-                        itemQuantity.value = item.quantity
+                        itemQuantity.value = item.quantity == 0 ? 'Out of stock' : item.quantity
                         itemDescription.value = item.description;
                     }
                 })
@@ -288,21 +289,23 @@
                 })
         }
 
-        async function getList(){
-            await axios.get('/d-get-list')
+        async function getSalesList(){
+            await axios.get('/get-sales-list')
                 .then(function (response) {
                     if(response.status == 200){
                         showList.innerHTML = response.data.data;
                         document.querySelector('.limit').innerHTML = response.data.limit;
+                        document.querySelector('.totalAmountToPay').innerHTML = response.data.totalAmount;
                     }
                 })
                 .catch(function (error) {
                     showList.innerHTML = error.response.data.error;
                     document.querySelector('.limit').innerHTML = error.response.data.limit;
+                    document.querySelector('.totalAmountToPay').innerHTML = error.response.data.totalAmount;
                 })
         }
 
-        function deleteList(data){
+        function deleteSalesList(data){
             const dataID = data.getAttribute('data');
             Swal.fire({
                 title: 'Are you sure?',
@@ -316,7 +319,7 @@
                 confirmButtonText: 'Yes, delete it!'
                 }).then((result) => {
                 if (result.isConfirmed) {
-                axios.get('/d-delete-list/' + dataID)
+                axios.get('/delete-sales-list/' + dataID)
                         .then(function (response) {
                             if(response.status == 200){
                                 Swal.fire({
@@ -325,7 +328,7 @@
                                     timer: 2000,
                                     timerProgressBar: true,
                                 });
-                                getList();
+                                getSalesList();
                             }
                         })
                         .catch(function (error) {
@@ -344,11 +347,50 @@
             })
         }
 
+        async function updateDeliveryStatus(data){
+            const dataID = data.getAttribute('data');
+            await axios.get('/update-sales-delivery-status/' + dataID)
+                .then(function (response) {
+                    if(response.status == 200){
+                        Swal.fire({
+                            toast: true,
+                            icon: 'success',
+                            text: response.data.message,
+                            position: 'top-right',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            color: '#ffffff',
+                            background: '#24283b',
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer)
+                                toast.addEventListener('mouseleave', Swal.resumeTimer)
+                            }
+                        });
+                        getSalesList()
+                    }
+                })
+                .catch(function (error) {
+                    if(error.response.status == 404){
+                        Swal.fire({
+                            toast: true,
+                            icon: 'error',
+                            text: error.response.statusText,
+                            position: 'top-right',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            color: '#ffffff',
+                            background: '#24283b',
+                        });
+                    }
+                })
+        }
+
         submit_list.addEventListener('submit', function(e){
             e.preventDefault();
             let formData = new FormData(this);
 
-            axios.post('/d-submit-list', formData)
+            axios.post('/submit-sales-list', formData)
                 .then((response) => {
                     if(response.status == 200){
                         Swal.fire({
@@ -357,7 +399,8 @@
                             timer: 2000,
                             timerProgressBar: true,
                         });
-                        getList();
+                        getSalesList();
+                        window.location.replace('/delivery');
                     }
                 })
                 .catch(function (error) {

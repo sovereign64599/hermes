@@ -41,6 +41,12 @@
                 <span>Sales Module</span>
             </a>
         </li>
+        <li class="nav-item @if(Route::currentRouteName() == 'delivery') active @endif">
+            <a class="nav-link"  href="{{route('delivery')}}">
+                <i class="fas fa-truck"></i>
+                <span>Delivery</span> <span class="badge bg-secondary" id="delivery_count">0</span>
+            </a>
+        </li>
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#itemsCollapse"
                 aria-expanded="true" aria-controls="itemsCollapse">
@@ -50,8 +56,8 @@
             <div id="itemsCollapse" class="collapse @if(Route::currentRouteName() == 'items' || Route::currentRouteName() == 'transfer.in' || Route::currentRouteName() == 'deduct.items') show @endif" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                 <div class="bg-secondary py-2 collapse-inner rounded">
                     <a class="collapse-item text-white mb-1  @if(Route::currentRouteName() == 'items' || Route::currentRouteName() == 'edit.item') active @endif" href="{{route('items')}}">
-                        <i class="fas fa-plus mr-3 text-tertiary"></i>
-                        <span>Add Items</span>
+                        <i class="fas fa-boxes mr-3 text-tertiary"></i>
+                        <span>Items</span>
                     </a>
                     <a class="collapse-item text-white mb-1  @if(Route::currentRouteName() == 'transfer.in') active @endif" href="{{route('transfer.in')}}">
                         <i class="fas fa-share mr-2 text-tertiary"></i>
@@ -252,9 +258,25 @@
     <script src="{{asset('vendor/sweetalert/sweetalert.min.js')}}"></script>
     <script>
         if(document.querySelector('.alert .btn-close')){
-            setTimeout(() => {
-                document.querySelector('.alert .btn-close').click()
-            }, 4000);
+                setTimeout(() => {
+                    document.querySelector('.alert .btn-close').click()
+                }, 4000);
+            }
+            getDeliveryCount()
+        
+
+        async function getDeliveryCount(){
+            let delivery_count = document.getElementById('delivery_count');
+
+            await axios.get('/get-delivery-count')
+                .then(function (response) {
+                    if(response.status == 200){
+                        delivery_count.innerHTML = response.data.count;
+                    }
+                })
+                .catch(function (error) {
+                    delivery_count.innerHTML = error.response.data.count;
+                })
         }
     </script>
     @yield('script')

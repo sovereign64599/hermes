@@ -29,7 +29,9 @@
                                             <td>{{$user->created_at->diffForHumans()}}</td>
                                             <td>
                                                 <a href="{{route('edit.user', $user->id)}}" class="btn btn-primary">Edit</a>
-                                                <a href="#" onclick="deleteUser()" class="btn btn-primary">Delete</a>
+                                                @if($user->role != 'Admin')
+                                                <a href="#" data="{{$user->id}}" onclick="deleteUser(this)" class="btn btn-primary">Delete</a>
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach
@@ -48,7 +50,8 @@
 @if($users->count() > 0)
 @section('script')
     <script>
-        function deleteUser(){
+        function deleteUser(user){
+            let userID = user.getAttribute('data');
             Swal.fire({
                 title: 'Are you sure?',
                 text: "You won't be able to revert this!",
@@ -61,7 +64,7 @@
                 confirmButtonText: 'Yes, delete it!'
                 }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location.replace("{{route('delete.user', $user->id)}}");
+                    window.location.replace('/dleete-user/' + userID);
                 }
             })
         }

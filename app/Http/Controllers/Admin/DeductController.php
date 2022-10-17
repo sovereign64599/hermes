@@ -201,7 +201,6 @@ class DeductController extends Controller
                         'item_quantity_deduct' => $list['deductQty'],
                         'item_description' => $data->item_description,
                         'item_barcode' => $data->item_barcode,
-                        'item_description' => $data->item_name,
                         'item_cost' => $data->item_cost,
                         'item_sell' => $data->item_sell,
                         'item_photo' => $data->item_photo,
