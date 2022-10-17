@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Users')
+@section('title', 'Delivery')
 
 @section('content')
     <div class="row pages">
@@ -8,8 +8,8 @@
             <div class="card shadow p-4">
                 <div class="card-header">
                     <h4 class="text-tertiary">Delivery Items</h4>
-                    <p class="mb-0"><small>If item marked <span class="text-success">(Delivered)</span>, the total amount will added to your sales.</small></p>
-                    <p class="mb-0"><small>If item marked <span class="text-info">(For Deliver)</span>, the item quantity deduction will applied.</small></p>
+                    <p class="mb-0"><small>If item marked <span class="text-success">(Delivered)</span>, the total amount will be added to your sales.</small></p>
+                    <p class="mb-0"><small>If item marked <span class="text-info">(For Delivery)</span>, the item quantity deduction will be applied.</small></p>
                     <p class="mb-0"><small>If item marked <span class="text-danger">(Cancel)</span>, Item quantity deduction will not applied.</small></p>
                 </div>
                 <div class="card-body">
@@ -61,7 +61,7 @@
                                             <td class="{{$status}}">{{$delivery->delivery_status}}</td>
                                             <td>
                                                 @if($delivery->delivery_status == 'Pending')
-                                                    <a href="{{route('action.for.deliver', $delivery->id)}}" class="btn-info btn-sm">For Deliver</a>
+                                                    <a href="{{route('action.for.deliver', $delivery->id)}}" class="btn-info btn-sm">For Delivery</a>
                                                 @elseif($delivery->delivery_status == 'For Delivery')
                                                     <a href="{{route('action.delivered', $delivery->id)}}" data="{{$delivery->id}}" onclick="deleteUser(this)" class="btn-success btn-sm">Delivered</a>
                                                     <a href="{{route('action.cancelled', $delivery->id)}}" data="{{$delivery->id}}" onclick="deleteUser(this)" class="btn btn-danger btn-sm">Cancel</a>
