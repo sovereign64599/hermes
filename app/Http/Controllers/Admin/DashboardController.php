@@ -7,7 +7,9 @@ use App\Models\Delivery;
 use App\Models\Items;
 use App\Models\Sales;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class DashboardController extends Controller
@@ -31,8 +33,20 @@ class DashboardController extends Controller
         }else{
             $totalSales = 0;
         }
+
+        // chart
+        $earnings =  DB::select('select year(created_at) as year, month(created_at) as month, sum(sales_amount) as total_amount from sales group by year(created_at), month(created_at)');
+        $salesArr = [];
+        $salesCount = 0;
+        for ($month = 1; $month <= 12; $month++) {
+            if((int)$month == (int)$earnings[0]->month){
+                $salesArr[$month] = (int)$earnings[0]->total_amount;
+            }else{
+                $salesArr[$month] = 0;
+            }
+        }
         
-        return view('admin.dashboard.dashboard', compact(['totalItems', 'users', 'totalSales', 'delivered']));
+        return view('admin.dashboard.dashboard', compact(['totalItems', 'users', 'totalSales', 'delivered', 'salesArr']));
     }
 
     public function sales()

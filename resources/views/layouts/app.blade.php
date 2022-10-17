@@ -300,7 +300,7 @@
             pointHoverBorderColor: "rgba(78, 115, 223, 1)",
             pointHitRadius: 10,
             pointBorderWidth: 2,
-            data: [0, 10000, 5000, 15000, 10000, 20000, 15000, 25000, 20000, 30000, 25000, 40000],
+            data: [{{$salesArr[1]}}, {{$salesArr[2]}}, {{$salesArr[3]}}, {{$salesArr[4]}}, {{$salesArr[5]}}, {{$salesArr[6]}}, {{$salesArr[7]}}, {{$salesArr[8]}}, {{$salesArr[9]}}, {{$salesArr[10]}}, {{$salesArr[11]}}, {{$salesArr[12]}}],
             }],
         },
         options: {
