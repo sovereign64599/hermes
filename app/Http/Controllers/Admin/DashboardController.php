@@ -35,7 +35,16 @@ class DashboardController extends Controller
         }
 
         // chart
-        $earnings =  DB::select('select year(created_at) as year, month(created_at) as month, sum(sales_amount) as total_amount from sales group by year(created_at), month(created_at)');
+        // $earnings =  DB::select('select year(created_at) as year, month(created_at) as month, sum(sales_amount) as total_amount from sales group by year(created_at), month(created_at)');
+        $earnings = Sales::select(
+                    DB::raw('sum(sales_amount) as total_amount'), 
+                    DB::raw("DATE_FORMAT(created_at,'%m') as month")
+        )
+        ->groupBy('month')
+        ->get();
+
+        // dd($earnings[0]->month);
+        
         $salesArr = [];
         $salesCount = 0;
         for ($month = 1; $month <= 12; $month++) {
