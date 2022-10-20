@@ -11039,6 +11039,23 @@ textarea.form-control-lg {
   -o-object-fit: cover;
      object-fit: cover;
 }
+#page-top .card-body.form-numbers ul {
+  padding-left: 0;
+}
+#page-top .card-body.form-numbers ul a {
+  text-decoration: none;
+}
+#page-top .card-body.form-numbers ul a li {
+  background: var(--secondary);
+  list-style: none;
+  padding: 10px;
+  margin: 10px 0;
+  text-align: center;
+  color: var(--light);
+}
+#page-top .card-body.form-numbers ul a li.active {
+  background: var(--tertiary);
+}
 #page-top #content .categories {
   position: relative;
 }

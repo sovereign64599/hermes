@@ -19,6 +19,10 @@ class SalesController extends Controller
         // set a session for sales item
         $sessionList = session()->get('salesItem', []);
         session()->put('salesItem', $sessionList);
+        if(Auth::user()->role == 'Admin'){
+            $discount = session()->get('salesItemDiscount', ['discount' => 0]);
+            session()->put('salesItemDiscount', $discount);
+        }
 
         $collection = collect(SubCategory::get());
         $unique = $collection->unique(['category_name']);
@@ -112,7 +116,7 @@ class SalesController extends Controller
                     'quantity' => $items->item_quantity,
                     'deductQty' => $request->deductQty,
                     'amount' => (int)$items->item_sell * (int)$request->deductQty,
-                    'delivery_status' => 'For Delivery'
+                    'delivery_status' => 'For Delivery',
                 ];
     
                 session()->put('salesItem', $sessionList);
@@ -133,12 +137,19 @@ class SalesController extends Controller
     public function getSalesList()
     {
         $sessionList = session('salesItem');
+        if(Auth::user()->role == 'Admin'){
+            $discount = session('salesItemDiscount');
+            $percent = $discount['discount'];
+            $totalAmountDiscounted = 0;
+        }
         if(!empty($sessionList)){
-
             $totalAmount = 0;
             $html = '';
             foreach ($sessionList as $list) {
-                $totalAmount = $totalAmount + ((float)$list['sell'] * (float)$list['deductQty']);
+                $totalAmount = $totalAmount + ((float)$list['sell'] * (int)$list['deductQty']);
+                if(Auth::user()->role == 'Admin'){
+                    $totalAmountDiscounted = (float)$totalAmount - ((float)$totalAmount * ((int)$percent / 100));
+                }
                 $delivery_status = $list['delivery_status'] == 'For Delivery' ? 'checked value="For Delivery"' : 'value="Pending"';
 
                 $html .= '<tr>';
@@ -155,17 +166,68 @@ class SalesController extends Controller
                 $html .= '</td>';
                 $html .= '</tr>';
             }
+            if(Auth::user()->role == 'Admin'){
+                return response()->json([
+                    'data' => $html,
+                    'limit' => 'Item ('.count($sessionList).'/10)',
+                    'totalAmount' => number_format($totalAmount, 2),
+                    'discount' => $percent,
+                    'totalAmountDiscounted' => number_format($totalAmountDiscounted, 2),
+                ], 200);
+            }else{
+                return response()->json([
+                    'data' => $html,
+                    'limit' => 'Item ('.count($sessionList).'/10)',
+                    'totalAmount' => number_format($totalAmount, 2),
+                ], 200);
+            }
+        }
+        if(Auth::user()->role == 'Admin'){
             return response()->json([
-                'data' => $html,
-                'limit' => 'Item ('.count($sessionList).'/10)',
-                'totalAmount' => number_format($totalAmount, 2),
-            ], 200);
+                'error' => '<td>No List Found</td>',
+                'limit' => 'Item (0/10)',
+                'totalAmount' => 00.00,
+                'discount' => $percent,
+                'totalAmountDiscounted' => number_format($totalAmountDiscounted, 2),
+            ], 410);
+        }else{
+            return response()->json([
+                'error' => '<td>No List Found</td>',
+                'limit' => 'Item (0/10)',
+                'totalAmount' => 00.00
+            ], 410);
+        }
+    }
+
+    public function updateDiscount($value)
+    {
+        if(Auth::user()->role == 'Admin'){
+            $sessionList = session('salesItem');
+            if(count($sessionList) > 0){
+                if((int)$value > 100 || (int)$value < 0){
+                    return response()->json([
+                        'error' => 'Discount must be between 0 - 100'
+                    ], 422);
+                }
+                $discount = session()->get('salesItemDiscount');
+                if(isset($discount)) {
+                    $discount['discount'] = (int)$value;
+                    session()->put('salesItemDiscount', $discount);
+                    return response()->json([
+                        'message' => $value . '% Discount applied'
+                    ], 200);
+                }
+                return response()->json([
+                    'error' => 'something went wrong.'
+                ], 404);
+            }
+            return response()->json([
+                'error' => 'Add item to apply discount'
+            ], 422);
         }
         return response()->json([
-            'error' => '<td>No List Found</td>',
-            'limit' => 'Item (0/10)',
-            'totalAmount' => 00.00,
-        ], 410);
+            'error' => 'Fobidden'
+        ], 422);
     }
 
     public function updateDeliveryStatus($id)
@@ -211,19 +273,26 @@ class SalesController extends Controller
         ]);
 
         $lists = session()->get('salesItem');
+        if(Auth::user()->role == 'Admin'){
+            $discount = session('salesItemDiscount');
+            $percent = $discount['discount'];
+        }
 
         $user_who_tranfer = Auth::user()->name;
         $user_id_who_tranfer = Auth::id();
         $form_number = $request->form_number;
         $custom_date = $request->custom_date;
 
+        $totalAmountDiscounted = 0;
         $totalAmount = 0;
         $listCount = count($lists);
         if(count($lists) > 0){
             foreach($lists as $list){
                 $data = Items::find($list['id']);
                 $totalAmount = $totalAmount + ((float)$list['sell'] * (float)$list['deductQty']);
-
+                if(Auth::user()->role == 'Admin'){
+                    $totalAmountDiscounted = (float)$totalAmount - ((float)$totalAmount * ((int)$percent / 100));
+                }
                 if($data->exists()){
                     if($list['delivery_status'] != 'Pending'){
                         Items::where('id', $data->id)->update([
@@ -246,14 +315,20 @@ class SalesController extends Controller
                         'total_amount' => $list['amount'],
                         'form_number' => $form_number,
                         'custom_date' => $custom_date,
-                        'delivery_status' => $list['delivery_status']
+                        'delivery_status' => $list['delivery_status'],
+                        'totalAmount_discounted' => (float)$totalAmountDiscounted
                     ]);
                     unset($lists[$list['id']]);
                 }
             }
+            if(Auth::user()->role == 'Admin'){
+                $discount['discount'] = 0;
+                session()->put('salesItemDiscount', $discount);
+            }
+            
             session()->put('salesItem', $lists);
             return response()->json([
-                'message' => $listCount . ' items processed.'
+                'message' => $listCount . ' items processed. Redirecting to Delivery page...'
             ], 200);
         }
         return response()->json([

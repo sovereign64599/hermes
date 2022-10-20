@@ -30,7 +30,10 @@ class TransferInController extends Controller
     public function collectItemName($input){
         $items = Items::where('item_name', 'like', '%'.ucfirst($input).'%')
                 ->orWhere('item_name', 'like', '%'.$input.'%')
-                ->orWhere('item_name', 'like', '%'.strtolower($input).'%')->get();
+                ->orWhere('item_name', 'like', '%'.strtolower($input).'%')
+                ->orWhere('item_description', 'like', '%'.strtolower($input).'%')
+                ->orWhere('item_barcode', 'like', '%'.(int)$input.'%')
+                ->get();
 
         if($items->count() > 0){
             $html = '';

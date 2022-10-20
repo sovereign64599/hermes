@@ -7,6 +7,7 @@ use App\Models\Delivery;
 use App\Models\Items;
 use App\Models\Sales;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class DeliveryController extends Controller
 {
@@ -17,7 +18,12 @@ class DeliveryController extends Controller
     public function index()
     {
         $deliveries = Delivery::all();
-        return view('admin.delivery', compact(['deliveries']));
+        if(isset($_GET['form_number'])){
+            $deliveries = Delivery::where('form_number', $_GET['form_number'])->get();
+        }
+        
+        $groupFormNumber = Delivery::select('form_number')->groupBy('form_number')->get();
+        return view('admin.delivery', compact(['deliveries', 'groupFormNumber']));
     }
 
     public function getDeliveryCount()

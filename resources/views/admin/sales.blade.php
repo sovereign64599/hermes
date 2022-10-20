@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Transfer Out')
+@section('title', 'Sales')
 
 @section('content')
     <div class="row pages">
@@ -120,14 +120,26 @@
                                     {{-- show list here 06040241 06030340 04030811 --}}
                                 </tbody>
                             </table>
+                            <p class="text-right"><small class="text-tertiary limit">Items (0/10)</small></p>
                         </div>
                     </div>
-                    <div class="card-footer bg-transparent border-0 d-flex justify-content-between align-items-center">
-                        <p><small class="text-tertiary limit">Items (0/10)</small></p>
-                        <div class="d-flex align-items-center gap-4">
+                    <div class="card-footer bg-transparent border-0 d-flex justify-content-start align-items-left">
+                        <div class="d-flex flex-column align-items-left gap-1">
                             <div>
-                                <h5 class="text-tertiary limit mb-0">Total: <span class="text-light totalAmountToPay">9000</span></h5>
+                                <h5 class="text-tertiary mb-0">Total Price: <span class="text-light totalAmountToPay">0</span></h5>
                             </div>
+                            @if(Auth::user()->role == 'Admin')
+                            <div class="d-flex align-items-center gap-4">
+                                <h5 class="text-tertiary mb-0">Discount:</h5>
+                                <div class="input-group">
+                                    <input type="text" class="form-control item-discount" placeholder="Enter Discount %" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');">
+                                    <button class="btn btn-outline-secondary text-light" type="button" role="button" onclick="updateSalesDiscount(document.querySelector('.item-discount').value)">Apply</button>
+                                </div>
+                            </div>
+                            <div>
+                                <h5 class="text-tertiary mb-0">Total: <span class="text-light item-totalAmountDiscounted">0</span></h5>
+                            </div>
+                            @endif
                             <button class="btn text-light">Submit</button>
                         </div>
                     </div>
@@ -296,12 +308,20 @@
                         showList.innerHTML = response.data.data;
                         document.querySelector('.limit').innerHTML = response.data.limit;
                         document.querySelector('.totalAmountToPay').innerHTML = response.data.totalAmount;
+                        @if(Auth::user()->role == 'Admin')
+                        document.querySelector('.item-discount').value = response.data.discount;
+                        document.querySelector('.item-totalAmountDiscounted').innerHTML = response.data.totalAmountDiscounted;
+                        @endif
                     }
                 })
                 .catch(function (error) {
                     showList.innerHTML = error.response.data.error;
                     document.querySelector('.limit').innerHTML = error.response.data.limit;
                     document.querySelector('.totalAmountToPay').innerHTML = error.response.data.totalAmount;
+                    @if(Auth::user()->role == 'Admin')
+                    document.querySelector('.item-discount').value = error.response.data.discount;
+                    document.querySelector('.item-totalAmountDiscounted').innerHTML = error.response.data.totalAmountDiscounted;
+                    @endif
                 })
         }
 
@@ -396,18 +416,20 @@
                         Swal.fire({
                             icon: 'success',
                             text: response.data.message,
-                            timer: 2000,
+                            timer: 3000,
                             timerProgressBar: true,
                         });
                         getSalesList();
-                        window.location.replace('/delivery');
+                        setTimeout(() => {
+                            window.location.replace('/delivery');
+                        }, 3000);
                     }
                 })
                 .catch(function (error) {
                     if(error.response.status == 422){
                         Swal.fire({
                             icon: 'error',
-                            text: error.response.statusText,
+                            text: error.response.data.errors.form_number,
                             timer: 2000,
                             color: '#ffffff',
                             background: '#24283b',
@@ -425,6 +447,26 @@
                     }
                 });
         })
+
+        async function updateSalesDiscount(value){
+            await axios.get('/update-sales-discount/'+value)
+                .then(function (response) {
+                    if(response.status == 200){
+                        getSalesList()
+                        console.log(response);
+                    }
+                })
+                .catch(function (error) {
+                    Swal.fire({
+                        icon: 'error',
+                        text: error.response.data.error,
+                        timer: 2000,
+                        timerProgressBar: true,
+                        color: '#ffffff',
+                        background: '#24283b'
+                    });
+                })
+        }
 
     </script>
 @endsection

@@ -74,8 +74,8 @@ class ItemsController extends Controller
                 $html .='<td>'.$item->item_category.'</td>';
                 $html .='<td>'.$item->item_sub_category.'</td>';
                 $html .='<td>'.$item->item_barcode.'</td>';
-                $html .='<td>'.$item->item_cost.'</td>';
-                $html .='<td>'.$item->item_sell.'</td>';
+                $html .='<td>'.number_format((float)$item->item_cost, 2).'</td>';
+                $html .='<td>'.number_format((float)$item->item_sell, 2).'</td>';
                 $html .='<td>'.$quantity.'</td>';
                 $html .='<td>'.mb_strimwidth($description, 0, 10, "...").'</td>';
                 $html .='<td>';

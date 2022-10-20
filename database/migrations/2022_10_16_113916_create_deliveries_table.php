@@ -25,11 +25,12 @@ class CreateDeliveriesTable extends Migration
             $table->integer('item_quantity_deduct')->nullable();
             $table->string('item_barcode');
             $table->string('item_description')->nullable();
-            $table->float('item_price');
-            $table->float('total_amount');
-            $table->string('form_number')->nullable();
+            $table->string('item_price');
+            $table->string('total_amount');
+            $table->string('form_number');
             $table->string('custom_date')->nullable();
             $table->string('delivery_status')->nullable();
+            $table->string('totalAmount_discounted')->nullable();
             $table->timestamps();
         });
     }

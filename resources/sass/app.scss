@@ -276,6 +276,27 @@
         }
     }
 
+    .card-body.form-numbers ul {
+        padding-left: 0;
+
+        a{
+            text-decoration: none;
+
+            li {
+                background: var(--secondary);
+                list-style: none;
+                padding: 10px;
+                margin: 10px 0;
+                text-align: center;
+                color: var(--light);
+            }
+            li.active {
+                background: var(--tertiary);
+            }
+            
+        }
+    }
+
     // categories page
     #content .categories{
         position: relative;

@@ -26,6 +26,7 @@ class Delivery extends Model
         'total_amount',
         'form_number',
         'custom_date',
-        'delivery_status'
+        'delivery_status',
+        'totalAmount_discounted'
     ];
 }

@@ -25,8 +25,8 @@ class ItemImport implements ToModel, WithHeadingRow
                 'item_quantity' => $qty,
                 'item_barcode' => $row['barcode'],
                 'item_description' => $row['description'],
-                'item_cost' => str_replace(',', '', (float)$row['cost']),
-                'item_sell' => str_replace(',', '', (float)$row['sell']),
+                'item_cost' => str_replace(',', '', $row['cost']),
+                'item_sell' => str_replace(',', '', $row['sell']),
                 'item_notes' => $row['notes'],
                 'item_photo' => $row['photo'],
             ]);

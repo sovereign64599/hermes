@@ -25,8 +25,8 @@ class CreateTransferInRecordsTable extends Migration
             $table->integer('item_quantity_added')->nullable();
             $table->string('item_barcode');
             $table->string('item_description')->nullable();
-            $table->float('item_cost');
-            $table->float('item_sell');
+            $table->string('item_cost');
+            $table->string('item_sell');
             $table->string('item_photo')->nullable();
             $table->string('form_number')->nullable();
             $table->string('custom_date')->nullable();

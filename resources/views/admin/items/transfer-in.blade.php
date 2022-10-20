@@ -10,9 +10,9 @@
                     <div class="card-body pt-0">
                         <div class="row">
                             <div class="form-group">
-                                <label><small>Item Name</small></label>
+                                <label><small>Search Item Name/barcode/description</small></label>
                                 <div class="auto-sugguestion">
-                                    <input type="search" class="form-control" id="search_item" placeholder="Search Item Name"  oninput="collectItemNames(this)" autocomplete="false">
+                                    <input type="search" class="form-control" id="search_item" placeholder="Search Name / barcode / description"  oninput="collectItemNames(this)" autocomplete="false">
                                     <i class="fas fa-search"></i>
                                     <ul class="list-item-option">
                                         

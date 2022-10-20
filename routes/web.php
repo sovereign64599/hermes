@@ -29,6 +29,8 @@ Route::group(['middleware' => 'auth'], function(){
         Route::get('/edit-items/{id}', [App\Http\Controllers\Admin\ItemsController::class, 'editItems'])->name('edit.item');
         // items post
         Route::patch('/update-items/{id}', [App\Http\Controllers\Admin\ItemsController::class, 'update'])->name('update.item');
+        // update sales discount
+        Route::get('/update-sales-discount/{value}', [App\Http\Controllers\Admin\SalesController::class, 'updateDiscount']);
     });
 
     //===================================================SALES=======================================================================
