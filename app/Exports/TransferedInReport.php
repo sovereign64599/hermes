@@ -4,6 +4,7 @@ namespace App\Exports;
 
 use App\Models\TransferInRecord;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\FromCollection;
 
@@ -12,9 +13,18 @@ class TransferedInReport implements FromCollection, WithHeadings
     /**
     * @return \Illuminate\Support\Collection
     */
+    use Exportable;
+    protected $from;
+    protected $to;
+
+    function __construct($from,$to) {
+        $this->from = $from;
+        $this->to = $to;
+    }
+
     public function collection()
     {
-        $data = DB::table('transfer_in_records')->select('item_name','item_category','item_sub_category','item_quantity','item_quantity_added', 'item_barcode','item_cost','item_sell','form_number','custom_date','notes', 'user_name', 'created_at')->get();
+        $data = DB::table('transfer_in_records')->select('item_name','item_category','item_sub_category','item_quantity','item_quantity_added', 'item_barcode','item_cost','item_sell','form_number','custom_date','notes', 'user_name')->whereBetween('custom_date', [$this->from, $this->to])->get();
         return $data;
     }
 
@@ -32,8 +42,7 @@ class TransferedInReport implements FromCollection, WithHeadings
             "Item Form Number",
             "Item Form Date",
             "Notes",
-            "Reported By",
-            "Transfer Created",
+            "Reported By"
         ];
     }
 }

@@ -111,11 +111,11 @@ Route::group(['middleware' => 'auth'], function(){
 
     //===================================================REPORTS=======================================================================
     // report view
-    Route::get('/reports/treansfered-in', [App\Http\Controllers\Admin\ReportsController::class, 'transferedIn'])->name('report.transfered.in');
-    Route::get('/reports/treansfered-out', [App\Http\Controllers\Admin\ReportsController::class, 'transferedOut'])->name('report.transfered.out');
+    Route::get('/reports/transfered-in', [App\Http\Controllers\Admin\ReportsController::class, 'transferedIn'])->name('report.transfered.in');
+    Route::get('/reports/transfered-out', [App\Http\Controllers\Admin\ReportsController::class, 'transferedOut'])->name('report.transfered.out');
     // export reports
-    Route::get('/reports/export/treansfered-in', [App\Http\Controllers\Admin\ReportsController::class, 'ExportTransferedInReport'])->name('export.report.transfer.in');
-    Route::get('/reports/export/treansfered-out', [App\Http\Controllers\Admin\ReportsController::class, 'ExportTransferedOutReport'])->name('export.report.transfer.out');
+    Route::get('/reports/export/transfered-in/{from}/{to}', [App\Http\Controllers\Admin\ReportsController::class, 'ExportTransferedInReport']);
+    Route::get('/reports/export/transfered-out/{from}/{to}', [App\Http\Controllers\Admin\ReportsController::class, 'ExportTransferedOutReport']);
 
     //===================================================ITEM QUANTITY CHECK=======================================================================
     // item quantity check view

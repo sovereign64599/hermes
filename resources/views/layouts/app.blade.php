@@ -108,7 +108,7 @@
                 <i class="fas fa-fw fa-chart-area"></i>
                 <span>Reports</span>
             </a>
-            {{-- <div id="reportsCollapse" class="collapse @if(Route::currentRouteName() == 'report.transfered.in' || Route::currentRouteName() == 'report.transfered.out') show @endif" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+            <div id="reportsCollapse" class="collapse @if(Route::currentRouteName() == 'report.transfered.in' || Route::currentRouteName() == 'report.transfered.out') show @endif" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                 <div class="bg-secondary py-2 collapse-inner rounded">
                     <a class="collapse-item text-white mb-1  @if(Route::currentRouteName() == 'report.transfered.in') active @endif" href="{{route('report.transfered.in')}}">
                         <i class="fas fa-calendar-check mr-2 text-tertiary"></i>
@@ -120,7 +120,7 @@
                     </a>
                 </span></a>
                 </div>
-            </div> --}}
+            </div>
         </li>
         <hr class="sidebar-divider">
 

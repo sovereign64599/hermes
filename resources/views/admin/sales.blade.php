@@ -86,7 +86,7 @@
         <div class="col-lg-8">
             <form id="submit_list">
                 @csrf
-                <div class="card shadow p-2">
+                <div class="card shadow p-2 mb-3">
                     <div class="card-header">
                         <div class="d-flex justify-content-between text-tertiary">
                             <div class="m-0">
@@ -121,26 +121,40 @@
                                 </tbody>
                             </table>
                             <p class="text-right"><small class="text-tertiary limit">Items (0/10)</small></p>
+                            <p class="text-right"><small class="text-light">Add Discount</small></p>
+                            <div class="input-group w-25 float-right">
+                                <input type="text" class="form-control item-discount" placeholder="Enter Discount %" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');">
+                                <button class="btn btn-outline-secondary text-light" type="button" role="button" onclick="updateSalesDiscount(document.querySelector('.item-discount').value)">Apply</button>
+                            </div>
                         </div>
                     </div>
-                    <div class="card-footer bg-transparent border-0 d-flex justify-content-start align-items-left">
-                        <div class="d-flex flex-column align-items-left gap-1">
-                            <div>
-                                <h5 class="text-tertiary mb-0">Total Price: <span class="text-light totalAmountToPay">0</span></h5>
-                            </div>
-                            @if(Auth::user()->role == 'Admin')
-                            <div class="d-flex align-items-center gap-4">
-                                <h5 class="text-tertiary mb-0">Discount:</h5>
-                                <div class="input-group">
-                                    <input type="text" class="form-control item-discount" placeholder="Enter Discount %" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');">
-                                    <button class="btn btn-outline-secondary text-light" type="button" role="button" onclick="updateSalesDiscount(document.querySelector('.item-discount').value)">Apply</button>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-8">
+
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex flex-column align-items-left gap-1">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <h6 class="text-light mb-0">Total Price:</h6>
+                                        <span class="text-light totalAmountToPay">0</span>
+                                    </div>
+                                    @if(Auth::user()->role == 'Admin')
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <h6 class="text-light mb-0">Discount:</h6>
+                                        <span class="text-light totalAmountToPay item-discount-text">0</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <h6 class="text-light mb-0">Total:</h6>
+                                        <span class="text-light item-totalAmountDiscounted">0</span>
+                                    </div>
+                                    @endif
+                                    <button class="btn text-light">Submit</button>
                                 </div>
                             </div>
-                            <div>
-                                <h5 class="text-tertiary mb-0">Total: <span class="text-light item-totalAmountDiscounted">0</span></h5>
-                            </div>
-                            @endif
-                            <button class="btn text-light">Submit</button>
                         </div>
                     </div>
                 </div>
@@ -310,6 +324,7 @@
                         document.querySelector('.totalAmountToPay').innerHTML = response.data.totalAmount;
                         @if(Auth::user()->role == 'Admin')
                         document.querySelector('.item-discount').value = response.data.discount;
+                        document.querySelector('.item-discount-text').innerHTML = response.data.discount;
                         document.querySelector('.item-totalAmountDiscounted').innerHTML = response.data.totalAmountDiscounted;
                         @endif
                     }
@@ -320,6 +335,7 @@
                     document.querySelector('.totalAmountToPay').innerHTML = error.response.data.totalAmount;
                     @if(Auth::user()->role == 'Admin')
                     document.querySelector('.item-discount').value = error.response.data.discount;
+                    document.querySelector('.item-discount-text').innerHTML = error.response.data.discount;
                     document.querySelector('.item-totalAmountDiscounted').innerHTML = error.response.data.totalAmountDiscounted;
                     @endif
                 })
@@ -417,6 +433,8 @@
                             icon: 'success',
                             text: response.data.message,
                             timer: 3000,
+                            color: '#ffffff',
+                            background: '#24283b',
                             timerProgressBar: true,
                         });
                         getSalesList();
@@ -453,7 +471,21 @@
                 .then(function (response) {
                     if(response.status == 200){
                         getSalesList()
-                        console.log(response);
+                        Swal.fire({
+                            toast: true,
+                            icon: 'success',
+                            text: response.data.message,
+                            position: 'top-right',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            color: '#ffffff',
+                            background: '#24283b',
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer)
+                                toast.addEventListener('mouseleave', Swal.resumeTimer)
+                            }
+                        });
                     }
                 })
                 .catch(function (error) {

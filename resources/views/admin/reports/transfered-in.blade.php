@@ -4,11 +4,35 @@
 
 @section('content')
     <div class="row pages">
-        <div class="col-lg">
+        <div class="col-lg-3">
+            <div class="card card shadow p-4">
+             <div class="card-body form-numbers">
+                 <h5 class="mb-4">Date Range</h5>
+                 <form>
+                    <div class="form-group">
+                        <label>From</label>
+                        <input type="date" class="form-control" name="from" @if(isset($_GET['from']) || isset($_GET['to']))value="{{$_GET['from']}}" @endif>
+                    </div>
+                    <div class="form-group">
+                        <label>To</label>
+                        <input type="date" class="form-control" name="to" @if(isset($_GET['from']) || isset($_GET['to']))value="{{$_GET['to']}}" @endif>
+                    </div>
+                    <button type="submit" class="btn text-white">Generate</button>
+                 </form>
+             </div>
+            </div>
+         </div>
+        <div class="col-lg-9">
             <div class="card shadow p-4">
                 <div class="card-header d-flex align-items-center justify-content-between">
-                    <h4 class="text-tertiary">Transfered In</h4>
-                    <a href="{{route('export.report.transfer.in')}}" class="btn btn-sm text-light d-flex align-items-center"><i class="fas fa-file-export mr-2"></i><span>Export</span></a>
+                    <h4 class="text-tertiary">Report</h4>
+                    @if($reports->count() > 0)
+                        @if(isset($_GET['from']) && isset($_GET['to'])) 
+                            <a href="/reports/export/transfered-in/{{$_GET['from']}}/{{$_GET['to']}}" class="btn btn-sm text-light d-flex align-items-center"><i class="fas fa-file-export mr-2"></i><span>Export</span></a>
+                        @else
+                            Select date range to export
+                        @endif
+                    @endif
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -16,18 +40,18 @@
                             <thead>
                                 <tr>
                                     <th>Item Name</th>
-                                    <th>Item Category</th>
-                                    <th>Item Sub Category</th>
-                                    <th>Item Quantity <small>(before added)</small></th>
-                                    <th>Item Added Quantity</th>
-                                    <th>Item Barcode</th>
-                                    <th>Item Cost</th>
-                                    <th>Item Sell</th>
-                                    <th>Item Form Number</th>
-                                    <th>Item Form Date</th>
+                                    <th>Category</th>
+                                    <th>Sub Category</th>
+                                    <th>Quantity <small>(before added)</small></th>
+                                    <th>Added Quantity</th>
+                                    <th>Barcode</th>
+                                    <th>Cost</th>
+                                    <th>Sell</th>
+                                    <th>Form Number</th>
+                                    <th>Form Date</th>
                                     <th>Notes</th>
                                     <th>Reported By</th>
-                                    <th>Transfer Created</th>
+                                    {{-- <th>Transfer Created</th> --}}
                                 </tr>
                             </thead>
                             <tbody>
@@ -46,7 +70,7 @@
                                             <td class="text-warning">{{$report->custom_date}}</td>
                                             <td>{{$report->notes}}</td>
                                             <td class="text-warning">{{ucfirst($report->user_name)}}</td>
-                                            <td>{{$report->created_at->diffForHumans()}}</td>
+                                            {{-- <td>{{$report->created_at->diffForHumans()}}</td> --}}
                                         </tr>
                                     @endforeach
                                 @else 
