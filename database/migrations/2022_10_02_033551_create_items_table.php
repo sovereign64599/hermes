@@ -26,6 +26,7 @@ class CreateItemsTable extends Migration
             $table->string('item_sell');
             $table->string('item_notes')->nullable();
             $table->string('item_photo')->nullable();
+            $table->float('total_cost', 12,2);
             $table->timestamps();
         });
     }

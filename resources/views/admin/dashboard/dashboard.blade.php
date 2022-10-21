@@ -67,7 +67,7 @@
                                 <div class="text-md text-tertiary text-capitalize mb-1">
                                     Total Sales
                                 </div>
-                                <div class="h5 mb-0 font-weight-bold text-gray">${{number_format($totalSales), 2}}</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray">₱{{number_format($totalSales), 2}}</div>
                             </div>
                             <div class="col-auto">
                                 <i class="fas fa-chart-line text-tertiary fa-2x"></i>

@@ -108,17 +108,32 @@
                 <i class="fas fa-fw fa-chart-area"></i>
                 <span>Reports</span>
             </a>
-            <div id="reportsCollapse" class="collapse @if(Route::currentRouteName() == 'report.transfered.in' || Route::currentRouteName() == 'report.transfered.out') show @endif" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+            <div id="reportsCollapse" class="collapse @if(Route::currentRouteName() == 'transfered.in.report' || Route::currentRouteName() == 'transfered.out.report' || Route::currentRouteName() == 'delivery.report' || Route::currentRouteName() == 'sales.report' || Route::currentRouteName() == 'revenue.report' || Route::currentRouteName() == 'inventory.report') show @endif" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                 <div class="bg-secondary py-2 collapse-inner rounded">
-                    <a class="collapse-item text-white mb-1  @if(Route::currentRouteName() == 'report.transfered.in') active @endif" href="{{route('report.transfered.in')}}">
+                    <a class="collapse-item text-white mb-1  @if(Route::currentRouteName() == 'inventory.report') active @endif" href="{{route('inventory.report')}}">
+                        <i class="fas fa-calendar-check mr-2 text-tertiary"></i>
+                        <span>Inventory Report</span>
+                    </a>
+                    <a class="collapse-item text-white mb-1  @if(Route::currentRouteName() == 'revenue.report') active @endif" href="{{route('revenue.report')}}">
+                        <i class="fas fa-calendar-check mr-2 text-tertiary"></i>
+                        <span>Revenue Report</span>
+                    </a>
+                    <a class="collapse-item text-white mb-1  @if(Route::currentRouteName() == 'transfered.in.report') active @endif" href="{{route('transfered.in.report')}}">
                         <i class="fas fa-calendar-check mr-2 text-tertiary"></i>
                         <span>Transfered In</span>
                     </a>
-                    <a class="collapse-item text-white mb-1  @if(Route::currentRouteName() == 'report.transfered.out') active @endif" href="{{route('report.transfered.out')}}">
+                    <a class="collapse-item text-white mb-1  @if(Route::currentRouteName() == 'transfered.out.report') active @endif" href="{{route('transfered.out.report')}}">
                         <i class="fas fa-calendar-check mr-2 text-tertiary"></i>
                         <span>Transfered Out</span>
                     </a>
-                </span></a>
+                    <a class="collapse-item text-white mb-1  @if(Route::currentRouteName() == 'delivery.report') active @endif" href="{{route('delivery.report')}}">
+                        <i class="fas fa-calendar-check mr-2 text-tertiary"></i>
+                        <span>Delivery Report</span>
+                    </a>
+                    <a class="collapse-item text-white mb-1  @if(Route::currentRouteName() == 'sales.report') active @endif" href="{{route('sales.report')}}">
+                        <i class="fas fa-calendar-check mr-2 text-tertiary"></i>
+                        <span>Sales Report</span>
+                    </a>
                 </div>
             </div>
         </li>

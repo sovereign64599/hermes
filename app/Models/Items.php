@@ -22,6 +22,7 @@ class Items extends Model
         'item_cost',
         'item_sell',
         'item_notes',
-        'item_photo'
+        'item_photo',
+        'total_cost',
     ];
 }

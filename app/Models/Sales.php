@@ -14,5 +14,8 @@ class Sales extends Model
     protected $table = 'sales';
     protected $fillable = [
         'sales_amount',
+        'transaction_number',
+        'custom_date',
+        'proccessed_by',
     ];
 }

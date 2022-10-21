@@ -111,11 +111,20 @@ Route::group(['middleware' => 'auth'], function(){
 
     //===================================================REPORTS=======================================================================
     // report view
-    Route::get('/reports/transfered-in', [App\Http\Controllers\Admin\ReportsController::class, 'transferedIn'])->name('report.transfered.in');
-    Route::get('/reports/transfered-out', [App\Http\Controllers\Admin\ReportsController::class, 'transferedOut'])->name('report.transfered.out');
+    Route::get('/reports/revenue-report', [App\Http\Controllers\Admin\ReportsController::class, 'revenueReport'])->name('revenue.report');
+    Route::get('/reports/transfered-in', [App\Http\Controllers\Admin\ReportsController::class, 'transferedIn'])->name('transfered.in.report');
+    Route::get('/reports/transfered-out', [App\Http\Controllers\Admin\ReportsController::class, 'transferedOut'])->name('transfered.out.report');
+    Route::get('/reports/delivery-report', [App\Http\Controllers\Admin\ReportsController::class, 'deliveryReport'])->name('delivery.report');
+    Route::get('/reports/sales-report', [App\Http\Controllers\Admin\ReportsController::class, 'salesReport'])->name('sales.report');
+    Route::get('/reports/inventory-report', [App\Http\Controllers\Admin\ReportsController::class, 'inventoryReport'])->name('inventory.report');
+    
     // export reports
+    Route::get('/reports/export/revenue-report/{from}/{to}', [App\Http\Controllers\Admin\ReportsController::class, 'ExportRevenueReport']);
     Route::get('/reports/export/transfered-in/{from}/{to}', [App\Http\Controllers\Admin\ReportsController::class, 'ExportTransferedInReport']);
     Route::get('/reports/export/transfered-out/{from}/{to}', [App\Http\Controllers\Admin\ReportsController::class, 'ExportTransferedOutReport']);
+    Route::get('/reports/export/delivery-report/{from}/{to}', [App\Http\Controllers\Admin\ReportsController::class, 'ExportDeliveryReport']);
+    Route::get('/reports/export/sales-report/{from}/{to}', [App\Http\Controllers\Admin\ReportsController::class, 'ExportSalesReport']);
+    Route::get('/reports/export/inventory-report/{from}/{to}', [App\Http\Controllers\Admin\ReportsController::class, 'ExportInventoryReport']);
 
     //===================================================ITEM QUANTITY CHECK=======================================================================
     // item quantity check view

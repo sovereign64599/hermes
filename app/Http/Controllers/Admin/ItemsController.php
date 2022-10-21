@@ -256,6 +256,7 @@ class ItemsController extends Controller
             'item_sell' => (float)$request->item_sell,
             'item_notes' => $request->item_notes,
             'item_photo' => $item_photo,
+            'total_cost' => ((float)$request->item_cost * $quantity),
         ]);
         if($storeItems){
             if(!empty($request->item_photo)){
@@ -316,6 +317,7 @@ class ItemsController extends Controller
                     'item_sell' => str_replace(',', '', (float)$request->item_sell),
                     'item_notes' => $request->item_notes,
                     'item_photo' => $item_photo,
+                    'total_cost' => ((float)$request->item_cost * $quantity),
                 ]);
         
                 if($updateItem){

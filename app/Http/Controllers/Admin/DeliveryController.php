@@ -45,10 +45,13 @@ class DeliveryController extends Controller
             ]);
 
             $storeSales = Sales::create([
-                'sales_amount' => $delivery->total_amount
+                'sales_amount' => $delivery->totalAmount_discounted,
+                'transaction_number' => $delivery->form_number,
+                'custom_date' => $delivery->custom_date,
+                'proccessed_by' => $delivery->user_name,
             ]);
             if($storeSales){
-                return back()->with('success', $delivery->total_amount . ' Added to your sales.');
+                return back()->with('success', $delivery->totalAmount_discounted . ' Added to your sales.');
             }
         }
     }

@@ -17,6 +17,9 @@ class CreateSalesTable extends Migration
             $table->uuid('id');
             $table->primary('id');
             $table->float('sales_amount', 12,2);
+            $table->integer('transaction_number');
+            $table->string('custom_date');
+            $table->string('proccessed_by');
             $table->timestamps();
         });
     }
