@@ -36,7 +36,6 @@
                         <table class="table" width="100%" cellspacing="0">
                             <thead>
                                 <tr>
-                                    <th>Form #</th>
                                     <th>Item Name</th>
                                     <th>Item Category</th>
                                     <th>Item Sub Category</th>
@@ -66,14 +65,13 @@
                                             }
                                         @endphp
                                         <tr>
-                                            <td>{{$delivery->form_number}}</td>
                                             <td>{{$delivery->item_name}}</td>
                                             <td>{{$delivery->item_category}}</td>
                                             <td>{{$delivery->item_sub_category}}</td>
                                             <td>{{$delivery->item_quantity_deduct}}</td>
                                             <td>{{$delivery->item_barcode}}</td>
                                             <td>{{$delivery->item_price}}</td>
-                                            <td>{{$delivery->total_amount}}</td>
+                                            <td>{{$delivery->totalAmount_discounted != 0 ? 'discounted '. $delivery->totalAmount_discounted : $delivery->total_amount }}</td>
                                             <td>{{$delivery->custom_date}}</td>
                                             <td>{{$delivery->created_at->diffForHumans()}}</td>
                                             <td>{{$delivery->user_name}}</td>
