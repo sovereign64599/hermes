@@ -21,7 +21,7 @@ class CreateSalesTable extends Migration
         });
     }
 
-    /**
+    /** 01010570 01040855 01030569 01030566 01030558 01030556 01030548 01030544
      * Reverse the migrations.
      *
      * @return void
