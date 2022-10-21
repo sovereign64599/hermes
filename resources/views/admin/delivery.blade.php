@@ -80,10 +80,10 @@
                                             <td class="{{$status}}">{{$delivery->delivery_status}}</td>
                                             <td class="d-flex flex-column gap-1">
                                                 @if($delivery->delivery_status == 'Pending')
-                                                    <a href="{{route('action.for.deliver', $delivery->id)}}" class="btn-info btn-sm">For Delivery</a>
+                                                    <a href="{{route('action.for.deliver', $delivery->id)}}" class="btn-info btn-sm"><small>For Delivery</small></a>
                                                 @elseif($delivery->delivery_status == 'For Delivery')
-                                                    <a href="{{route('action.delivered', $delivery->id)}}" data="{{$delivery->id}}" onclick="deleteUser(this)" class="btn-success btn-sm">Delivered</a>
-                                                    <a href="{{route('action.cancelled', $delivery->id)}}" data="{{$delivery->id}}" onclick="deleteUser(this)" class="btn btn-danger btn-sm">Cancel</a>
+                                                    <a href="{{route('action.delivered', $delivery->id)}}" data="{{$delivery->id}}" onclick="deleteUser(this)" class="btn-success btn-sm"><small>Delivered</small></a>
+                                                    <a href="{{route('action.cancelled', $delivery->id)}}" data="{{$delivery->id}}" onclick="deleteUser(this)" class="btn btn-danger btn-sm"><small>Cancel</small></a>
                                                 @else
                                                     {{$delivery->delivery_status}}
                                                 @endif
