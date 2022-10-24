@@ -50,9 +50,9 @@
                                     @foreach ($reports as $report)
                                         <tr>
                                             <td>{{$report->custom_date}}</td>
-                                            <td>{{$report->sales_amount}}</td>
-                                            <td>{{$report->transaction_number}}</td>
-                                            <td>{{$report->proccessed_by}}</td>
+                                            <td>{{$report->total_sales}}</td>
+                                            <td>{{$report->t_n}}</td>
+                                            <td>{{$report->p_by}}</td>
                                         </tr>
                                     @endforeach
                                 @else 
