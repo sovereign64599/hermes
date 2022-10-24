@@ -11,7 +11,7 @@
                  <form>
                     <div class="form-group">
                         <label>From</label>
-                        <input type="date" class="form-control" name="from" @if(isset($_GET['from']) || isset($_GET['to']))value="{{$_GET['from']}}" @endif>
+                        <input type="date" class="form-control" name="from" @if(isset($_GET['from']) || isset($_GET['to']))value="{{$_GET['from']}}" @else value="{{date('Y-m-d')}}" @endif>
                     </div>
                     <div class="form-group">
                         <label>To</label>
@@ -45,7 +45,6 @@
                                     <th>Quantity</th>
                                     <th>Barcode</th>
                                     <th>Cosr</th>
-                                    <th>Sell</th>
                                     <th>Total Cost</th>
                                 </tr>
                             </thead>
@@ -53,13 +52,13 @@
                                 @if($reports->count() > 0)
                                     @foreach ($reports as $report)
                                         <tr>
-                                            <td>{{$report->item_cost}}</td>
+                                            <td>{{$report->item_name}}</td>
                                             <td>{{$report->item_category}}</td>
                                             <td>{{$report->item_sub_category}}</td>
                                             <td>{{$report->item_quantity}}</td>
                                             <td>{{$report->item_barcode}}</td>
-                                            <td>{{$report->item_cost}}</td>
-                                            <td>{{$report->item_sell}}</td>
+                                            <td>{{number_format((float)$report->item_cost, 2)}}</td>
+                                            <td>{{number_format($report->total_cost, 2)}}</td>
                                         </tr>
                                     @endforeach
                                 @else 

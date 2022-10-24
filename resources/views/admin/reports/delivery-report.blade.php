@@ -11,7 +11,7 @@
                  <form>
                     <div class="form-group">
                         <label>From</label>
-                        <input type="date" class="form-control" name="from" @if(isset($_GET['from']) || isset($_GET['to']))value="{{$_GET['from']}}" @endif>
+                        <input type="date" class="form-control" name="from" @if(isset($_GET['from']) || isset($_GET['to']))value="{{$_GET['from']}}" @else value="{{date('Y-m-d')}}" @endif>
                     </div>
                     <div class="form-group">
                         <label>To</label>

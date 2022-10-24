@@ -47,17 +47,26 @@
                 <span>Delivery</span> <span class="badge bg-secondary" id="delivery_count">0</span>
             </a>
         </li>
+        
+        <hr class="sidebar-divider">
+        <div class="sidebar-heading">
+            Manage
+        </div>
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#itemsCollapse"
                 aria-expanded="true" aria-controls="itemsCollapse">
                 <i class="fas fa-box-open"></i>
                 <span>Manage Items</span>
             </a>
-            <div id="itemsCollapse" class="collapse @if(Route::currentRouteName() == 'items' || Route::currentRouteName() == 'transfer.in' || Route::currentRouteName() == 'deduct.items') show @endif" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+            <div id="itemsCollapse" class="collapse @if(Route::currentRouteName() == 'items' || Route::currentRouteName() == 'transfer.in' || Route::currentRouteName() == 'deduct.items' || Route::currentRouteName() == 'item.quantity.check') show @endif" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                 <div class="bg-secondary py-2 collapse-inner rounded">
                     <a class="collapse-item text-white mb-1  @if(Route::currentRouteName() == 'items' || Route::currentRouteName() == 'edit.item') active @endif" href="{{route('items')}}">
                         <i class="fas fa-boxes mr-3 text-tertiary"></i>
                         <span>Items</span>
+                    </a>
+                    <a class="collapse-item text-white   @if(Route::currentRouteName() == 'item.quantity.check') active @endif" href="{{route('item.quantity.check')}}">
+                        <i class="fas fa-tasks mr-2 text-tertiary"></i>
+                        <span>Item Quantity Check</span>
                     </a>
                     <a class="collapse-item text-white mb-1  @if(Route::currentRouteName() == 'transfer.in') active @endif" href="{{route('transfer.in')}}">
                         <i class="fas fa-share mr-2 text-tertiary"></i>
@@ -70,10 +79,6 @@
                 </div>
             </div>
         </li>
-        <hr class="sidebar-divider">
-        <div class="sidebar-heading">
-            Manage
-        </div>
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#categoryCollapse"
                 aria-expanded="true" aria-controls="categoryCollapse">
@@ -136,17 +141,6 @@
                     </a>
                 </div>
             </div>
-        </li>
-        <hr class="sidebar-divider">
-
-        <div class="sidebar-heading">
-            Actions
-        </div>
-        <li class="nav-item  @if(Route::currentRouteName() == 'item.quantity.check') active @endif">
-            <a class="nav-link" href="{{route('item.quantity.check')}}">
-                <i class="fas fa-tasks"></i>
-                <span>Item Quantity Check</span>
-            </a>
         </li>
     </ul>
 

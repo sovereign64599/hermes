@@ -130,6 +130,7 @@
                     }
                 })
                 .catch(function (error) {
+                    console.log(error.response);
                     document.querySelector('#showItems').innerHTML = `<tr><td>${error.response.data.errors}</td></tr>`;
                 })
         }

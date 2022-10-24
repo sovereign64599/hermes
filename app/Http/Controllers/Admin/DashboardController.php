@@ -89,7 +89,6 @@ class DashboardController extends Controller
             'middlename' => 'required',
             'lastname' => 'required',
             'email' => 'required|unique:users',
-            'gender' => 'required|in:Male,Female',
             'role' => 'required|in:user,admin',
             'password' => 'required|confirmed'
         ]);
@@ -100,7 +99,6 @@ class DashboardController extends Controller
             'middlename' => ucfirst($request->middlename),
             'lastname' => ucfirst($request->lastname),
             'email' => $request->email,
-            'gender' => $request->gender,
             'role' => $request->role,
             'password' => Hash::make($request->password),
         ]);
@@ -132,7 +130,6 @@ class DashboardController extends Controller
                 'middlename' => ucfirst($request->middlename),
                 'lastname' => ucfirst($request->lastname),
                 'email' => $request->email,
-                'gender' => $request->gender,
                 'role' => $request->role,
                 'password' => $password
             ]);

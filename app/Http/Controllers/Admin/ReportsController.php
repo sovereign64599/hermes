@@ -138,9 +138,9 @@ class ReportsController extends Controller
     public function inventoryReport()
     {
         date_default_timezone_set('Asia/Manila');
-        $from = Carbon::parse($_GET['from']);
         $reports = Items::orderBy('created_at', 'DESC')->get();
         if(isset($_GET['from']) && isset($_GET['to'])){
+            $from = Carbon::parse($_GET['from']);
             $reports = Items::whereBetween('created_at', [$from->format('Y-m-d h:i:s'), $_GET['to']])->get();
         }
         return view('admin.reports.inventory-report', compact(['reports']));

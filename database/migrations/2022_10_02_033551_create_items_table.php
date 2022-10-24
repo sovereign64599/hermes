@@ -19,14 +19,14 @@ class CreateItemsTable extends Migration
             $table->string('item_name')->nullable();
             $table->string('item_category');
             $table->string('item_sub_category');
-            $table->integer('item_quantity')->nullable();
+            $table->integer('item_quantity')->default(0);
             $table->string('item_barcode');
             $table->string('item_description')->nullable();
             $table->string('item_cost');
             $table->string('item_sell');
             $table->string('item_notes')->nullable();
             $table->string('item_photo')->nullable();
-            $table->float('total_cost', 12,2);
+            $table->float('total_cost', 12,2)->default(0.00);
             $table->timestamps();
         });
     }

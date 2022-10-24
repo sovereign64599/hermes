@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         \App\Models\User::create([
-            'name' => 'Hermes Store',
+            'name' => 'Hermes Admin',
             'firstname' => 'first',
             'middlename' => 'middle',
             'lastname' => 'last',
@@ -23,6 +23,17 @@ class DatabaseSeeder extends Seeder
             'role' => 'Admin',
             'email' => 'hermes@admin.com',
             'password' => Hash::make('hermes@admin.com')
+        ]);
+
+        \App\Models\User::create([
+            'name' => 'Test User',
+            'firstname' => 'first',
+            'middlename' => 'middle',
+            'lastname' => 'last',
+            'gender' => 'Male',
+            'role' => 'user',
+            'email' => 'testuser@test.com',
+            'password' => Hash::make('testuser@test.com')
         ]);
     }
 }

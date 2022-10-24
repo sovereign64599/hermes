@@ -121,11 +121,13 @@
                                 </tbody>
                             </table>
                             <p class="text-right"><small class="text-tertiary limit">Items (0/10)</small></p>
+                            @if(Auth::user()->role == 'Admin')
                             <p class="text-right"><small class="text-light">Add Discount</small></p>
                             <div class="input-group w-25 float-right">
                                 <input type="text" class="form-control item-discount" placeholder="Enter Discount %" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');">
                                 <button class="btn btn-outline-secondary text-light" type="button" role="button" onclick="updateSalesDiscount(document.querySelector('.item-discount').value)">Apply</button>
                             </div>
+                            @endif
                         </div>
                     </div>
                 </div>

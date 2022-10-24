@@ -52,8 +52,18 @@
                             </thead>
                             <tbody>
                                 @if($deliveries->count() > 0)
+                                @php 
+                                    $total = 0;
+                                @endphp
                                     @foreach ($deliveries as $delivery)
-                                        @php 
+                                        @php
+                                            if($delivery->total_amount != $delivery->totalAmount_discounted){
+                                                $amount = $delivery->totalAmount_discounted;
+                                                $total = (float)$total + (float)$amount;
+                                            }else{
+                                                $amount = $delivery->total_amount;
+                                                $total = (float)$total + (float)$amount;
+                                            }
                                             if ($delivery->delivery_status == 'Pending') {
                                                 $status = 'text-warning';
                                             }else if($delivery->delivery_status == 'For Delivery'){
@@ -71,7 +81,14 @@
                                             <td>{{$delivery->item_quantity_deduct}}</td>
                                             <td>{{$delivery->item_barcode}}</td>
                                             <td>{{$delivery->item_price}}</td>
-                                            <td>{{$delivery->totalAmount_discounted != 0 ? 'discounted '. $delivery->totalAmount_discounted : $delivery->total_amount }}</td>
+                                            @if($delivery->total_amount != $delivery->totalAmount_discounted)
+                                            <td class="d-flex align-items-center flex-column">
+                                                <small>Amount = {{$delivery->total_amount}}</small>
+                                                <small>Discounted = {{$delivery->totalAmount_discounted}}</small>
+                                            </td>
+                                            @else 
+                                            <td>{{$delivery->total_amount}}</td>
+                                            @endif
                                             <td>{{$delivery->custom_date}}</td>
                                             <td>{{$delivery->created_at->diffForHumans()}}</td>
                                             <td>{{$delivery->user_name}}</td>
@@ -94,6 +111,11 @@
                             </tbody>
                         </table>
                     </div>
+                    @if(isset($total))
+                    <div class="my-3">
+                        <h4>Total: ₱{{number_format((float)$total, 2)}}</h4>
+                    </div>
+                    @endif
                     @else 
                     Select Form Number
                     @endif
