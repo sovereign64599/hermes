@@ -111,9 +111,9 @@
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#reportsCollapse"
                 aria-expanded="true" aria-controls="reportsCollapse">
                 <i class="fas fa-fw fa-chart-area"></i>
-                <span>Reports(Ongoing)</span>
+                <span>Reports</span>
             </a>
-            {{-- <div id="reportsCollapse" class="collapse @if(Route::currentRouteName() == 'transfered.in.report' || Route::currentRouteName() == 'transfered.out.report' || Route::currentRouteName() == 'delivery.report' || Route::currentRouteName() == 'sales.report' || Route::currentRouteName() == 'revenue.report' || Route::currentRouteName() == 'inventory.report') show @endif" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+            <div id="reportsCollapse" class="collapse @if(Route::currentRouteName() == 'transfered.in.report' || Route::currentRouteName() == 'transfered.out.report' || Route::currentRouteName() == 'delivery.report' || Route::currentRouteName() == 'sales.report' || Route::currentRouteName() == 'revenue.report' || Route::currentRouteName() == 'inventory.report') show @endif" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                 <div class="bg-secondary py-2 collapse-inner rounded">
                     <a class="collapse-item text-white mb-1  @if(Route::currentRouteName() == 'inventory.report') active @endif" href="{{route('inventory.report')}}">
                         <i class="fas fa-calendar-check mr-2 text-tertiary"></i>
@@ -140,7 +140,7 @@
                         <span>Sales Report</span>
                     </a>
                 </div>
-            </div> --}}
+            </div>
         </li>
     </ul>
 

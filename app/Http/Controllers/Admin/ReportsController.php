@@ -116,7 +116,12 @@ class ReportsController extends Controller
     // REVENUE REPORT====================================================================================================================================================
     public function revenueReport()
     {
-        $reports = Sales::orderBy('created_at', 'DESC')->get();
+        $reports = Sales::select([
+            \DB::raw('transaction_number as t_n'),
+            'custom_date',
+            \DB::raw("SUM(sales_amount) as total_sales")
+        ])->groupBy('custom_date')->groupBy('t_n')->get();
+        
         if(isset($_GET['from']) && isset($_GET['to'])){
             $reports = Sales::select([
                 \DB::raw('transaction_number as t_n'),

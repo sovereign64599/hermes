@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\Models\Delivery;
+use App\Models\Sales;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -25,7 +26,12 @@ class RevenueReportExport implements FromCollection, WithHeadings, ShouldAutoSiz
 
     public function collection()
     {
-        $data = DB::table('sales')->select('custom_date','sales_amount','transaction_number','proccessed_by')->whereBetween('custom_date', [$this->from, $this->to])->get();
+        // $data = DB::table('sales')->select('custom_date','sales_amount','transaction_number','proccessed_by')->whereBetween('custom_date', [$this->from, $this->to])->get();
+        $data = Sales::select([
+            'custom_date',
+            \DB::raw("SUM(sales_amount) as total_sales"),
+            \DB::raw('transaction_number as t_n'),
+        ])->groupBy('custom_date')->groupBy('t_n')->whereBetween('custom_date', [$this->from, $this->to])->get();
         return $data;
     }
 
@@ -35,7 +41,6 @@ class RevenueReportExport implements FromCollection, WithHeadings, ShouldAutoSiz
             "Date",
             "Revenue",
             "Transaction #",
-            "Proccessed By",
         ];
     }
 }
