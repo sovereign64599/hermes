@@ -48,7 +48,7 @@
                                     <th>Price</th>
                                     <th>Amount</th>
                                     <th>Form Date</th>
-                                    <th>Proccessed by</th>
+                                    <th>Processed by</th>
                                     {{-- <th>Transfer Created</th> --}}
                                 </tr>
                             </thead>

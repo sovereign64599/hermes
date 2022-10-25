@@ -46,7 +46,7 @@
                                     <th>Quantity</th>
                                     <th>Amount</th>
                                     <th>Form Date</th>
-                                    <th>Proccessed by</th>
+                                    <th>Processed by</th>
                                 </tr>
                             </thead>
                             <tbody>

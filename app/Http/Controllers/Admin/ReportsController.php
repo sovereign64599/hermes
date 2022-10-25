@@ -119,11 +119,10 @@ class ReportsController extends Controller
         $reports = Sales::orderBy('created_at', 'DESC')->get();
         if(isset($_GET['from']) && isset($_GET['to'])){
             $reports = Sales::select([
-                \DB::raw('proccessed_by as p_by'),
                 \DB::raw('transaction_number as t_n'),
                 'custom_date',
                 \DB::raw("SUM(sales_amount) as total_sales")
-            ])->groupBy('custom_date')->groupBy('t_n')->groupBy('p_by')->whereBetween('custom_date', [$_GET['from'], $_GET['to']])->get();
+            ])->groupBy('custom_date')->groupBy('t_n')->whereBetween('custom_date', [$_GET['from'], $_GET['to']])->get();
         }
         return view('admin.reports.revenue-report', compact(['reports']));
     }

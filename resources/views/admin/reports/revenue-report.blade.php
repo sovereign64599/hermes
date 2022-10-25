@@ -42,7 +42,6 @@
                                     <th>Form Date</th>
                                     <th>Revenue</th>
                                     <th>Transaction Number</th>
-                                    <th>Proccessed by</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -52,7 +51,6 @@
                                             <td>{{$report->custom_date}}</td>
                                             <td>{{$report->total_sales}}</td>
                                             <td>{{$report->t_n}}</td>
-                                            <td>{{$report->p_by}}</td>
                                         </tr>
                                     @endforeach
                                 @else 
