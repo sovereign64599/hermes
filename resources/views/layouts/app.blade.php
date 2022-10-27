@@ -41,10 +41,10 @@
                 <span>Sales Module</span>
             </a>
         </li>
-        <li class="nav-item @if(Route::currentRouteName() == 'delivery') active @endif">
-            <a class="nav-link"  href="{{route('delivery')}}">
+        <li class="nav-item @if(Route::currentRouteName() == 'item.logs') active @endif">
+            <a class="nav-link"  href="{{route('item.logs')}}">
                 <i class="fas fa-truck"></i>
-                <span>Delivery</span> <span class="badge bg-secondary" id="delivery_count">0</span>
+                <span>Item Logs</span> <span class="badge bg-secondary" id="delivery_count">0</span>
             </a>
         </li>
         

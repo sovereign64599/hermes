@@ -135,12 +135,16 @@ Route::group(['middleware' => 'auth'], function(){
     Route::get('/check-sub-categories/{id}', [App\Http\Controllers\Admin\ItemQuantityCheckController::class, 'checkSubCategory']);
 
     //===================================================DELIVERY=======================================================================
+    // post method
+    Route::post('/collect-form-number', [App\Http\Controllers\Admin\DeliveryController::class, 'collectFormNumber']);
+
     // get method
-    Route::get('/delivery', [App\Http\Controllers\Admin\DeliveryController::class, 'index'])->name('delivery');
+    Route::get('/item-logs', [App\Http\Controllers\Admin\DeliveryController::class, 'index'])->name('item.logs');
     Route::get('/get-delivery-count', [App\Http\Controllers\Admin\DeliveryController::class, 'getDeliveryCount']);
     // delivery status actions
     Route::get('/delivered-update/{id}', [App\Http\Controllers\Admin\DeliveryController::class, 'updateToDelivered'])->name('action.delivered');
     Route::get('/for-delivery-update/{id}', [App\Http\Controllers\Admin\DeliveryController::class, 'updateToForDeliver'])->name('action.for.deliver');
     Route::get('/cancel-delivery-update/{id}', [App\Http\Controllers\Admin\DeliveryController::class, 'updateToCancelled'])->name('action.cancelled');
+    
     
 });

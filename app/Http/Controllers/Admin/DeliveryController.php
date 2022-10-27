@@ -27,6 +27,30 @@ class DeliveryController extends Controller
         return view('admin.delivery', compact(['deliveries', 'groupFormNumber']));
     }
 
+    public function collectFormNumber(Request $request)
+    {
+        if(isset($request->_token) && isset($request->form_number)){
+            $formNumbers = Delivery::where('form_number', 'like', '%'.$request->form_number.'%')->orderBy('updated_at', 'desc')->get();
+        }else{
+            $formNumbers = Delivery::select('form_number')->groupBy('form_number')->get();
+        }
+
+        if($formNumbers->count() > 0){
+            $html = '';
+            foreach($formNumbers as $row){
+                $html .= '<a href="?form_number='. $row->form_number.'">';
+                $html .= '<li '. (isset($_GET['form_number']) && $_GET['form_number'] == $row->form_number ? 'class="active"' : ' ') .'># '. $row->form_number .'</li>';
+                $html .= '</a>';
+            }
+            return response()->json([
+                'data' => $html,
+            ], 200);
+        }
+        return response()->json([
+            'errors' => 'No Form found',
+        ], 410);
+    }
+
     public function getDeliveryCount()
     {
         $count = Delivery::count();

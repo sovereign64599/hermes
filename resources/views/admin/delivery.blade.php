@@ -8,14 +8,15 @@
            <div class="card">
             <div class="card-body form-numbers">
                 <h5>Form Number</h5>
-                <ul>
-                    @if($groupFormNumber->count() > 0)
+                <input type="text" class="form-control" placeholder="Search Form Number" id="form_number" oninput="collectFormNumber()">
+                <ul id="form_number_list">
+                    {{-- @if($groupFormNumber->count() > 0)
                         @foreach($groupFormNumber as $row)
                             <a href="?form_number={{ $row->form_number }}"><li @if(isset($_GET['form_number']) && $_GET['form_number'] == $row->form_number) class="active"@endif># {{ $row->form_number }}</li></a>
                         @endforeach
                     @else 
                         <a href=""><li>No Form Number</li></a>
-                    @endif
+                    @endif --}}
                 </ul>
             </div>
            </div>
@@ -123,4 +124,34 @@
             </div>
         </div>  
     </div>
+@endsection
+
+@section('script')
+    <script>
+        window.onload = function(){
+            collectFormNumber();
+        }
+
+        async function collectFormNumber(){
+            document.querySelector('#form_number_list').innerHTML = `<div class="d-flex align-items-center justify-content-center py-4"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div></div>`;
+            let data = {
+                _token: '{{csrf_token()}}',
+                form_number: document.querySelector('#form_number').value
+            }
+
+            await axios.post('/collect-form-number', data)
+                .then(function (response) {
+                    if(response.status == 200){
+                        document.querySelector('#form_number_list').innerHTML = response.data.data;
+                    }
+                })
+                .catch(function (error) {
+                    console.log(error.response);
+                    document.querySelector('#form_number_list').innerHTML = `<a href=""><li>${error.response.data.errors}</li></a>`;
+                })
+        }
+        
+    </script>
 @endsection
