@@ -441,7 +441,7 @@
                         });
                         getSalesList();
                         setTimeout(() => {
-                            window.location.replace('/delivery');
+                            window.location.replace('/item-logs');
                         }, 3000);
                     }
                 })
