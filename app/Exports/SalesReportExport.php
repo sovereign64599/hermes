@@ -56,7 +56,7 @@ class SalesReportExport implements FromCollection, WithHeadings, ShouldAutoSize,
             "Quantity",
             "Amount",
             "Date",
-            "Proccessed By",
+            "Processed By",
         ];
     }
 }

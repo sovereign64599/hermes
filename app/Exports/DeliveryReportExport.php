@@ -41,7 +41,7 @@ class DeliveryReportExport implements FromCollection, WithHeadings, ShouldAutoSi
             "Price",
             "Amount",
             "Date",
-            "Proccessed By",
+            "Processed By",
         ];
     }
 }
