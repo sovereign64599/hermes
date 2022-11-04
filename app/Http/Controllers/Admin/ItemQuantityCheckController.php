@@ -25,18 +25,22 @@ class ItemQuantityCheckController extends Controller
         return view('admin.items.item-quantity-check', compact(['getSubCategories', 'items']));
     }
 
-    public function filterItemsAvailable(Request $request)
+    public function filterItemsAvailable(Request $request, Items $itemsResult)
     {
 
-        if(isset($request->category) && isset($request->subCategory) && isset($request->code)){
-            $items = Items::where('item_category', $request->category)->where('item_sub_category', $request->subCategory)->where('item_barcode', 'like', '%'.$request->code.'%')->orWhere('item_description', 'like', '%'.$request->code.'%')->orderBy('updated_at', 'desc')->get();
-        }else if(isset($request->category) && isset($request->subCategory)){
-            $items = Items::where('item_category', $request->category)->where('item_sub_category', $request->subCategory)->orderBy('updated_at', 'desc')->get();
-        }else if(isset($request->code)){
-            $items = Items::where('item_barcode', 'like', '%'.$request->code.'%')->orWhere('item_description', 'like', '%'.$request->code.'%')->orderBy('updated_at', 'desc')->get();
-        }else{
-            $items = Items::orderBy('updated_at', 'desc')->get();
-        }    
+        $items = Items::when($request->code, function ($query, $code) {
+            return $query->where('item_barcode', 'like', "%{$code}%");
+        })->when($request->description, function ($query, $description) {
+            return $query->where('item_description', 'like', "%{$description}%");
+        })->when($request->description && $request->code, function ($query) use ($request) {
+            return $query->where('item_description', 'like', '%'.$request->description.'%')->where('item_barcode', 'LIKE', '%'.$request->code.'%');
+        })->when($request->category && $request->subCategory, function ($query) use ($request) {
+            return $query->where('item_category', 'like', '%'.$request->category.'%')->where('item_sub_category', 'LIKE', '%'.$request->subCategory.'%');
+        })->when($request->category && $request->subCategory && $request->code, function ($query) use ($request) {
+            return $query->where('item_category', $request->category)->where('item_sub_category', $request->subCategory)->where('item_barcode', 'LIKE', '%'.$request->code.'%');
+        }, function ($query) {
+            return $query->orderByDesc('updated_at');
+        })->get();
 
         if($items->count() > 0){
             $html = '';

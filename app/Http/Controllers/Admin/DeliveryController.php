@@ -34,12 +34,11 @@ class DeliveryController extends Controller
         }else{
             $formNumbers = Delivery::select('form_number')->groupBy('form_number')->get();
         }
-
         if($formNumbers->count() > 0){
             $html = '';
             foreach($formNumbers as $row){
                 $html .= '<a href="?form_number='. $row->form_number.'">';
-                $html .= '<li '. (isset($_GET['form_number']) && $_GET['form_number'] == $row->form_number ? 'class="active"' : ' ') .'># '. $row->form_number .'</li>';
+                $html .= '<li '. ($request->paramFormNumber == $row->form_number ? 'class="active"' : ' ') .'># '. $row->form_number .'</li>';
                 $html .= '</a>';
             }
             return response()->json([

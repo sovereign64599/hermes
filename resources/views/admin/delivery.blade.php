@@ -125,7 +125,6 @@
         </div>  
     </div>
 @endsection
-
 @section('script')
     <script>
         window.onload = function(){
@@ -136,9 +135,13 @@
             document.querySelector('#form_number_list').innerHTML = `<div class="d-flex align-items-center justify-content-center py-4"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
                 <span class="visually-hidden">Loading...</span>
             </div></div>`;
+
+            var paramFormNumber = '<?= Request::get('form_number') ?>';
+
             let data = {
                 _token: '{{csrf_token()}}',
-                form_number: document.querySelector('#form_number').value
+                form_number: document.querySelector('#form_number').value,
+                paramFormNumber: paramFormNumber
             }
 
             await axios.post('/collect-form-number', data)

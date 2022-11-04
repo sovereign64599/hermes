@@ -39,8 +39,14 @@
                         @endif
                         <div class="col-lg-12">
                             <div class="form-group">
-                                <label><small>Item barcode / Description</small></label>
-                                <input type="text" id="code" class="form-control" placeholder="Enter barcode or description" oninput="setValue()">
+                                <label><small>Item Barcode</small></label>
+                                <input type="text" id="code" class="form-control" placeholder="Enter Barcode" oninput="setValue()">
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label><small>Item Description</small></label>
+                                <input type="text" id="description" class="form-control" placeholder="Enter description" oninput="setValue()">
                             </div>
                         </div>
                     </div>
@@ -121,6 +127,7 @@
                 category: document.querySelector('#item_category').value,
                 subCategory: document.querySelector('#item_sub_category').value,
                 code: document.querySelector('#code').value,
+                description: document.querySelector('#description').value,
             }
 
             await axios.post('/filter-items-available', data)
