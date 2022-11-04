@@ -30,13 +30,15 @@ class SalesController extends Controller
         return view('admin.sales', compact(['getSubCategories', 'items']));
     }
 
-    public function collectItemItem($input){
-        $items = Items::where('item_name', 'like', '%'.ucfirst($input).'%')
-                ->orWhere('item_name', 'like', '%'.$input.'%')
-                ->orWhere('item_name', 'like', '%'.strtolower($input).'%')
-                ->orWhere('item_description', 'like', '%'.strtolower($input).'%')
-                ->orWhere('item_barcode', 'like', '%'.(int)$input.'%')
-                ->get();
+    public function collectItem($input, Items $itemsResult){
+
+        $search = $itemsResult->newQuery();
+
+        $search->where(function($query) use($input) {
+            $query->where('item_name', 'LIKE', '%'.$input.'%')->orWhere( 'item_description', 'LIKE', '%'.$input.'%')->orWhere('item_barcode', 'LIKE', '%'.$input.'%');
+        });
+
+        $items = $search->get();
 
         if($items->count() > 0){
             $html = '';
@@ -100,7 +102,7 @@ class SalesController extends Controller
 
                 if($request->deductQty > $items->item_quantity){
                     return response()->json([
-                        'error' => 'Deduct Quantity must be greater than Current Quantity.'
+                        'error' => 'Current Quantity must be greater than Deduct Quantity.'
                     ], 409);
                 }
     
@@ -114,7 +116,7 @@ class SalesController extends Controller
                     'quantity' => $items->item_quantity,
                     'deductQty' => $request->deductQty,
                     'amount' => (int)$items->item_sell * (int)$request->deductQty,
-                    'delivery_status' => 'For Delivery',
+                    'delivery_status' => 'Pending',
                 ];
     
                 session()->put('salesItem', $sessionList);

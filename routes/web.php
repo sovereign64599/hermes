@@ -37,7 +37,7 @@ Route::group(['middleware' => 'auth'], function(){
     // sales view
     Route::get('/sales', [App\Http\Controllers\Admin\SalesController::class, 'index'])->name('sales');
     // sales get method
-    Route::get('/sale-collect-item/{input}', [App\Http\Controllers\Admin\SalesController::class, 'collectItemItem']);
+    Route::get('/sale-collect-item/{input}', [App\Http\Controllers\Admin\SalesController::class, 'collectItem']);
     Route::get('/sales-collect-data/{id}', [App\Http\Controllers\Admin\SalesController::class, 'collectItemData']);
     Route::get('/get-sales-list', [App\Http\Controllers\Admin\SalesController::class, 'getSalesList']);
     Route::get('/delete-sales-list/{id}', [App\Http\Controllers\Admin\SalesController::class, 'deleteSalesList']);

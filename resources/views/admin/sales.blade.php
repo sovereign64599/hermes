@@ -41,19 +41,13 @@
                                     </div>
                                 </div>
                             @endif
-                            <div class="col-lg-4">
+                            <div class="col-lg-6">
                                 <div class="form-group">
                                     <label><small>Item barcode</small></label>
                                     <input readonly class="form-control item-barcode" placeholder="Item Bar code" maxlength="6" disabled>
                                 </div>
                             </div>
-                            <div class="col-lg-4">
-                                <div class="form-group">
-                                    <label><small>Item Cost</small></label>
-                                    <input readonly class="form-control item-cost" placeholder="Item cost" disabled>
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
+                            <div class="col-lg-6">
                                 <div class="form-group">
                                     <label><small>Price</small></label>
                                     <input type="text" id="item_price" class="form-control item-sell bg-black" placeholder="Unit Price" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');">
@@ -285,7 +279,6 @@
             let itemCategory = document.querySelector('.item-category');
             let itemSubCategory = document.querySelector('.item-sub-category');
             let itemBarcode = document.querySelector('.item-barcode');
-            let itemCost = document.querySelector('.item-cost');
             let itemSell = document.querySelector('.item-sell');
             let itemQuantity = document.querySelector('.item-quantity');
             let itemDescription = document.querySelector('.item-description');
@@ -299,7 +292,6 @@
                         itemCategory.value = item.category;
                         itemSubCategory.value = item.subCategory;
                         itemBarcode.value = item.barcode;
-                        itemCost.value = item.cost;
                         itemSell.value = item.sell;
                         itemQuantity.value = item.quantity == 0 ? 'Out of stock' : item.quantity
                         itemDescription.value = item.description;

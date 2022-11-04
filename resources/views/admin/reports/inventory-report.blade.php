@@ -44,7 +44,7 @@
                                     <th>Sub Category</th>
                                     <th>Quantity</th>
                                     <th>Barcode</th>
-                                    <th>Cosr</th>
+                                    <th>Cost</th>
                                     <th>Total Cost</th>
                                 </tr>
                             </thead>

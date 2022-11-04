@@ -30,7 +30,7 @@ class DeliveryController extends Controller
     public function collectFormNumber(Request $request)
     {
         if(isset($request->_token) && isset($request->form_number)){
-            $formNumbers = Delivery::where('form_number', 'like', '%'.$request->form_number.'%')->orderBy('updated_at', 'desc')->get();
+            $formNumbers = Delivery::select('form_number')->groupBy('form_number')->where('form_number', 'like', '%'.$request->form_number.'%')->get();
         }else{
             $formNumbers = Delivery::select('form_number')->groupBy('form_number')->get();
         }
@@ -50,6 +50,8 @@ class DeliveryController extends Controller
             'errors' => 'No Form found',
         ], 410);
     }
+
+    //Item 4b57 Item e4c8 Item 4832
 
     public function getDeliveryCount()
     {
