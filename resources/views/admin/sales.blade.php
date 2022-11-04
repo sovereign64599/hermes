@@ -62,7 +62,7 @@
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label><small>Deduct Quantity</small></label>
-                                    <input type="text" id="item_deduct_Quantity" class="form-control bg-black" class="form-control" placeholder="Deduct quantity" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');">
+                                    <input type="text" id="item_deduct_Quantity" class="form-control bg-black" class="form-control" placeholder="Deduct quantity" oninput="this.value = this.value.replace(/[^-\d+$.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');">
                                 </div>
                             </div>
                             <div class="form-group">

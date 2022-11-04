@@ -80,7 +80,7 @@ class SalesController extends Controller
     {
         $request->validate([
             'id' => 'required',
-            'deductQty' => 'required|numeric|min:1',
+            'deductQty' => 'required|numeric',
             'price' => 'required|numeric',
         ],
         [
