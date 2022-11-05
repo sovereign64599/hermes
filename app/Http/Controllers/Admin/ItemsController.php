@@ -70,14 +70,13 @@ class ItemsController extends Controller
                 $quantity = ($item->item_quantity == 0) ? '<small class="text-danger">Out of Stock</small>' : $item->item_quantity;
                 $description = empty($item->item_description) ? 'No item Description' : $item->item_description;
                 $html .= '<tr>';
-                $html .='<td>'.$item->item_name.'</td>';
+                $html .='<td>'.mb_strimwidth($item->item_name, 0, 15, "...").'</td>';
                 $html .='<td>'.$item->item_category.'</td>';
                 $html .='<td>'.$item->item_sub_category.'</td>';
                 $html .='<td>'.$item->item_barcode.'</td>';
                 $html .='<td>'.number_format((float)$item->item_cost, 2).'</td>';
                 $html .='<td>'.number_format((float)$item->item_sell, 2).'</td>';
                 $html .='<td>'.$quantity.'</td>';
-                $html .='<td>'.mb_strimwidth($description, 0, 10, "...").'</td>';
                 $html .='<td>';
                 $html .='<div class="d-flex gap-1">';
                 $html .='<a data="'.$item->id.'" onclick="viewItem(this)" class="btn bg-info btn-sm text-light"><i class="fas fa-eye fa-sm"></i></a>';
@@ -163,14 +162,13 @@ class ItemsController extends Controller
                 $quantity = ($item->item_quantity == 0) ? '<small class="text-danger">Out of Stock</small>' : $item->item_quantity;
                 $description = empty($item->item_description) ? 'No item Description' : $item->item_description;
                 $html .= '<tr>';
-                $html .='<td>'.$item->item_name.'</td>';
+                $html .='<td>'.mb_strimwidth($item->item_name, 0, 6, "...").'</td>';
                 $html .='<td>'.$item->item_category.'</td>';
                 $html .='<td>'.$item->item_sub_category.'</td>';
                 $html .='<td>'.$item->item_barcode.'</td>';
                 $html .='<td>'.$item->item_cost.'</td>';
                 $html .='<td>'.$item->item_sell.'</td>';
                 $html .='<td>'.$quantity.'</td>';
-                $html .='<td>'.mb_strimwidth($description, 0, 10, "...").'</td>';
                 $html .='<td>';
                 $html .='<div class="d-flex gap-1">';
                 $html .='<a data="'.$item->id.'" onclick="viewItem(this)" class="btn bg-info btn-sm text-light"><i class="fas fa-eye fa-sm"></i></a>';
@@ -211,12 +209,12 @@ class ItemsController extends Controller
             'item_category' => 'required',
             'item_sub_category' => 'required',
             'item_quantity' => 'required|numeric|min:1',
-            'item_barcode' => 'required|digits_between:8,8',
+            'item_barcode' => 'required|regex:/([0-9]{2})-([0-9]{2})-([0-9]{6})/',
             'item_cost' => 'required|numeric',
             'item_sell' => 'required|numeric',
         ],
         [
-            'item_barcode.digits_between' => 'Barcode must be 8 digits.',
+            'item_barcode.regex' => 'Barcode format must be 00-00-000000',
         ]);
         $like = scandir('img/item_photo');
         foreach ($like as $thisFile) {
@@ -282,9 +280,12 @@ class ItemsController extends Controller
                 'item_category' => 'required',
                 'item_sub_category' => 'required',
                 'item_quantity' => 'required|numeric|min:0',
-                'item_barcode' => 'required|numeric',
+                'item_barcode' => 'required|regex:/([0-9]{2})-([0-9]{2})-([0-9]{6})/',
                 'item_cost' => 'required|numeric',
                 'item_sell' => 'required|numeric',
+            ],
+            [
+                'item_barcode.regex' => 'Barcode format must be 00-00-000000',
             ]);
     
             $like = scandir('img/item_photo');
@@ -311,7 +312,7 @@ class ItemsController extends Controller
                     'item_category' => ucfirst($request->item_category),
                     'item_sub_category' => ucfirst($request->item_sub_category),
                     'item_quantity' => $quantity,
-                    'item_barcode' => ucfirst($request->item_barcode),
+                    'item_barcode' => $request->item_barcode,
                     'item_description' => $request->item_description,
                     'item_cost' => str_replace(',', '', (float)$request->item_cost),
                     'item_sell' => str_replace(',', '', (float)$request->item_sell),

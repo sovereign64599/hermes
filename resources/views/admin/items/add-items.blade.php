@@ -46,31 +46,31 @@
                                     </div>
                                 </div>
                             @endif
-                            <div class="col-lg-4">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label><small>Item barcode (auto format)</small></label>
+                                    <input type="text" name="item_barcode" class="form-control" placeholder="00-00-000000" minlength="10" maxlength="10" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/^(?=[0-9]{10})([0-9]{2})([0-9]{2})([0-9]{6})$/, '$1-$2-$3');">
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
                                 <div class="form-group">
                                     <label><small>Item Quantity</small></label>
                                     <input type="text" name="item_quantity" class="form-control" class="form-control" placeholder="Item Quantity" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');">
                                 </div>
                             </div>
-                            <div class="col-lg-4">
-                                <div class="form-group">
-                                    <label><small>Item barcode</small></label>
-                                    <input type="text" name="item_barcode" class="form-control" placeholder="Item Bar code" minlength="8" maxlength="8" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');">
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
+                            <div class="col-lg-6">
                                 <div class="form-group">
                                     <label><small>Item Cost</small></label>
-                                    <input type="text" name="item_cost" class="form-control" placeholder="Cost" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');">
+                                    <input type="text" name="item_cost" class="form-control" placeholder="Cost" oninput="this.value = this.value.replace(/[^0-9.]/g, '');">
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label><small>Item Sell</small></label>
-                                    <input type="text" name="item_sell" class="form-control" placeholder="Sell" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');">
+                                    <input type="text" name="item_sell" class="form-control" placeholder="Sell" oninput="this.value = this.value.replace(/[^0-9.]/g, '');">
                                 </div>
                             </div>
-                            <div class="col-lg-6">
+                            <div class="col-lg">
                                 <div class="form-group">
                                     <label for="item_img"><small>Item photo (Optional)</small></label>
                                     <input type="file" name="item_photo" class="form-control" id="item_img">
@@ -124,7 +124,6 @@
                                     <th>Cost</th>
                                     <th>Sell</th>
                                     <th>Quantity</th>
-                                    <th>Description</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>

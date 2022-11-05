@@ -42,8 +42,8 @@
                                     <th>Item Name</th>
                                     <th>Category</th>
                                     <th>Sub Category</th>
-                                    <th>Quantity <small>(before added)</small></th>
-                                    <th>Added Quantity</th>
+                                    <th>Quantity <small>(before deduct)</small></th>
+                                    <th>Deduct Quantity</th>
                                     <th>Barcode</th>
                                     <th>Cost</th>
                                     <th>Sell</th>
@@ -51,7 +51,6 @@
                                     <th>Form Date</th>
                                     <th>Notes</th>
                                     <th>Reported By</th>
-                                    {{-- <th>Transfer Created</th> --}}
                                 </tr>
                             </thead>
                             <tbody>
@@ -62,7 +61,7 @@
                                             <td>{{$report->item_category}}</td>
                                             <td>{{$report->item_sub_category}}</td>
                                             <td class="text-success">{{$report->item_quantity}}</td>
-                                            <td class="text-warning">{{$report->item_quantity_added}}</td>
+                                            <td class="text-warning">{{$report->item_quantity_deduct}}</td>
                                             <td>{{$report->item_barcode}}</td>
                                             <td>{{$report->item_cost}}</td>
                                             <td>{{$report->item_sell}}</td>

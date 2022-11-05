@@ -40,7 +40,7 @@
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label><small>Item Barcode</small></label>
-                                <input type="text" id="code" class="form-control" placeholder="Enter Barcode" oninput="setValue()">
+                                <input type="text" id="code" class="form-control" placeholder="Enter barcode" minlength="10" maxlength="10" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); setValue()">
                             </div>
                         </div>
                         <div class="col-lg-12">
