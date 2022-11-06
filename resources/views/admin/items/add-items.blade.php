@@ -108,7 +108,7 @@
                             <a href="{{asset('vendor/item-format.xlsx')}}" class="btn btn-info btn-sm text-light d-flex align-items-center"><i class="fas fa-file-excel mr-2" download></i><span>Download Item Format</span></a>
                         </div>
                         <div>
-                            <input type="text" placeholder="Search Item" oninput="filter(this)">
+                            <input type="text" placeholder="Search Item" oninput="getItems(1, this.value)">
                         </div>
                     </div>
                 </div>
@@ -132,6 +132,12 @@
                             </tbody>
                         </table>
                     </div>
+                    <nav>
+                        <small class="text-light">10 of <span id="totalItems"></span></small>
+                        <ul class="pagination" id="pagination_link">
+
+                        </ul>
+                    </nav>
                 </div>
             </div>
         </div>  
@@ -152,10 +158,11 @@
 @section('script')
     <script>
         const viewItemsContent = document.querySelector('#viewItemsContent')
+        const paginationLink = document.querySelector('#pagination_link')
+        const totalItems = document.querySelector('#totalItems')
         // modal init
         var viewItemModal = new bootstrap.Modal(document.getElementById('viewItemsModal'))
-        getItems();
-        
+        getItems(1, undefined);
         async function viewItem(item){
             const dataID = item.getAttribute('data');
 
@@ -170,42 +177,58 @@
                     document.querySelector('#showItems').innerHTML = `<tr><td>${error.response.data.errors}</td></tr>`;
                 })
         }
-        async function getItems(){
+
+        async function getItems(page, filter){
             document.querySelector('#showItems').innerHTML = `<div class="d-flex align-items-center justify-content-center py-4"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
                 <span class="visually-hidden">Loading...</span>
             </div></div>`;
+
+            let url = filter == '' ? `/get-items/${page}/undefined` : `/get-items/${page}/${filter}`;
             
-            await axios.get('/get-items')
+            await axios.get(url)
                 .then(function (response) {
                     if(response.status == 200){
                         document.querySelector('#showItems').innerHTML = `<tr><td>${response.data.data}</td></tr>`;
+                        if(response.data.pagination){
+                            let pages = response.data.pagination.links;
+                            paginationLink.innerHTML ='';
+                            pages.forEach(function(item){
+                                if(!isNaN(item.label)){
+                                    totalItems.innerHTML = response.data.pagination.total;
+                                    paginationLink.innerHTML += `<li style="cursor:pointer;" onclick="getItems(${item.label}, '${filter}')" class="page-item ${item.active ? 'active' : '' } "><a class="page-link" style="background-color: #1a1e29;">${item.label}</a></li>`;
+                                }
+                            })
+                        }
                     }
                 })
                 .catch(function (error) {
                     document.querySelector('#showItems').innerHTML = `<tr><td>${error.response.data.errors}</td></tr>`;
+                    paginationLink.innerHTML ='';
                 })
         }
-        async function filter(input) {
-            document.querySelector('#showItems').innerHTML = `<div class="d-flex align-items-center justify-content-center py-4"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div></div>`;
-            let incrementedLengthInput = input.value.length + 1;
-            if(incrementedLengthInput > 1){
-                await axios.get('/filter-items/'+input.value)
-                .then(function (response) {
-                    setTimeout(() => {
-                        if(response.status == 200){
-                            document.querySelector('#showItems').innerHTML = response.data.data;
-                        }
-                    }, 1000);
-                })
-                .catch(function (error) {
-                    document.querySelector('#showItems').innerHTML = error.response.data.errors;
-                })
-            }else{
-                getItems();
-            }
-        }
+        
+        // async function filter(input) {
+        //     document.querySelector('#showItems').innerHTML = `<div class="d-flex align-items-center justify-content-center py-4"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+        //         <span class="visually-hidden">Loading...</span>
+        //     </div></div>`;
+        //     let incrementedLengthInput = input.value.length + 1;
+        //     if(incrementedLengthInput > 1){
+        //         await axios.get('/filter-items/'+input.value)
+        //         .then(function (response) {
+        //             setTimeout(() => {
+        //                 if(response.status == 200){
+        //                     document.querySelector('#showItems').innerHTML = response.data.data;
+        //                 }
+        //             }, 1000);
+        //         })
+        //         .catch(function (error) {
+        //             document.querySelector('#showItems').innerHTML = error.response.data.errors;
+        //         })
+        //     }else{
+        //         getItems();
+        //     }
+        // }
+
         async function collectSubCategory(data){
             var selectedOption = data.options[data.selectedIndex];
             var dataID = selectedOption.getAttribute('data');

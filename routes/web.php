@@ -52,9 +52,10 @@ Route::group(['middleware' => 'auth'], function(){
     // items post action
     Route::post('/import-items', [App\Http\Controllers\Admin\ItemsController::class, 'importItems'])->name('import.items');
     Route::post('/store-items', [App\Http\Controllers\Admin\ItemsController::class, 'store'])->name('store.items');
+    Route::post('/get-items/paginate', [App\Http\Controllers\Admin\ItemsController::class, 'getPaginate']);
     // items get action 
     Route::get('/export-items', [App\Http\Controllers\Admin\ItemsController::class, 'exportItems'])->name('export.items');
-    Route::get('/get-items', [App\Http\Controllers\Admin\ItemsController::class, 'getItems']);
+    Route::get('/get-items/{page}/{filter}', [App\Http\Controllers\Admin\ItemsController::class, 'getItems']);
     Route::get('/view-items/{id}', [App\Http\Controllers\Admin\ItemsController::class, 'viewItems']);
     Route::get('/delete-items/{id}', [App\Http\Controllers\Admin\ItemsController::class, 'destroy']);
     Route::get('/filter-items/{input}', [App\Http\Controllers\Admin\ItemsController::class, 'filter']);

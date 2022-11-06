@@ -17,6 +17,14 @@
     --gray: #858796 !important;
 }
 
+.pagination .page-item.active .page-link{
+    color: #fff;
+    background-color: var(--tertiary) !important;
+}
+.pagination .page-link{
+    color: #fff;
+    border: 1px solid #323232 !important;
+}
 // HOME
 .home{
     background: var(--primary);
