@@ -76,7 +76,7 @@
                                             }
                                         @endphp
                                         <tr>
-                                            <td>{{$delivery->item_name}}</td>
+                                            <td>{{mb_strimwidth($delivery->item_name, 0, 15, "...")}}</td>
                                             <td>{{$delivery->item_category}}</td>
                                             <td>{{$delivery->item_sub_category}}</td>
                                             <td>{{$delivery->item_quantity_deduct}}</td>

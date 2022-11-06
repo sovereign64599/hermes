@@ -10825,14 +10825,15 @@ textarea.form-control-lg {
   --gray: #858796 !important;
 }
 
-.pagination .page-item.active .page-link {
-  color: #fff;
+.page-item.active .page-link {
+  color: #fff !important;
   background-color: var(--tertiary) !important;
 }
 
-.pagination .page-link {
-  color: #fff;
+.page-link {
+  color: #858796 !important;
   border: 1px solid #323232 !important;
+  background-color: #1a1e29 !important;
 }
 
 .home {

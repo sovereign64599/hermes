@@ -40,7 +40,7 @@
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label><small>Item Barcode</small></label>
-                                <input type="text" id="code" class="form-control" placeholder="Enter barcode" minlength="10" maxlength="10" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); setValue()">
+                                <input type="text" id="code" class="form-control" placeholder="Enter barcode" minlength="12" maxlength="12" oninput="this.value = this.value.replace(/[^0-9-.]/g, ''); setValue()">
                             </div>
                         </div>
                         <div class="col-lg-12">
@@ -79,6 +79,12 @@
                             </tbody>
                         </table>
                     </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <small class="text-light">10 of <span id="totalItems"></span></small>
+                        <ul class="pagination" id="pagination_link">
+
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>  
@@ -99,9 +105,11 @@
 @section('script')
     <script>
         const viewItemsContent = document.querySelector('#viewItemsContent')
+        const paginationLink = document.querySelector('#pagination_link')
+        const totalItems = document.querySelector('#totalItems')
         // // modal init
         var viewItemModal = new bootstrap.Modal(document.getElementById('viewItemsModal'))
-        filterItems();
+        filterItems(1);
         
         async function viewItem(item){
             const dataID = item.getAttribute('data');
@@ -118,7 +126,7 @@
                 })
         }
 
-        async function filterItems(){
+        async function filterItems(page){
             document.querySelector('#showItems').innerHTML = `<div class="d-flex align-items-center justify-content-center py-4"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
                 <span class="visually-hidden">Loading...</span>
             </div></div>`;
@@ -128,17 +136,30 @@
                 subCategory: document.querySelector('#item_sub_category').value,
                 code: document.querySelector('#code').value,
                 description: document.querySelector('#description').value,
+                page: page,
             }
 
             await axios.post('/filter-items-available', data)
                 .then(function (response) {
                     if(response.status == 200){
                         document.querySelector('#showItems').innerHTML = response.data.data;
+                        if(response.data.pagination){
+                            let pages = response.data.pagination.links;
+                            paginationLink.innerHTML ='';
+                            pages.forEach(function(item){
+                                if(!isNaN(item.label)){
+                                    totalItems.innerHTML = response.data.pagination.total;
+                                    paginationLink.innerHTML += `<li style="cursor:pointer;" onclick="filterItems(${item.label})" class="page-item ${item.active ? 'active' : '' } "><a class="page-link" style="background-color: #1a1e29;">${item.label}</a></li>`;
+                                }
+                            });
+                        }
                     }
                 })
                 .catch(function (error) {
                     console.log(error.response);
                     document.querySelector('#showItems').innerHTML = `<tr><td>${error.response.data.errors}</td></tr>`;
+                    paginationLink.innerHTML ='';
+                    totalItems.innerHTML = 0;
                 })
         }
 

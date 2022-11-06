@@ -25,7 +25,6 @@
                                 <textarea name="category_description" class="form-control" rows="3" placeholder="write.."></textarea>
                             </div>
                             <div class="form-group">
-                                <button class="btn bg-secondary text-light">Reset Form</button>
                                 <button class="btn text-light">Create Category</button>
                             </div>
                         </div>

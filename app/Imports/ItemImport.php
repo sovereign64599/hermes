@@ -18,7 +18,7 @@ class ItemImport implements ToModel, WithHeadingRow
         if(empty($checkItem)){
             $qty = empty($row['quantity']) ? 0 : $row['quantity'];
             $name = empty($row['name']) ? 'Item ' . bin2hex(random_bytes(2)) : $row['name'];
-            $total_cost = ((float)str_replace(',', '', $row['cost']) * $qty);
+            $total_cost = ((int)str_replace(',', '', empty($row['cost']) ? 0: $row['cost']) * $qty);
             return new Items([
                 'item_name' => $name,
                 'item_category' => $row['category'],

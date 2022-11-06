@@ -21,11 +21,10 @@ class ItemQuantityCheckController extends Controller
 
         $unique->values()->all();
         $getSubCategories = $unique;
-        $items = Items::orderBy('created_at', 'desc')->paginate(3);
-        return view('admin.items.item-quantity-check', compact(['getSubCategories', 'items']));
+        return view('admin.items.item-quantity-check', compact(['getSubCategories']));
     }
 
-    public function filterItemsAvailable(Request $request, Items $itemsResult)
+    public function filterItemsAvailable(Request $request)
     {
 
         $items = Items::when($request->code, function ($query, $code) {
@@ -40,7 +39,7 @@ class ItemQuantityCheckController extends Controller
             return $query->where('item_category', $request->category)->where('item_sub_category', $request->subCategory)->where('item_barcode', 'LIKE', '%'.$request->code.'%');
         }, function ($query) {
             return $query->orderByDesc('updated_at');
-        })->get();
+        })->paginate(10, ['*'], 'page', $request->page);
 
         if($items->count() > 0){
             $html = '';
@@ -52,8 +51,8 @@ class ItemQuantityCheckController extends Controller
                 $html .='<td>'.$item->item_category.'</td>';
                 $html .='<td>'.$item->item_sub_category.'</td>';
                 $html .='<td>'.$item->item_barcode.'</td>';
-                $html .='<td>'.$item->item_cost.'</td>';
-                $html .='<td>'.$item->item_sell.'</td>';
+                $html .='<td>'.number_format((float)$item->item_cost, 2).'</td>';
+                $html .='<td>'.number_format((float)$item->item_sell, 2).'</td>';
                 $html .='<td>'.$quantity.'</td>';
                 $html .='<td>'.mb_strimwidth($description, 0, 10, "...").'</td>';
                 $html .='<td>';
@@ -64,6 +63,7 @@ class ItemQuantityCheckController extends Controller
             }
             return response()->json([
                 'data' => $html,
+                'pagination' => $items
             ], 200);
         }
         return response()->json([

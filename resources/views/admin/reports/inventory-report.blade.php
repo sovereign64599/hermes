@@ -66,6 +66,12 @@
                                 @endif
                             </tbody>
                         </table>
+                        @if($reports->count() > 0)
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>Showing {{$reports->firstItem() - 1}} - {{$reports->lastItem()}} of {{$reports->total()}}</div>
+                            <div>{{$reports->links()}}</div>
+                        </div>
+                        @endif
                     </div>
                 </div>
             </div>

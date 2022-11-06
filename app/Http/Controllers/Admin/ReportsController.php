@@ -28,9 +28,9 @@ class ReportsController extends Controller
     // TRANSFERED IN REPORT====================================================================================================================================================
     public function transferedIn()
     {
-        $reports = TransferInRecord::orderBy('created_at', 'DESC')->get();
+        $reports = TransferInRecord::orderBy('created_at', 'DESC')->paginate(10);
         if(isset($_GET['from']) && isset($_GET['to'])){
-            $reports = TransferInRecord::whereBetween('custom_date', [$_GET['from'], $_GET['to']])->get();
+            $reports = TransferInRecord::whereBetween('custom_date', [$_GET['from'], $_GET['to']])->paginate(10);
         }
         return view('admin.reports.transfered-in', compact(['reports']));
     }
@@ -50,9 +50,9 @@ class ReportsController extends Controller
     // TRANSFERED OUT REPORT====================================================================================================================================================
     public function transferedOut()
     {
-        $reports = TransferOutRecord::orderBy('created_at', 'DESC')->get();
+        $reports = TransferOutRecord::orderBy('created_at', 'DESC')->paginate(10);
         if(isset($_GET['from']) && isset($_GET['to'])){
-            $reports = TransferOutRecord::whereBetween('custom_date', [$_GET['from'], $_GET['to']])->get();
+            $reports = TransferOutRecord::whereBetween('custom_date', [$_GET['from'], $_GET['to']])->paginate(10);
         }
         return view('admin.reports.transfered-out', compact(['reports']));
     }
@@ -72,9 +72,9 @@ class ReportsController extends Controller
     // DELIVERY REPORT====================================================================================================================================================
     public function deliveryReport()
     {
-        $reports = Delivery::orderBy('created_at', 'DESC')->where('delivery_status', 'For Delivery')->get();
+        $reports = Delivery::orderBy('created_at', 'DESC')->where('delivery_status', 'For Delivery')->paginate(10);
         if(isset($_GET['from']) && isset($_GET['to'])){
-            $reports = Delivery::whereBetween('custom_date', [$_GET['from'], $_GET['to']])->where('delivery_status', 'For Delivery')->get();
+            $reports = Delivery::whereBetween('custom_date', [$_GET['from'], $_GET['to']])->where('delivery_status', 'For Delivery')->paginate(10);
         }
         return view('admin.reports.delivery-report', compact(['reports']));
     }
@@ -94,9 +94,9 @@ class ReportsController extends Controller
     // SALES REPORT====================================================================================================================================================
     public function salesReport()
     {
-        $reports = Delivery::orderBy('created_at', 'DESC')->where('delivery_status', 'Delivered')->get();
+        $reports = Delivery::orderBy('created_at', 'DESC')->where('delivery_status', 'Delivered')->paginate(10);
         if(isset($_GET['from']) && isset($_GET['to'])){
-            $reports = Delivery::whereBetween('custom_date', [$_GET['from'], $_GET['to']])->where('delivery_status', 'Delivered')->get();
+            $reports = Delivery::whereBetween('custom_date', [$_GET['from'], $_GET['to']])->where('delivery_status', 'Delivered')->paginate(10);
         }
         return view('admin.reports.sales-report', compact(['reports']));
     }
@@ -120,14 +120,14 @@ class ReportsController extends Controller
             \DB::raw('transaction_number as t_n'),
             'custom_date',
             \DB::raw("SUM(sales_amount) as total_sales")
-        ])->groupBy('custom_date')->groupBy('t_n')->get();
+        ])->groupBy('custom_date')->groupBy('t_n')->paginate(10);
         
         if(isset($_GET['from']) && isset($_GET['to'])){
             $reports = Sales::select([
                 \DB::raw('transaction_number as t_n'),
                 'custom_date',
                 \DB::raw("SUM(sales_amount) as total_sales")
-            ])->groupBy('custom_date')->groupBy('t_n')->whereBetween('custom_date', [$_GET['from'], $_GET['to']])->get();
+            ])->groupBy('custom_date')->groupBy('t_n')->whereBetween('custom_date', [$_GET['from'], $_GET['to']])->paginate(10);
         }
         return view('admin.reports.revenue-report', compact(['reports']));
     }
@@ -148,10 +148,10 @@ class ReportsController extends Controller
     public function inventoryReport()
     {
         date_default_timezone_set('Asia/Manila');
-        $reports = Items::orderBy('created_at', 'DESC')->get();
+        $reports = Items::orderBy('created_at', 'DESC')->paginate(10);
         if(isset($_GET['from']) && isset($_GET['to'])){
             $from = Carbon::parse($_GET['from']);
-            $reports = Items::whereBetween('created_at', [$from->format('Y-m-d h:i:s'), $_GET['to']])->get();
+            $reports = Items::whereBetween('created_at', [$from->format('Y-m-d h:i:s'), $_GET['to']])->paginate(10);
         }
         return view('admin.reports.inventory-report', compact(['reports']));
     }

@@ -28,7 +28,6 @@
                                 <input type="text" name="sub_category_name" class="form-control" placeholder="Category name">
                             </div>
                             <div class="form-group">
-                                <button class="btn bg-secondary text-light">Reset Form</button>
                                 <button class="btn text-light">Create Category</button>
                             </div>
                         @else 

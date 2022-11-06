@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
@@ -36,5 +37,6 @@ class AppServiceProvider extends ServiceProvider
             $this->app['request']->server->set('HTTPS', true);
             URL::forceScheme('https');
         }
+        Paginator::useBootstrap();
     }
 }

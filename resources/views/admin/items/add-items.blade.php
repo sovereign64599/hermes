@@ -132,12 +132,12 @@
                             </tbody>
                         </table>
                     </div>
-                    <nav>
+                    <div class="d-flex justify-content-between align-items-center">
                         <small class="text-light">10 of <span id="totalItems"></span></small>
                         <ul class="pagination" id="pagination_link">
 
                         </ul>
-                    </nav>
+                    </div>
                 </div>
             </div>
         </div>  
