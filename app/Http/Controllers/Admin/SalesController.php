@@ -116,7 +116,7 @@ class SalesController extends Controller
                     'quantity' => $items->item_quantity,
                     'deductQty' => $request->deductQty,
                     'amount' => (int)$items->item_sell * (int)$request->deductQty,
-                    'delivery_status' => 'Pending',
+                    'delivery_status' => 'Delivered',
                 ];
     
                 session()->put('salesItem', $sessionList);

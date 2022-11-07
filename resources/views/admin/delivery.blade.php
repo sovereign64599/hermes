@@ -10,13 +10,7 @@
                 <h5>Form Number</h5>
                 <input type="text" class="form-control" placeholder="Search Form Number" id="form_number" oninput="collectFormNumber()">
                 <ul id="form_number_list">
-                    {{-- @if($groupFormNumber->count() > 0)
-                        @foreach($groupFormNumber as $row)
-                            <a href="?form_number={{ $row->form_number }}"><li @if(isset($_GET['form_number']) && $_GET['form_number'] == $row->form_number) class="active"@endif># {{ $row->form_number }}</li></a>
-                        @endforeach
-                    @else 
-                        <a href=""><li>No Form Number</li></a>
-                    @endif --}}
+                    
                 </ul>
             </div>
            </div>
