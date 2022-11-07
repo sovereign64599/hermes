@@ -18,7 +18,7 @@ class DeliveryController extends Controller
 
     public function index()
     {
-        $deliveries = Delivery::all();
+        $deliveries = Delivery::orderBy('created_at', 'DESC')->get();
         if(isset($_GET['form_number'])){
             $deliveries = Delivery::where('form_number', $_GET['form_number'])->get();
         }
