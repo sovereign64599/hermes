@@ -426,15 +426,12 @@
                         Swal.fire({
                             icon: 'success',
                             text: response.data.message,
-                            timer: 3000,
+                            timer: 2000,
                             color: '#ffffff',
                             background: '#24283b',
                             timerProgressBar: true,
                         });
                         getSalesList();
-                        setTimeout(() => {
-                            window.location.replace('/item-logs');
-                        }, 3000);
                     }
                 })
                 .catch(function (error) {

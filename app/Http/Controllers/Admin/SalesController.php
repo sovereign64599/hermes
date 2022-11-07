@@ -100,11 +100,11 @@ class SalesController extends Controller
                     ], 409);
                 }
 
-                if($request->deductQty > $items->item_quantity){
-                    return response()->json([
-                        'error' => 'Current Quantity must be greater than Deduct Quantity.'
-                    ], 409);
-                }
+                // if($request->deductQty > $items->item_quantity){
+                //     return response()->json([
+                //         'error' => 'Current Quantity must be greater than Deduct Quantity.'
+                //     ], 409);
+                // }
     
                 $sessionList[$request->id] = [
                     'id' => $request->id,
@@ -148,7 +148,7 @@ class SalesController extends Controller
                 $totalAmount = $totalAmount + ((float)$list['sell'] * (int)$list['deductQty']);
                 $totalAmountDiscounted = (float)$totalAmount - ((float)$totalAmount * ((int)$percent / 100));
 
-                $delivery_status = $list['delivery_status'] == 'For Delivery' ? 'checked value="For Delivery"' : 'value="Pending"';
+                $delivery_status = $list['delivery_status'] == 'For Delivery' ? 'checked value="For Delivery"' : 'value="Delivered"';
 
                 $html .= '<tr>';
                 $html .= '<td>'.$list['name'].'</td>';
@@ -216,10 +216,10 @@ class SalesController extends Controller
     {
         $list = session()->get('salesItem');
         if(isset($list[$id])) {
-            if($list[$id]['delivery_status'] == 'Pending'){
+            if($list[$id]['delivery_status'] == 'Delivered'){
                 $list[$id]['delivery_status'] = 'For Delivery';
             }else{
-                $list[$id]['delivery_status'] = 'Pending';
+                $list[$id]['delivery_status'] = 'Delivered';
             }
             session()->put('salesItem', $list);
             return response()->json([
@@ -307,7 +307,7 @@ class SalesController extends Controller
             
             session()->put('salesItem', $lists);
             return response()->json([
-                'message' => $listCount . ' items processed. Redirecting to Delivery page...'
+                'message' => $listCount . ' items being processed.'
             ], 200);
         }
         return response()->json([
