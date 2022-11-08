@@ -4,9 +4,11 @@ namespace App\Imports;
 
 use App\Models\Items;
 use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\WithBatchInserts;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class ItemImport implements ToModel, WithHeadingRow
+class ItemImport implements ToModel, WithHeadingRow, WithBatchInserts, WithChunkReading
 {
     public function model(array $row)
     {
@@ -38,5 +40,15 @@ class ItemImport implements ToModel, WithHeadingRow
     public function headingRow(): int
     {
         return 1;
+    }
+
+    public function batchSize(): int
+    {
+        return 1000;
+    }
+
+    public function chunkSize(): int
+    {
+        return 1000;
     }
 }

@@ -27,7 +27,7 @@ class InventoryReportExport implements FromCollection, WithHeadings, ShouldAutoS
 
      public function collection()
     {
-        $data = DB::table('items')->select('item_name','item_category','item_sub_category','item_quantity', 'item_barcode', 'item_cost', 'total_cost')->whereBetween('created_at', [$this->from_date, $this->to_date])->get();
+        $data = DB::table('items')->select('item_name','item_category','item_sub_category','item_quantity', 'item_barcode', 'item_cost', 'item_sell', 'item_notes', 'item_photo', 'total_cost')->whereBetween('created_at', [$this->from_date, $this->to_date])->get();
         
         foreach($data as $row)
         {
@@ -50,12 +50,16 @@ class InventoryReportExport implements FromCollection, WithHeadings, ShouldAutoS
     public function headings(): array
     {
         return [
-            "Item Name",
-            "Category",
-            "Sub Category",
-            "Quantity",
-            "Barcode",
-            "Cost",
+            "name",
+            "category",
+            "subcategory",
+            "quantity",
+            "barcode",
+            "description",
+            "cost",
+            "sell",
+            "notes",
+            "photo",
             "Total Cost"
         ];
     }
