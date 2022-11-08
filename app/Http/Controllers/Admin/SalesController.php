@@ -274,9 +274,16 @@ class SalesController extends Controller
                 $totalAmountDiscounted = (float)$totalAmount - ((float)$totalAmount * ((int)$percent / 100));
 
                 if($data->exists()){
-                    if($list['delivery_status'] != 'Pending'){
+                    if($list['delivery_status'] != 'For Delivery'){
                         Items::where('id', $data->id)->update([
                             'item_quantity' => (int)$data->item_quantity - (int)$list['deductQty'],
+                        ]);
+                        
+                        Sales::create([
+                            'sales_amount' => $totalAmountDiscounted,
+                            'transaction_number' => $form_number,
+                            'custom_date' => $custom_date,
+                            'proccessed_by' => $user_who_tranfer,
                         ]);
                     }
 
@@ -297,13 +304,6 @@ class SalesController extends Controller
                         'custom_date' => $custom_date,
                         'delivery_status' => $list['delivery_status'],
                         'totalAmount_discounted' => $totalAmountDiscounted
-                    ]);
-                    
-                    Sales::create([
-                        'sales_amount' => $totalAmountDiscounted,
-                        'transaction_number' => $form_number,
-                        'custom_date' => $custom_date,
-                        'proccessed_by' => $user_who_tranfer,
                     ]);
 
                     unset($lists[$list['id']]);
