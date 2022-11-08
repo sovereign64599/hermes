@@ -62,27 +62,27 @@ class DeliveryController extends Controller
     }
 
     // delivery actions
-    public function updateToDelivered($id)
-    {
-        $delivery = Delivery::find($id);
-        if($delivery){
-            $delivery->update([
-                'delivery_status' => 'Delivered'
-            ]);
+    // public function updateToDelivered($id)
+    // {
+    //     $delivery = Delivery::find($id);
+    //     if($delivery){
+    //         $delivery->update([
+    //             'delivery_status' => 'Delivered'
+    //         ]);
 
-            $total = $delivery->totalAmount_discounted;
+    //         $total = $delivery->totalAmount_discounted;
 
-            $storeSales = Sales::create([
-                'sales_amount' => $total,
-                'transaction_number' => $delivery->form_number,
-                'custom_date' => $delivery->custom_date,
-                'proccessed_by' => $delivery->user_name,
-            ]);
-            if($storeSales){
-                return back()->with('success', $total . ' Added to your sales.');
-            }
-        }
-    }
+    //         $storeSales = Sales::create([
+    //             'sales_amount' => $total,
+    //             'transaction_number' => $delivery->form_number,
+    //             'custom_date' => $delivery->custom_date,
+    //             'proccessed_by' => $delivery->user_name,
+    //         ]);
+    //         if($storeSales){
+    //             return back()->with('success', $total . ' Added to your sales.');
+    //         }
+    //     }
+    // }
 
     public function updateToForDeliver($id)
     {

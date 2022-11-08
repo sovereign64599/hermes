@@ -21,7 +21,7 @@
                     <h4 class="text-tertiary">Delivery Items</h4>
                     @if(isset($_GET['form_number']))
                         <p class="mb-0"><small>If item marked <span class="text-success">(Delivered)</span>, the total amount will be added to your sales.</small></p>
-                        <p class="mb-0"><small>If item marked <span class="text-info">(For Delivery)</span>, the item quantity deduction will be applied.</small></p>
+                        {{-- <p class="mb-0"><small>If item marked <span class="text-info">(For Delivery)</span>, the item quantity deduction will be applied.</small></p> --}}
                         <p class="mb-0"><small>If item marked <span class="text-danger">(Cancel)</span>, Item quantity deduction will not applied.</small></p>
                     @endif
                 </div>
@@ -89,9 +89,7 @@
                                             <td>{{$delivery->user_name}}</td>
                                             <td class="{{$status}}">{{$delivery->delivery_status}}</td>
                                             <td class="d-flex flex-column gap-1">
-                                                @if($delivery->delivery_status == 'Pending')
-                                                    <a href="{{route('action.for.deliver', $delivery->id)}}" class="btn-info btn-sm"><small>For Delivery</small></a>
-                                                @elseif($delivery->delivery_status == 'For Delivery')
+                                                @if($delivery->delivery_status == 'For Delivery')
                                                     <a href="{{route('action.delivered', $delivery->id)}}" data="{{$delivery->id}}" onclick="deleteUser(this)" class="btn-success btn-sm"><small>Delivered</small></a>
                                                     <a href="{{route('action.cancelled', $delivery->id)}}" data="{{$delivery->id}}" onclick="deleteUser(this)" class="btn btn-danger btn-sm"><small>Cancel</small></a>
                                                 @else

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Delivery;
 use App\Models\Items;
+use App\Models\Sales;
 use App\Models\SubCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -297,6 +298,14 @@ class SalesController extends Controller
                         'delivery_status' => $list['delivery_status'],
                         'totalAmount_discounted' => $totalAmountDiscounted
                     ]);
+                    
+                    Sales::create([
+                        'sales_amount' => $totalAmountDiscounted,
+                        'transaction_number' => $form_number,
+                        'custom_date' => $custom_date,
+                        'proccessed_by' => $user_who_tranfer,
+                    ]);
+
                     unset($lists[$list['id']]);
                 }
             }
