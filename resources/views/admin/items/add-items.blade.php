@@ -96,12 +96,15 @@
             <div class="card shadow p-2">
                 <div class="card-header">
                     <h4 class="text-tertiary">Items Available</h4>
+                    <div class="progress my-2 d-none">
+                        <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">100%</div>
+                    </div>
                     <div class="d-flex justify-content-between">
                         <div class="d-flex gap-1">
-                            <form action="{{route('import.items')}}" method="POST" id="importForm" enctype="multipart/form-data">
-                                @method('POST')
+                            <form id="importForm" method="POST" enctype="multipart/form-data">
                                 @csrf
-                                <input type="file" name="file" class="d-none" id="import" onchange="document.getElementById('importForm').submit()">
+                                <input type="file" name="file" class="d-none" id="import" onchange="document.getElementById('submitImport').click()">
+                                <button type="submit" role="button" class="d-none" id="submitImport"></button>
                             </form>
                             <button type="button" role="button" class="btn btn-sm text-light" onclick="document.getElementById('import').click();"><i class="fas fa-file-import mr-2"></i><span>Import Items</span></button>
                             <a href="{{route('export.items')}}" class="btn btn-sm text-light d-flex align-items-center"><i class="fas fa-file-export mr-2"></i><span>Export Items</span></a>
@@ -160,9 +163,54 @@
         const viewItemsContent = document.querySelector('#viewItemsContent')
         const paginationLink = document.querySelector('#pagination_link')
         const totalItems = document.querySelector('#totalItems')
+        const importForm = document.querySelector('#importForm')
+        var pb = document.querySelector('.progress');
+        const progress = document.querySelector('.progress-bar')
+        
         // modal init
         var viewItemModal = new bootstrap.Modal(document.getElementById('viewItemsModal'))
-        getItems(1, undefined);
+        getItems(1, undefined); 
+        
+        const url = '{{route("import.items")}}';
+        importForm.addEventListener('submit', async function(e){
+            e.preventDefault();
+            let formData = new FormData();
+            formData.append('file', document.querySelector('#import').files[0]);
+            pb.classList.remove('d-none')
+
+            await axios.post(url, formData, {
+                onUploadProgress: function(progressEvent) {
+                    const {loaded, total} = progressEvent
+                    let percent = Math.floor((loaded * 100) / total)
+                    progress.style.width = percent + '%';
+                    progress.innerHTML = percent + '%';
+                    if(percent === 100){
+                        progress.innerHTML = 'Please wait';
+                    }
+                }
+            })
+                .then(function(response){
+                    pb.classList.add('d-none')
+                    getItems(1, undefined)
+                    Swal.fire({
+                        text: response.data.success,
+                        icon: 'success',
+                        color: '#ffffff',
+                        background: '#24283b',
+                    })
+                })
+                .catch(function(error){
+                    pb.classList.add('d-none')
+                    Swal.fire({
+                        text: error.response.data.error,
+                        icon: 'error',
+                        color: '#ffffff',
+                        background: '#24283b',
+                    })
+                });
+        });
+        
+
         async function viewItem(item){
             const dataID = item.getAttribute('data');
 
@@ -206,28 +254,6 @@
                     paginationLink.innerHTML ='';
                 })
         }
-        
-        // async function filter(input) {
-        //     document.querySelector('#showItems').innerHTML = `<div class="d-flex align-items-center justify-content-center py-4"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
-        //         <span class="visually-hidden">Loading...</span>
-        //     </div></div>`;
-        //     let incrementedLengthInput = input.value.length + 1;
-        //     if(incrementedLengthInput > 1){
-        //         await axios.get('/filter-items/'+input.value)
-        //         .then(function (response) {
-        //             setTimeout(() => {
-        //                 if(response.status == 200){
-        //                     document.querySelector('#showItems').innerHTML = response.data.data;
-        //                 }
-        //             }, 1000);
-        //         })
-        //         .catch(function (error) {
-        //             document.querySelector('#showItems').innerHTML = error.response.data.errors;
-        //         })
-        //     }else{
-        //         getItems();
-        //     }
-        // }
 
         async function collectSubCategory(data){
             var selectedOption = data.options[data.selectedIndex];

@@ -42,14 +42,18 @@ class ItemsController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return back()->with('error', 'File type must be xlsx file.');
+            return response()->json([
+                'error' => 'File type must be xlsx file.',
+            ], 412);
         } else {
             $file = $request->file('file');
 
             Excel::import(new ItemImport, $file);
             Excel::import(new ItemCategory, $file);
 
-            return back()->with('success', 'File Imported successfully');
+            return response()->json([
+                'success' => 'File Imported successfull',
+            ], 200);
         }
     }
 
