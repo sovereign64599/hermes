@@ -4,11 +4,10 @@ namespace App\Imports;
 
 use App\Models\Items;
 use Maatwebsite\Excel\Concerns\ToModel;
-use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class ItemImport implements ToModel, WithHeadingRow, WithBatchInserts, WithChunkReading
+class ItemImport implements ToModel, WithHeadingRow
 {
     public function model(array $row)
     {
@@ -28,8 +27,8 @@ class ItemImport implements ToModel, WithHeadingRow, WithBatchInserts, WithChunk
                 'item_quantity' => $qty,
                 'item_barcode' => $row['barcode'],
                 'item_description' => $row['description'],
-                'item_cost' => str_replace(',', '', $row['cost']),
-                'item_sell' => str_replace(',', '', $row['sell']),
+                'item_cost' => empty($row['cost']) ? 0 : str_replace(',', '', $row['cost']),
+                'item_sell' => empty($row['sell']) ? 0 : str_replace(',', '', $row['sell']),
                 'item_notes' => $row['notes'],
                 'item_photo' => $row['photo'],
                 'total_cost' => $total_cost
@@ -42,13 +41,8 @@ class ItemImport implements ToModel, WithHeadingRow, WithBatchInserts, WithChunk
         return 1;
     }
 
-    public function batchSize(): int
-    {
-        return 1000;
-    }
-
-    public function chunkSize(): int
-    {
-        return 1000;
-    }
+    // public function chunkSize(): int
+    // {
+    //     return 1000;
+    // }
 }
