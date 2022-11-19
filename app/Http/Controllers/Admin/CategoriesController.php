@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\SubCategory;
 use Illuminate\Http\Request;
 
 class CategoriesController extends Controller
@@ -92,7 +93,12 @@ class CategoriesController extends Controller
         ]);
 
         if($updateCategory){
-            return response(json_encode(['status' => 200, 'message' => ucfirst($request->category_name). ' Updated Successfully.']));
+            $updateSubcategory = SubCategory::where('category_id', $request->category_id)->update([
+                'category_name' => ucfirst($request->category_name)
+            ]);
+            if($updateSubcategory){
+                return response(json_encode(['status' => 200, 'message' => ucfirst($request->category_name). ' Updated Successfully.']));
+            }
         }
     }
 
