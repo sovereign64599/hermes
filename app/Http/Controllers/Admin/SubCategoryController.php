@@ -106,12 +106,19 @@ class SubCategoryController extends Controller
             return response(json_encode(['status' => 500, 'message' => ucfirst($request->category_name). ' with '.$request->sub_category_name .' already exist.']));
             exit();
         }
+        $cat = SubCategory::where('id', $request->sub_category_id)->first();
         $updateCategory = SubCategory::where('id', $request->sub_category_id)->update([
-            'category_name' => ucfirst($request->category_name),
             'sub_category_name' => ucfirst($request->sub_category_name),
         ]);
+        
 
         if($updateCategory){
+            SubCategory::where('category_id', $cat->category_id)->update([
+                'category_name' => ucfirst($request->category_name),
+            ]);
+            Category::where('id', $cat->category_id)->update([
+                'category_name' => ucfirst($request->category_name)
+            ]);
             return response(json_encode(['status' => 200, 'message' => ucfirst($request->sub_category_name). ' Updated Successfully.']));
         }
     }
