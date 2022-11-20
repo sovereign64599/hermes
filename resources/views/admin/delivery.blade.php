@@ -4,10 +4,12 @@
 
 @section('content')
     <div class="row pages">
-        <div class="col-lg-2">
+        <div class="col-lg-3">
            <div class="card">
             <div class="card-body form-numbers">
                 <h5>Form Number</h5>
+                <label>From</label>
+                <input type="date" class="form-control mb-2" id="form_date" onchange="collectFormNumber()">
                 <input type="text" class="form-control" placeholder="Search Form Number" id="form_number" oninput="collectFormNumber()">
                 <ul id="form_number_list">
                     
@@ -15,7 +17,7 @@
             </div>
            </div>
         </div>
-        <div class="col-lg-10">
+        <div class="col-lg-9">
             <div class="card shadow p-4">
                 <div class="card-header">
                     <h4 class="text-tertiary">Delivery Items</h4>
@@ -133,6 +135,7 @@
             let data = {
                 _token: '{{csrf_token()}}',
                 form_number: document.querySelector('#form_number').value,
+                form_date: document.querySelector('#form_date').value,
                 paramFormNumber: paramFormNumber
             }
 

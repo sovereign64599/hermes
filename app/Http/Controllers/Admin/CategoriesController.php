@@ -101,7 +101,7 @@ class CategoriesController extends Controller
             }
         }
     }
-
+// 14-02-000100  14-02-000077	  14-02-000086	
     public function filter($input){
         $categories = Category::where('category_name', 'like', '%'.ucfirst($input).'%')
                 ->orWhere('category_name', 'like', '%'.$input.'%')

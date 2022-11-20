@@ -29,14 +29,21 @@ class DeliveryController extends Controller
 
     public function collectFormNumber(Request $request)
     {
-        if(isset($request->_token) && isset($request->form_number)){
-            $formNumbers = Delivery::select('form_number')->groupBy('form_number')->where('form_number', 'like', '%'.$request->form_number.'%')->get();
-        }else{
-            $formNumbers = Delivery::select('form_number')->groupBy('form_number')->get();
-        }
+        $formNumbers = Delivery::select('form_number')->groupBy('form_number')->when($request->form_number, function ($query, $code) {
+            return $query->where('form_number', 'like', "%{$code}%");
+        })->when($request->form_date, function ($query) use ($request) {
+            return $query->where('custom_date', $request->form_date);
+        })->get();
+
+        // if(isset($request->_token) && isset($request->form_number)){
+        //     $formNumbers = Delivery::select('form_number')->groupBy('form_number')->where('form_number', 'like', '%'.$request->form_number.'%')->orWhere('form_date', $request->form_date)->get();
+        // }else{
+        //     $formNumbers = Delivery::select('form_number')->groupBy('form_number')->get();
+        // }
         if($formNumbers->count() > 0){
             $html = '';
             foreach($formNumbers as $row){
+                
                 $html .= '<a href="?form_number='. $row->form_number.'">';
                 $html .= '<li '. ($request->paramFormNumber == $row->form_number ? 'class="active"' : ' ') .'># '. $row->form_number .'</li>';
                 $html .= '</a>';
@@ -98,7 +105,6 @@ class DeliveryController extends Controller
             }
         }
     }
-    // 06040256 04060659	 12010256
 
     public function updateToCancelled($id)
     {
