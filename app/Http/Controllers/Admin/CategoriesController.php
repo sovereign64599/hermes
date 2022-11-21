@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Items;
 use App\Models\SubCategory;
 use Illuminate\Http\Request;
 
@@ -87,6 +88,8 @@ class CategoriesController extends Controller
             return response(json_encode(['status' => 500, 'message' => ucfirst($request->category_name). ' already exist.']));
             exit();
         }
+        $oldCategory = Category::where('id', $request->category_id)->first();
+        
         $updateCategory = Category::where('id', $request->category_id)->update([
             'category_name' => ucfirst($request->category_name),
             'category_description' => ucfirst($request->category_description),
@@ -95,6 +98,9 @@ class CategoriesController extends Controller
         if($updateCategory){
             $updateSubcategory = SubCategory::where('category_id', $request->category_id)->update([
                 'category_name' => ucfirst($request->category_name)
+            ]);
+            Items::where('item_category', $oldCategory->category_name)->update([
+                'item_category' => $request->category_name
             ]);
             if($updateSubcategory){
                 return response(json_encode(['status' => 200, 'message' => ucfirst($request->category_name). ' Updated Successfully.']));

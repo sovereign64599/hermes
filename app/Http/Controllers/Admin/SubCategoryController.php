@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Items;
 use App\Models\SubCategory;
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Http\Request;
@@ -107,6 +108,7 @@ class SubCategoryController extends Controller
             exit();
         }
         $cat = SubCategory::where('id', $request->sub_category_id)->first();
+        $oldCategory = Category::where('id', $cat->category_id)->first();
         $updateCategory = SubCategory::where('id', $request->sub_category_id)->update([
             'sub_category_name' => ucfirst($request->sub_category_name),
         ]);
@@ -119,6 +121,13 @@ class SubCategoryController extends Controller
             Category::where('id', $cat->category_id)->update([
                 'category_name' => ucfirst($request->category_name)
             ]);
+            
+            Items::where('item_category', $oldCategory->category_name)
+            ->where('item_sub_category', $cat->sub_category_name)->update([
+                'item_category' => $request->category_name,
+                'item_sub_category' => $request->sub_category_name
+            ]);
+
             return response(json_encode(['status' => 200, 'message' => ucfirst($request->sub_category_name). ' Updated Successfully.']));
         }
     }
