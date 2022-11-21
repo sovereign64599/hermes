@@ -17,8 +17,8 @@ class CreateItemsTable extends Migration
             $table->uuid('id');
             $table->primary('id');
             $table->string('item_name')->nullable();
-            $table->string('item_category');
-            $table->string('item_sub_category');
+            $table->string('item_category')->nullable();
+            $table->string('item_sub_category')->nullable();
             $table->integer('item_quantity')->default(0);
             $table->string('item_barcode');
             $table->string('item_description')->nullable();

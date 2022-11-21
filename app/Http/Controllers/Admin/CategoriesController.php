@@ -140,6 +140,10 @@ class CategoriesController extends Controller
         $category = Category::where('id', $id)->firstOrFail();
         $delete = $category->delete();
         if($delete){
+            Items::where('item_category', $category->category_name)->update([
+                'item_category' => 'No Category',
+                'item_sub_category' => 'No Sub Category'
+            ]);
             return response(json_encode(['status' => 200, 'message' => 'Category Deleted.']));
         }
     }
