@@ -8,7 +8,7 @@
            <div class="card">
             <div class="card-body form-numbers">
                 <h5>Form Number</h5>
-                <label>From</label>
+                <label>Choose date to filter</label>
                 <input type="date" class="form-control mb-2" id="form_date" onchange="collectFormNumber()">
                 <input type="text" class="form-control" placeholder="Search Form Number" id="form_number" oninput="collectFormNumber()">
                 <ul id="form_number_list">
