@@ -8,6 +8,8 @@ Route::get('/', function () {
     return view('welcome');
 })->middleware('guest');
 
+
+
 Auth::routes();
 Route::match(['get'], 'login', function(){ return redirect('/'); })->name('login');
 

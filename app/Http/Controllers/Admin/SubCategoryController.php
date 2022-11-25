@@ -164,6 +164,9 @@ class SubCategoryController extends Controller
         $category = SubCategory::where('id', $id)->firstOrFail();
         $delete = $category->delete();
         if($delete){
+            Items::where('item_sub_category', $category->sub_category_name)->where('item_category', $category->category_name)->update([
+                'item_sub_category' => 'No Sub Category'
+            ]);
             return response(json_encode(['status' => 200, 'message' => 'Sub Category Deleted.']));
         }
     }
