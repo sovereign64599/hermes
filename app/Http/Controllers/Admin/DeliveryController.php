@@ -34,12 +34,7 @@ class DeliveryController extends Controller
         })->when($request->form_date, function ($query) use ($request) {
             return $query->where('custom_date', $request->form_date);
         })->get();
-
-        // if(isset($request->_token) && isset($request->form_number)){
-        //     $formNumbers = Delivery::select('form_number')->groupBy('form_number')->where('form_number', 'like', '%'.$request->form_number.'%')->orWhere('form_date', $request->form_date)->get();
-        // }else{
-        //     $formNumbers = Delivery::select('form_number')->groupBy('form_number')->get();
-        // }
+        
         if($formNumbers->count() > 0){
             $html = '';
             foreach($formNumbers as $row){

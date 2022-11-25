@@ -271,7 +271,7 @@ class SalesController extends Controller
             foreach($lists as $list){
                 $data = Items::find($list['id']);
                 $totalAmount = ((float)$list['sell'] * (int)$list['deductQty']);
-                $totalAmountDiscounted = (float)$totalAmount - ((float)$totalAmount * ((int)$percent / 100));
+                $totalAmountDiscounted = (float)$totalAmount - (float)$totalAmount * (int)$percent / 100;
 
                 if($data->exists()){
                     if($list['delivery_status'] != 'For Delivery'){

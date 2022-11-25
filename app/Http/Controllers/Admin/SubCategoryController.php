@@ -159,6 +159,7 @@ class SubCategoryController extends Controller
             return response(json_encode(['status' => 200, 'data' => '<tr><td>No Sub Category Found</td></tr>']));
         }
     }
+    // 14-02-000086 14-02-000082
 
     public function deleteSubCategory(String $id){
         $category = SubCategory::where('id', $id)->firstOrFail();

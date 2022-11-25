@@ -58,7 +58,7 @@
                                             <td>{{$report->item_sub_category}}</td>
                                             <td>{{$report->item_barcode}}</td>
                                             <td class="text-warning">{{$report->item_quantity_deduct}}</td>
-                                            <td class="text-success">{{$report->total_amount}}</td>
+                                            <td class="text-success">{{$report->totalAmount_discounted}}</td>
                                             <td class="text-warning">{{$report->custom_date}}</td>
                                             <td class="text-warning">{{ucfirst($report->user_name)}}</td>
                                         </tr>
