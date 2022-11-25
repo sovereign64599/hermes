@@ -29,18 +29,22 @@ class DeliveryController extends Controller
 
     public function collectFormNumber(Request $request)
     {
-        $formNumbers = Delivery::select('form_number')->groupBy('form_number')->when($request->form_number, function ($query, $code) {
+        $formNumbers = Delivery::when($request->form_number, function ($query, $code) {
             return $query->where('form_number', 'like', "%{$code}%");
         })->when($request->form_date, function ($query) use ($request) {
             return $query->where('custom_date', $request->form_date);
         })->get();
-        
+
         if($formNumbers->count() > 0){
+            $loopNUmbers = $formNumbers->unique('form_number');
+
             $html = '';
-            foreach($formNumbers as $row){
+            foreach($loopNUmbers as $row){
+                // $formNum = Delivery::where('id', )->first();
+                // dd($row);
                 
                 $html .= '<a href="?form_number='. $row->form_number.'">';
-                $html .= '<li '. ($request->paramFormNumber == $row->form_number ? 'class="active"' : ' ') .'># '. $row->form_number .'</li>';
+                $html .= '<li '. ($request->paramFormNumber == $row->form_number ? 'class="active"' : ' ') .'># '. $row->form_number .' <small style="color: #838383;">- '. date('F j, Y', strtotime($row->custom_date)) .'</small></li>';
                 $html .= '</a>';
             }
             return response()->json([
