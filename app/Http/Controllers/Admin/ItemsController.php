@@ -169,49 +169,6 @@ class ItemsController extends Controller
         ], 410);
     }
 
-    // public function filter($input){
-    //     $items = Items::where('item_name', 'like', '%'.ucfirst($input).'%')
-    //             ->orWhere('item_name', 'like', '%'.$input.'%')
-    //             ->orWhere('item_name', 'like', '%'.strtolower($input).'%')
-    //             ->orWhere('item_category', 'like', '%'.ucfirst($input).'%')
-    //             ->orWhere('item_category', 'like', '%'.$input.'%')
-    //             ->orWhere('item_sub_category', 'like', '%'.ucfirst($input).'%')
-    //             ->orWhere('item_sub_category', 'like', '%'.$input.'%')
-    //             ->orWhere('item_barcode', 'like', '%'.$input.'%')
-    //             ->orderBy('updated_at', 'desc')->get();
-                
-    //     if($items->count() > 0){
-    //         $html = '';
-    //         foreach($items as $item){
-    //             $quantity = ($item->item_quantity == 0) ? '<small class="text-danger">Out of Stock</small>' : $item->item_quantity;
-    //             $description = empty($item->item_description) ? 'No item Description' : $item->item_description;
-    //             $html .= '<tr>';
-    //             $html .='<td>'.mb_strimwidth($item->item_name, 0, 6, "...").'</td>';
-    //             $html .='<td>'.$item->item_category.'</td>';
-    //             $html .='<td>'.$item->item_sub_category.'</td>';
-    //             $html .='<td>'.$item->item_barcode.'</td>';
-    //             $html .='<td>'.$item->item_cost.'</td>';
-    //             $html .='<td>'.$item->item_sell.'</td>';
-    //             $html .='<td>'.$quantity.'</td>';
-    //             $html .='<td>';
-    //             $html .='<div class="d-flex gap-1">';
-    //             $html .='<a data="'.$item->id.'" onclick="viewItem(this)" class="btn bg-info btn-sm text-light"><i class="fas fa-eye fa-sm"></i></a>';
-    //             if(Auth::user()->role == 'Admin'){
-    //                 $html .='<a href="/edit-items/'.$item->id.'" class="btn bg-secondary btn-sm text-light"><i class="fas fa-pencil-alt fa-sm"></i></a>';
-    //                 $html .='<a data="'.$item->id.'" onclick="deleteItem(this)" class="btn bg-tertiary btn-sm text-light"><i class="fas fa-trash fa-sm"></i></a>';
-    //             }
-    //             $html .='</div>';
-    //             $html .='</td></tr>';
-    //         }
-    //         return response()->json([
-    //             'data' => $html,
-    //         ], 200);
-    //     }
-    //     return response()->json([
-    //         'errors' => '<tr><td>No Item available<td><tr>',
-    //     ], 410);
-    // }
-
     public function collectSubCategory($id){
         $subCategories = SubCategory::where('category_id', $id)->get();
         if($subCategories->count() > 0){
@@ -311,16 +268,8 @@ class ItemsController extends Controller
             [
                 'item_barcode.regex' => 'Barcode format must be 00-00-000000',
             ]);
-    
-            $like = scandir('img/item_photo');
-            foreach ($like as $thisFile) {
-                $rs = Items::where('item_photo', $thisFile)->first();
-                if (!$rs) {
-                    if($thisFile != "." and $thisFile != ".."){
-                            unlink ('img/item_photo/' . $thisFile);
-                    }
-                }
-            }
+
+            
     
             if(!empty($request->item_photo)){
                 $item_photo = uniqid() . '.' . $request->item_photo->extension();
@@ -348,6 +297,15 @@ class ItemsController extends Controller
                 if($updateItem){
                     if(!empty($request->item_photo)){
                         $request->item_photo->move(public_path('img/item_photo'), $item_photo);
+                        $like = scandir('img/item_photo');
+                        foreach ($like as $thisFile) {
+                            $rs = Items::where('item_photo', $thisFile)->first();
+                            if (!$rs) {
+                                if($thisFile != "." and $thisFile != ".."){
+                                        unlink ('img/item_photo/' . $thisFile);
+                                }
+                            }
+                        }
                     }
                     return redirect(route('items'))->with('success', ucfirst($request->item_name). ' Updated Successfully.');
                 }
