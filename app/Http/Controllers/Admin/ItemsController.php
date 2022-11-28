@@ -124,7 +124,7 @@ class ItemsController extends Controller
     {
         $item = Items::find($id);
         if($item){
-            $img = empty($item->item_photo) ? asset('img/default_item_photo.jpg') : asset('img/item_photo/'.$item->item_photo.'');
+            $img = empty($item->item_photo) ? asset('storage/img/default_item_photo.jpg') : asset('storage/img/item_photo/'.$item->item_photo.'');
             $description = empty($item->item_description) ? 'No item Description' : $item->item_description;
             $item_name = empty($item->item_name) ? 'No item Name' : $item->item_name;
             $html = '<div class="row">';
@@ -209,6 +209,16 @@ class ItemsController extends Controller
             return back()->with('success', ucfirst($request->item_name). ' already exist. Item quantity updated.');
         }
 
+        $like = scandir('storage/img/item_photo');
+        foreach ($like as $thisFile) {
+            $rs = Items::where('item_photo', $thisFile)->first();
+            if (!$rs) {
+                if($thisFile != "." and $thisFile != ".."){
+                        unlink ('storage/img/item_photo/' . $thisFile);
+                }
+            }
+        }
+
         if(!empty($request->item_photo)){
             $item_photo = uniqid() . '.' . $request->item_photo->extension();
         }else{
@@ -232,15 +242,6 @@ class ItemsController extends Controller
         if($storeItems){
             if(!empty($request->item_photo)){
                 $request->item_photo->storeAs('public/img/item_photo', $item_photo);
-                $like = scandir('storage/img/item_photo');
-                foreach ($like as $thisFile) {
-                    $rs = Items::where('item_photo', $thisFile)->first();
-                    if (!$rs) {
-                        if($thisFile != "." and $thisFile != ".."){
-                                unlink ('storage/img/item_photo/' . $thisFile);
-                        }
-                    }
-                }
             }
             return back()->with('success', ucfirst($request->item_name). ' Added Successfully.');
         }
@@ -270,7 +271,15 @@ class ItemsController extends Controller
                 'item_barcode.regex' => 'Barcode format must be 00-00-000000',
             ]);
 
-            
+            $like = scandir('storage/img/item_photo');
+            foreach ($like as $thisFile) {
+                $rs = Items::where('item_photo', $thisFile)->first();
+                if (!$rs) {
+                    if($thisFile != "." and $thisFile != ".."){
+                            unlink ('storage/img/item_photo/' . $thisFile);
+                    }
+                }
+            }
     
             if(!empty($request->item_photo)){
                 $item_photo = uniqid() . '.' . $request->item_photo->extension();
@@ -298,15 +307,6 @@ class ItemsController extends Controller
                 if($updateItem){
                     if(!empty($request->item_photo)){
                         $request->item_photo->storeAs('public/img/item_photo', $item_photo);
-                        $like = scandir('storage/img/item_photo');
-                        foreach ($like as $thisFile) {
-                            $rs = Items::where('item_photo', $thisFile)->first();
-                            if (!$rs) {
-                                if($thisFile != "." and $thisFile != ".."){
-                                        unlink ('storage/img/item_photo/' . $thisFile);
-                                }
-                            }
-                        }
                     }
                     return redirect(route('items'))->with('success', ucfirst($request->item_name). ' Updated Successfully.');
                 }
