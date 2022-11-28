@@ -136,7 +136,7 @@
                         </table>
                     </div>
                     <div class="d-flex justify-content-between align-items-center">
-                        <small class="text-light">10 of <span id="totalItems"></span></small>
+                        <small class="text-light" id="totalItems">0</small>
                         <ul class="pagination" id="pagination_link">
 
                         </ul>
@@ -242,7 +242,7 @@
                             paginationLink.innerHTML ='';
                             pages.forEach(function(item){
                                 if(!isNaN(item.label)){
-                                    totalItems.innerHTML = response.data.pagination.total;
+                                    totalItems.innerHTML = `10 of ${response.data.pagination.total}`;
                                     paginationLink.innerHTML += `<li style="cursor:pointer;" onclick="getItems(${item.label}, '${filter}')" class="page-item ${item.active ? 'active' : '' } "><a class="page-link" style="background-color: #1a1e29;">${item.label}</a></li>`;
                                 }
                             })
