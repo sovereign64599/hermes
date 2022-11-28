@@ -197,15 +197,7 @@ class ItemsController extends Controller
         [
             'item_barcode.regex' => 'Barcode format must be 00-00-000000',
         ]);
-        $like = scandir('img/item_photo');
-        foreach ($like as $thisFile) {
-            $rs = Items::where('item_photo', $thisFile)->first();
-            if (!$rs) {
-                if($thisFile != "." and $thisFile != ".."){
-                        unlink ('img/item_photo/' . $thisFile);
-                }
-            }
-        }
+        
 
         $quantity = $request->item_quantity <= 0 ? 0 : $request->item_quantity;
         $item = Items::where('item_category', $request->item_category)
@@ -239,7 +231,16 @@ class ItemsController extends Controller
         ]);
         if($storeItems){
             if(!empty($request->item_photo)){
-                $request->item_photo->move(public_path('img/item_photo'), $item_photo);
+                $request->item_photo->storeAs('public/img/item_photo', $item_photo);
+                $like = scandir('storage/img/item_photo');
+                foreach ($like as $thisFile) {
+                    $rs = Items::where('item_photo', $thisFile)->first();
+                    if (!$rs) {
+                        if($thisFile != "." and $thisFile != ".."){
+                                unlink ('storage/img/item_photo/' . $thisFile);
+                        }
+                    }
+                }
             }
             return back()->with('success', ucfirst($request->item_name). ' Added Successfully.');
         }
@@ -296,13 +297,13 @@ class ItemsController extends Controller
         
                 if($updateItem){
                     if(!empty($request->item_photo)){
-                        $request->item_photo->move(public_path('img/item_photo'), $item_photo);
-                        $like = scandir('img/item_photo');
+                        $request->item_photo->storeAs('public/img/item_photo', $item_photo);
+                        $like = scandir('storage/img/item_photo');
                         foreach ($like as $thisFile) {
                             $rs = Items::where('item_photo', $thisFile)->first();
                             if (!$rs) {
                                 if($thisFile != "." and $thisFile != ".."){
-                                        unlink ('img/item_photo/' . $thisFile);
+                                        unlink ('storage/img/item_photo/' . $thisFile);
                                 }
                             }
                         }
