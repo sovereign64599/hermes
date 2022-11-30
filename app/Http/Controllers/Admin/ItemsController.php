@@ -305,7 +305,7 @@ class ItemsController extends Controller
                             $rs = Items::where('item_photo', $thisFile)->first();
                             if (!$rs) {
                                 if($thisFile != "." and $thisFile != ".."){
-                                    unlink(public_path('/img/item_photo/' . $thisFile));
+                                    unlink('/storage/public/img/item_photo/' . $thisFile);
                                 }
                             }
                         }
