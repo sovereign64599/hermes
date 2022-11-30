@@ -14,6 +14,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 use Validator;
 use File;
+use Illuminate\Support\Facades\Storage;
 
 class ItemsController extends Controller
 {
@@ -272,12 +273,12 @@ class ItemsController extends Controller
                 'item_barcode.regex' => 'Barcode format must be 00-00-000000',
             ]);
 
-            $like = scandir('storage/img/item_photo');
+            $like = scandir(public_path('/storage/img/item_photo/'));
             foreach ($like as $thisFile) {
                 $rs = Items::where('item_photo', $thisFile)->first();
                 if (!$rs) {
                     if($thisFile != "." and $thisFile != ".."){
-                        File::delete(public_path('img/item_photo/' . $thisFile));
+                        unlink(public_path('/storage/img/item_photo/' . $thisFile));
                     }
                 }
             }
