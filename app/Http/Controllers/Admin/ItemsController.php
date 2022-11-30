@@ -273,16 +273,6 @@ class ItemsController extends Controller
                 'item_barcode.regex' => 'Barcode format must be 00-00-000000',
             ]);
 
-            $like = scandir('img/item_photo');
-            foreach ($like as $thisFile) {
-                $rs = Items::where('item_photo', $thisFile)->first();
-                if (!$rs) {
-                    if($thisFile != "." and $thisFile != ".."){
-                        unlink(public_path('/img/item_photo/' . $thisFile));
-                    }
-                }
-            }
-    
             if(!empty($request->item_photo)){
                 $item_photo = uniqid() . '.' . $request->item_photo->extension();
             }else{
@@ -309,6 +299,16 @@ class ItemsController extends Controller
                 if($updateItem){
                     if(!empty($request->item_photo)){
                         $request->item_photo->storeAs('public/img/item_photo', $item_photo);
+
+                        $like = scandir('img/item_photo');
+                        foreach ($like as $thisFile) {
+                            $rs = Items::where('item_photo', $thisFile)->first();
+                            if (!$rs) {
+                                if($thisFile != "." and $thisFile != ".."){
+                                    unlink(public_path('/img/item_photo/' . $thisFile));
+                                }
+                            }
+                        }
                     }
                     return redirect(route('items'))->with('success', ucfirst($request->item_name). ' Updated Successfully.');
                 }
