@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 use Validator;
+use File;
 
 class ItemsController extends Controller
 {
@@ -271,12 +272,12 @@ class ItemsController extends Controller
                 'item_barcode.regex' => 'Barcode format must be 00-00-000000',
             ]);
 
-            $like = scandir('img/item_photo');
+            $like = scandir('storage/img/item_photo');
             foreach ($like as $thisFile) {
                 $rs = Items::where('item_photo', $thisFile)->first();
                 if (!$rs) {
                     if($thisFile != "." and $thisFile != ".."){
-                        unlink(public_path('img/item_photo/' . $thisFile));
+                        File::delete(public_path('img/item_photo/' . $thisFile));
                     }
                 }
             }
