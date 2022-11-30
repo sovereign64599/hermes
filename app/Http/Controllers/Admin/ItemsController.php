@@ -126,7 +126,7 @@ class ItemsController extends Controller
     {
         $item = Items::find($id);
         if($item){
-            $img = empty($item->item_photo) ? asset('storage/img/default_item_photo.jpg') : asset('storage/img/item_photo/'.$item->item_photo.'');
+            $img = empty($item->item_photo) ? asset('img/default_item_photo.jpg') : asset('storage/img/item_photo/'.$item->item_photo.'');
             $description = empty($item->item_description) ? 'No item Description' : $item->item_description;
             $item_name = empty($item->item_name) ? 'No item Name' : $item->item_name;
             $html = '<div class="row">';
