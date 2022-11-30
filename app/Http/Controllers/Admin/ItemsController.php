@@ -273,7 +273,7 @@ class ItemsController extends Controller
                 'item_barcode.regex' => 'Barcode format must be 00-00-000000',
             ]);
 
-            $like = scandir('/app/public/storage/img/item_photo');
+            $like = scandir('img/item_photo');
             foreach ($like as $thisFile) {
                 $rs = Items::where('item_photo', $thisFile)->first();
                 if (!$rs) {
