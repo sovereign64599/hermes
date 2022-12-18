@@ -28,15 +28,15 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        if (App::environment(['production', 'PRODUCTION'])) {
-            $this->app['request']->server->set('HTTPS', true);
-            URL::forceScheme('https');
-        }
+        // if (App::environment(['production', 'PRODUCTION'])) {
+        //     $this->app['request']->server->set('HTTPS', true);
+        //     URL::forceScheme('https');
+        // }
         
-        if (app()->environment(['production', 'PRODUCTION'])) {
-            $this->app['request']->server->set('HTTPS', true);
-            URL::forceScheme('https');
-        }
+        // if (app()->environment(['production', 'PRODUCTION'])) {
+        //     $this->app['request']->server->set('HTTPS', true);
+        //     URL::forceScheme('https');
+        // }
         Paginator::useBootstrap();
     }
 }
